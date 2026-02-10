@@ -12,7 +12,7 @@
             --primary: #FF6B6B;
             --gradient: linear-gradient(135deg, #FF6B6B 0%, #FF9F43 100%);
             --gold-gradient: linear-gradient(135deg, #F1C40F 0%, #F39C12 100%);
-            --edit-btn: #F39C12; /* צבע העיפרון */
+            --edit-btn: #F39C12;
             --bg: #FAFAFC;
             --card: #FFFFFF;
             --text: #2D3436;
@@ -71,17 +71,18 @@
         .bubble-crown svg { width: 50px; height: 40px; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.15)); margin-bottom: 2px; }
         .bubble-label-text { font-size: 0.75rem; color: var(--gray); font-weight: 700; }
 
-        /* --- SWIPEABLE CARD STYLES --- */
+        /* --- FIXED SWIPEABLE CARD STYLES --- */
         .task-card-wrapper, .meal-swipe-wrapper {
             position: relative; width: 98%; margin: 0 auto 12px auto; height: 85px;
             border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
         }
-        .meal-swipe-wrapper { height: 200px; } /* Taller for meals library */
+        .meal-swipe-wrapper { height: 200px; }
 
-        /* Dual Action Background */
+        /* Background Layer (The Fix) */
         .task-action-bg {
             position: absolute; top: 0; bottom: 0; right: 0; left: 0;
-            display: flex; justify-content: flex-end; /* Align right (behind the card moving left) */
+            display: flex; 
+            justify-content: flex-start; /* FIX: Align to RIGHT in RTL mode */
             z-index: 1;
         }
         
@@ -93,13 +94,12 @@
         .action-btn.edit { background-color: var(--edit-btn); }
         .action-btn.delete { background-color: var(--danger); }
 
+        /* Foreground Layer */
         .task-card-content, .meal-card-content {
             position: absolute; top: 0; bottom: 0; right: 0; left: 0; background-color: var(--card);
             display: flex; justify-content: space-between; align-items: center; padding: 0 15px 0 20px;
             border-radius: 16px; z-index: 2; transition: transform 0.2s ease-out; border: 1px solid rgba(0,0,0,0.02);
         }
-        
-        /* Specifics for Meal Library Card */
         .meal-card-content { display: flex; flex-direction: column; align-items: stretch; padding: 0; }
         
         .task-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
@@ -107,27 +107,17 @@
         .task-meta { font-size: 0.85rem; color: var(--gray); font-weight: 500; display: flex; align-items: center; gap: 5px; }
         
         .meal-action-group { display: flex; align-items: center; gap: 12px; }
-        
-        .task-meal-img {
-            width: 50px; height: 50px; border-radius: 12px;
-            object-fit: cover; border: 2px solid #F1F2F6; flex-shrink: 0; cursor: pointer;
-            transition: transform 0.2s; background: #eee;
-        }
+        .task-meal-img { width: 50px; height: 50px; border-radius: 12px; object-fit: cover; border: 2px solid #F1F2F6; flex-shrink: 0; cursor: pointer; transition: transform 0.2s; background: #eee; }
         .task-meal-img:active { transform: scale(0.9); }
 
-        .status-btn {
-            width: 48px; height: 48px; border-radius: 50%; border: 2px solid #F1F2F6;
-            display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
-            background: #fff; transition: 0.2s; color: #DFE4EA; flex-shrink: 0; cursor: pointer;
-        }
+        .status-btn { width: 48px; height: 48px; border-radius: 50%; border: 2px solid #F1F2F6; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; background: #fff; transition: 0.2s; color: #DFE4EA; flex-shrink: 0; cursor: pointer; }
         .status-btn.success { background-color: var(--success); border-color: var(--success); color: white; }
         .status-btn.fail { background-color: var(--danger); border-color: var(--danger); color: white; }
 
-        /* --- MEALS LIBRARY STYLES --- */
+        /* Meals Lib */
         .meal-filters { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
         .filter-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid #eee; background: white; font-size: 0.9rem; color: var(--gray); font-weight: 600; white-space: nowrap; transition: 0.2s; }
         .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(255, 107, 107, 0.2); }
-
         .meal-img { width: 100%; height: 130px; object-fit: cover; background: #f0f0f0; }
         .meal-info-box { padding: 12px 15px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
         .meal-title { font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 5px; }
@@ -135,24 +125,17 @@
         .meal-tag { font-size: 0.75rem; padding: 3px 8px; border-radius: 6px; color: white; font-weight: 600; }
         .tag-meat { background: var(--meat); } .tag-dairy { background: var(--dairy); } .tag-parve { background: var(--parve); }
 
-        /* --- MENU TAB STYLES --- */
+        /* Menu */
         .menu-day-card { background: white; border-radius: 16px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
         .menu-day-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 10px; color: var(--primary); }
         .menu-slot { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
         .menu-slot:last-child { border-bottom: none; }
         .slot-label { font-weight: 600; font-size: 0.9rem; width: 60px; }
-        
-        .slot-btn {
-            flex: 1; margin-right: 10px; padding: 10px; border-radius: 10px;
-            background: #FAFAFC; border: 1px solid #eee;
-            font-size: 0.9rem; color: var(--text); text-align: right;
-            display: flex; justify-content: space-between; align-items: center;
-            cursor: pointer; transition: 0.2s;
-        }
+        .slot-btn { flex: 1; margin-right: 10px; padding: 10px; border-radius: 10px; background: #FAFAFC; border: 1px solid #eee; font-size: 0.9rem; color: var(--text); text-align: right; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
         .slot-btn.filled { background: white; border-color: var(--primary); color: var(--primary); font-weight: 600; }
         .slot-arrow { font-size: 0.8rem; color: var(--gray); }
 
-        /* --- SELECTOR MODAL --- */
+        /* Selector Modal */
         .selector-header { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
         .selector-search { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #F1F2F6; font-size: 1rem; }
         .selector-list { max-height: 60vh; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
@@ -163,7 +146,7 @@
         .selector-text { font-size: 1rem; font-weight: 600; color: var(--text); }
         .selector-type { margin-right: auto; font-size: 0.75rem; padding: 3px 8px; border-radius: 6px; color: white; }
 
-        /* Floating Buttons */
+        /* Fabs */
         .fabs-container { position: fixed; bottom: 110px; left: 25px; display: flex; flex-direction: column; gap: 15px; z-index: 30; align-items: center; }
         .fab { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); cursor: pointer; transition: transform 0.2s; }
         .fab:active { transform: scale(0.9); }
@@ -171,12 +154,7 @@
         .fab-plus svg { width: 24px; height: 24px; fill: currentColor; }
 
         /* Nav Bar */
-        .nav-bar {
-            position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-height);
-            background: var(--gradient); border-top: none; display: flex;
-            padding: 5px; padding-bottom: max(5px, env(safe-area-inset-bottom)); 
-            z-index: 20; box-shadow: 0 -5px 20px rgba(255, 107, 107, 0.2); align-items: flex-end;
-        }
+        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-height); background: var(--gradient); border-top: none; display: flex; padding: 5px; padding-bottom: max(5px, env(safe-area-inset-bottom)); z-index: 20; box-shadow: 0 -5px 20px rgba(255, 107, 107, 0.2); align-items: flex-end; }
         .nav-item { text-align: center; color: rgba(255, 255, 255, 0.5); font-size: 0.65rem; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.3s; font-weight: 500; height: 100%; z-index: 22; }
         .nav-item.active { color: white; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .nav-icon svg { width: 24px; height: 24px; fill: currentColor; transition: 0.3s; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.05)); }
@@ -197,7 +175,6 @@
         .full-width-btn { width: 100%; padding: 12px; background: #F1F2F6; border: none; border-radius: 10px; font-weight: 600; margin-bottom: 15px; }
         .btn-save { width: 100%; padding: 16px; background: var(--gradient); color: white; border:none; border-radius: 14px; font-size: 1.1rem; font-weight: 700; }
 
-        /* Delete Modal */
         .delete-btn-group { display: flex; flex-direction: column; gap: 10px; }
         .btn-delete-today { width: 100%; padding: 15px; background: #F1F2F6; color: var(--text); border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; }
         .btn-delete-forever { width: 100%; padding: 15px; background: #FF4757; color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; }
@@ -371,7 +348,6 @@
     </div>
 
     <script>
-        // Crown Logic
         function getCrownSVG(score) {
             if (score === 0) return ''; 
             let defs = '', bodyFill = '', strokeColor = '#000', gemsHTML = '';
@@ -406,11 +382,10 @@
         let selectedDays = [];
         let currentView = 'daily';
         
-        // Contexts
         let selectionContext = { day: 0, slot: '' };
         let currentSelectorFilter = 'all';
-        let editingMealIndex = null; // For editing recipe
-        let editingWeightSlot = null; // For editing meal weight
+        let editingMealIndex = null;
+        let editingWeightSlot = null;
         
         const dayNames = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
         const dayShortNames = ['א\'','ב\'','ג\'','ד\'','ה\'','ו\'','ש\''];
@@ -444,40 +419,32 @@
         function switchView(viewName, btn) {
             currentView = viewName;
             if (viewName === 'daily') currentDate = new Date();
-            
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.getElementById('view-' + viewName).classList.add('active');
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             btn.classList.add('active');
-            
             const fabContainer = document.querySelector('.fabs-container');
             if(viewName === 'stats' || viewName === 'menu') fabContainer.style.display = 'none';
             else fabContainer.style.display = 'flex';
-
             renderCurrentView();
         }
 
-        // --- MENU LOGIC ---
         function renderMenu() {
             document.getElementById('mainHeader').style.display = 'none';
             updateScoreBubble(0);
             const container = document.getElementById('menuList');
             container.innerHTML = '';
-
             dayNames.forEach((dayName, dayIdx) => {
                 if(!weeklyMenu[dayIdx]) weeklyMenu[dayIdx] = { breakfast: '', lunch: '', dinner: '' };
                 const dayCard = document.createElement('div');
                 dayCard.className = 'menu-day-card';
-                
                 const getSlotBtnContent = (val) => {
                     if(val !== '' && mealsData[val]) return `<span style="font-weight:700;">${mealsData[val].title}</span> <span class="slot-arrow">✎</span>`;
                     return `<span style="color:#aaa;">בחר מנה...</span> <span class="slot-arrow">▼</span>`;
                 };
-                
                 const valB = weeklyMenu[dayIdx].breakfast;
                 const valL = weeklyMenu[dayIdx].lunch;
                 const valD = weeklyMenu[dayIdx].dinner;
-
                 dayCard.innerHTML = `
                     <div class="menu-day-title">${dayName}</div>
                     <div class="menu-slot"><div class="slot-label">בוקר</div><div class="slot-btn ${valB!==''?'filled':''}" onclick="openMealSelector(${dayIdx}, 'breakfast')">${getSlotBtnContent(valB)}</div></div>
@@ -509,15 +476,12 @@
             const query = document.getElementById('selectorSearch').value.toLowerCase();
             const listEl = document.getElementById('selectorList');
             listEl.innerHTML = '';
-
             const filtered = mealsData.map((m, idx) => ({...m, idx})).filter(m => {
                 const matchesType = currentSelectorFilter === 'all' || m.type === currentSelectorFilter;
                 const matchesSearch = m.title.toLowerCase().includes(query);
                 return matchesType && matchesSearch;
             });
-
             if (filtered.length === 0) { listEl.innerHTML = '<div style="text-align:center; padding:20px; color:#ccc;">לא נמצאו תוצאות</div>'; return; }
-
             filtered.forEach(m => {
                 let typeColor = m.type === 'meat' ? 'var(--meat)' : m.type === 'dairy' ? 'var(--dairy)' : 'var(--parve)';
                 let typeName = m.type === 'meat' ? 'בשרי' : m.type === 'dairy' ? 'חלבי' : 'פרווה';
@@ -526,7 +490,6 @@
                 item.className = 'selector-item';
                 const currentVal = weeklyMenu[selectionContext.day][selectionContext.slot];
                 if(currentVal == m.idx) item.classList.add('selected');
-
                 item.onclick = () => selectMealFromSelector(m.idx);
                 item.innerHTML = `
                     <img src="${displayImg}" class="selector-img">
@@ -543,7 +506,6 @@
             saveAll(); closeModal('mealSelectorModal');
         }
 
-        // --- DAILY VIEW ---
         function changeDate(direction) { currentDate.setDate(currentDate.getDate() + direction); renderDay(direction); }
         
         function renderDay(animateDirection = 0) {
@@ -567,12 +529,11 @@
             if (!trackerData[dateKey].deletedTemplateIds) trackerData[dateKey].deletedTemplateIds = [];
             if (!trackerData[dateKey].deletedMealSlots) trackerData[dateKey].deletedMealSlots = [];
             if (!trackerData[dateKey].mealStatuses) trackerData[dateKey].mealStatuses = {};
-            if (!trackerData.mealWeights) trackerData.mealWeights = { breakfast: 20, lunch: 20, dinner: 20 }; // Init custom weights
+            if (!trackerData.mealWeights) trackerData.mealWeights = { breakfast: 20, lunch: 20, dinner: 20 };
 
             const dayOfWeek = currentDate.getDay();
             let displayTasks = [];
             
-            // 3 Static Meal Tasks
             const mealSlots = [
                 { key: 'breakfast', label: 'ארוחת בוקר' },
                 { key: 'lunch', label: 'ארוחת צהריים' },
@@ -583,25 +544,15 @@
 
             mealSlots.forEach(slot => {
                 if(trackerData[dateKey].deletedMealSlots.includes(slot.key)) return;
-                
                 const recipeId = menuForToday[slot.key];
                 let recipeData = { title: 'לא נבחר מתכון', img: '', link: '' };
                 if(recipeId !== '' && mealsData[recipeId]) recipeData = mealsData[recipeId];
-                
                 const slotWeight = trackerData.mealWeights[slot.key];
-
                 displayTasks.push({
-                    type: 'meal',
-                    slotKey: slot.key,
-                    name: slot.label,
-                    meta: recipeData.title,
-                    img: recipeData.img,
-                    link: recipeData.link,
-                    weight: slotWeight // Now meals have weight
+                    type: 'meal', slotKey: slot.key, name: slot.label, meta: recipeData.title, img: recipeData.img, link: recipeData.link, weight: slotWeight
                 });
             });
 
-            // Template Tasks
             const relevantTemplates = templates.filter(t => t.days.includes(dayOfWeek));
             relevantTemplates.forEach(tpl => {
                 const alreadyExists = trackerData[dateKey].tasks.some(t => t.templateId === tpl.id);
@@ -619,7 +570,6 @@
             if (combinedList.length === 0) taskListEl.innerHTML = '<div style="text-align:center; color:#B2BEC3; margin-top:40px;">אין משימות להיום</div>';
 
             combinedList.forEach((item, index) => {
-                // Score Calc (Now includes meals)
                 let itemStatus = null;
                 if(item.type === 'meal') itemStatus = trackerData[dateKey].mealStatuses[item.slotKey];
                 else itemStatus = item.status;
@@ -631,29 +581,21 @@
                 wrapper.className = 'task-card-wrapper';
                 let contentHTML = '';
                 
-                // --- RENDER MEAL ---
                 if(item.type === 'meal') {
                     const displayImg = item.img || 'https://via.placeholder.com/50?text=Meal';
                     const mStatus = trackerData[dateKey].mealStatuses[item.slotKey];
                     let mStatusClass = '', mStatusIcon = '';
                     if (mStatus === 'done') { mStatusIcon = '✓'; mStatusClass = 'success'; }
                     else if (mStatus === 'fail') { mStatusIcon = '✕'; mStatusClass = 'fail'; }
-                    
                     const metaString = `${item.weight}% | ${item.meta}`;
-
                     contentHTML = `
-                        <div class="task-info">
-                            <div class="task-name">${item.name}</div>
-                            <div class="task-meta">${metaString}</div>
-                        </div>
+                        <div class="task-info"><div class="task-name">${item.name}</div><div class="task-meta">${metaString}</div></div>
                         <div class="meal-action-group">
                             <img src="${displayImg}" class="task-meal-img" onclick="if('${item.link}') window.open('${item.link}', '_blank'); event.stopPropagation();">
                             <div class="status-btn ${mStatusClass}" onclick="toggleMealStatus('${item.slotKey}', event)">${mStatusIcon}</div>
                         </div>
                     `;
-                } 
-                // --- RENDER TASK ---
-                else {
+                } else {
                     let statusClass = '', statusIcon = '';
                     if (item.status === 'done') { statusIcon = '✓'; statusClass = 'success'; }
                     else if (item.status === 'fail') { statusIcon = '✕'; statusClass = 'fail'; }
@@ -669,12 +611,9 @@
                     `;
                 }
 
-                // --- SWIPE ACTIONS ---
                 const isMeal = item.type === 'meal';
-                // Params for delete
                 const deleteParam = isMeal ? `'${item.slotKey}'` : index - displayTasks.length;
-                // Params for Edit (Meal Weight Only, regular tasks not editable yet)
-                const editAction = isMeal ? `openWeightModal('${item.slotKey}')` : `alert('עריכת משימה תתווסף בקרוב')`; // Or handle task edit
+                const editAction = isMeal ? `openWeightModal('${item.slotKey}')` : `alert('עריכת משימה תתווסף בקרוב')`; 
 
                 wrapper.innerHTML = `
                     <div class="task-action-bg">
@@ -703,28 +642,23 @@
             }, {passive: true});
             content.addEventListener('touchmove', (e) => {
                 currentX = e.touches[0].clientX; let diff = currentX - startX;
-                // Allow swipe left up to -140px (for 2 buttons)
                 if (diff < 0 && diff > -160) content.style.transform = `translateX(${diff}px)`;
             }, {passive: true});
             content.addEventListener('touchend', (e) => {
                 content.style.transition = 'transform 0.2s ease-out';
-                if ((currentX - startX) < -60) content.style.transform = 'translateX(-140px)'; // Snap to show 2 buttons
+                if ((currentX - startX) < -60) content.style.transform = 'translateX(-140px)'; 
                 else content.style.transform = 'translateX(0)';
             });
         }
 
-        // --- ACTIONS ---
         function toggleStatus(visualIndex, type, event) {
             if(type === 'meal') return; 
             const content = document.getElementById(`content-${visualIndex}`);
             if (content.style.transform === 'translateX(-140px)') return;
-
             event.stopPropagation();
             const dateKey = getStorageKey(currentDate);
-            const dayOfWeek = currentDate.getDay();
             let mealCount = 0;
-            const slots = ['breakfast', 'lunch', 'dinner'];
-            slots.forEach(k => { if(!trackerData[dateKey].deletedMealSlots.includes(k)) mealCount++; });
+            ['breakfast', 'lunch', 'dinner'].forEach(k => { if(!trackerData[dateKey].deletedMealSlots.includes(k)) mealCount++; });
             const taskIndex = visualIndex - mealCount;
             const task = trackerData[dateKey].tasks[taskIndex];
             if (!task.status) task.status = 'done'; else if (task.status === 'done') task.status = 'fail'; else task.status = null;
@@ -743,24 +677,19 @@
         }
 
         function handleDeleteSwipe(isMeal, idOrIndex, visualIndex) {
-            // Close swipe
             const el = document.getElementById(`content-${visualIndex}`);
             if(el) el.style.transform = 'translateX(0)';
-
             const dateKey = getStorageKey(currentDate);
             if(isMeal) {
-                // Meals delete immediately
                 if(!trackerData[dateKey].deletedMealSlots) trackerData[dateKey].deletedMealSlots = [];
                 trackerData[dateKey].deletedMealSlots.push(idOrIndex);
                 saveAll();
             } else {
-                // Tasks open modal
                 taskToDeleteIndex = idOrIndex;
                 openModal('deleteModal');
             }
         }
 
-        // --- MEALS RENDER ---
         function renderMeals(filter = 'all') {
             document.getElementById('mainHeader').style.display = 'none';
             updateScoreBubble(0);
@@ -768,7 +697,6 @@
             container.innerHTML = '';
             const filteredMeals = filter === 'all' ? mealsData : mealsData.filter(m => m.type === filter);
             if (filteredMeals.length === 0) { container.innerHTML = '<div style="text-align:center; color:#B2BEC3; margin-top:40px;">אין מתכונים בקטגוריה זו</div>'; return; }
-            
             filteredMeals.forEach((meal, index) => {
                 const realIndex = mealsData.indexOf(meal);
                 const wrapper = document.createElement('div');
@@ -778,8 +706,6 @@
                 else if(meal.type === 'dairy') { tagClass = 'tag-dairy'; tagText = 'חלבי'; }
                 else { tagClass = 'tag-parve'; tagText = 'פרווה'; }
                 const displayImg = meal.img || 'https://via.placeholder.com/400x200?text=No+Image';
-                
-                // Add Edit/Delete Actions for Library
                 wrapper.innerHTML = `
                     <div class="task-action-bg">
                         <div class="action-btn edit" onclick="editMeal(${realIndex})">✎</div>
@@ -800,7 +726,7 @@
 
         function handleFabPlus() { 
             if (currentView === 'meals') {
-                editingMealIndex = null; // Clear edit mode
+                editingMealIndex = null;
                 document.getElementById('mealModalTitle').innerText = 'מתכון חדש';
                 document.getElementById('mealSaveBtn').innerText = 'שמור מתכון';
                 document.getElementById('mealTitle').value = '';
@@ -814,49 +740,32 @@
             }
         }
 
-        // --- EDIT RECIPE LOGIC ---
         function editMeal(index) {
-            // Close swipe visually first
             const contents = document.querySelectorAll('.meal-card-content');
             contents.forEach(c => c.style.transform = 'translateX(0)');
-
             editingMealIndex = index;
             const meal = mealsData[index];
             document.getElementById('mealModalTitle').innerText = 'עריכת מתכון';
             document.getElementById('mealSaveBtn').innerText = 'עדכן מתכון';
-            
             document.getElementById('mealTitle').value = meal.title;
             document.getElementById('mealTime').value = meal.time;
             document.getElementById('mealImgUrl').value = meal.img;
             document.getElementById('mealLinkUrl').value = meal.link;
             setMealType(meal.type);
-            
             openModal('mealModal');
         }
 
         function saveMeal() {
             const title = document.getElementById('mealTitle').value; const time = document.getElementById('mealTime').value; const img = document.getElementById('mealImgUrl').value; const link = document.getElementById('mealLinkUrl').value;
             if(!title) return alert('נא להזין שם מנה');
-            
             const mealObj = { title, time, img, link, type: currentMealType };
-            
-            if (editingMealIndex !== null) {
-                // Update existing
-                mealsData[editingMealIndex] = mealObj;
-            } else {
-                // Add new
-                mealsData.push(mealObj);
-            }
-            
+            if (editingMealIndex !== null) { mealsData[editingMealIndex] = mealObj; } else { mealsData.push(mealObj); }
             saveAll(); closeModal('mealModal'); if(currentView === 'meals') renderMeals();
         }
 
-        // --- EDIT WEIGHT LOGIC ---
         function openWeightModal(slotKey) {
-            // Close swipe
             const contents = document.querySelectorAll('.task-card-content');
             contents.forEach(c => c.style.transform = 'translateX(0)');
-            
             editingWeightSlot = slotKey;
             const currentWeight = trackerData.mealWeights[slotKey];
             document.getElementById('editWeightInput').value = currentWeight;
@@ -878,7 +787,6 @@
         function setMealType(type) { currentMealType = type; document.getElementById('opt-meat').className = type === 'meat' ? 'toggle-opt selected' : 'toggle-opt'; document.getElementById('opt-dairy').className = type === 'dairy' ? 'toggle-opt selected' : 'toggle-opt'; document.getElementById('opt-parve').className = type === 'parve' ? 'toggle-opt selected' : 'toggle-opt'; }
         function deleteMeal(index) { if(confirm('למחוק את המתכון?')) { mealsData.splice(index, 1); saveAll(); renderMeals(); } }
 
-        // --- STATS & HELPERS ---
         function renderStats() {
             document.getElementById('mainHeader').style.display = 'none';
             updateScoreBubble(0); 
@@ -886,9 +794,9 @@
             let monthSum = 0, monthCount = 0, yearSum = 0, yearCount = 0;
             const now = new Date();
             keys.forEach(key => {
-                if(key === 'mealWeights') return; // Skip settings key
+                if(key === 'mealWeights') return; 
                 const date = new Date(key); const data = trackerData[key];
-                if (data.tasks && data.score > 0) { // Check score > 0 to avoid empty days counting
+                if (data.tasks && data.score > 0) { 
                     if (date.getFullYear() === now.getFullYear()) { yearSum += data.score; yearCount++; if (date.getMonth() === now.getMonth()) { monthSum += data.score; monthCount++; } }
                 }
             });
