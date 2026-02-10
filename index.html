@@ -70,7 +70,7 @@
         .bubble-crown svg { width: 50px; height: 40px; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.15)); margin-bottom: 2px; }
         .bubble-label-text { font-size: 0.75rem; color: var(--gray); font-weight: 700; }
 
-        /* --- SWIPEABLE CARD STYLES --- */
+        /* --- CARD STYLES --- */
         .task-card-wrapper {
             position: relative; width: 98%; margin: 0 auto 12px auto; height: 85px;
             border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
@@ -90,8 +90,13 @@
         .task-name { font-weight: 600; font-size: 1.15rem; margin-bottom: 4px; color: var(--text); }
         .task-meta { font-size: 0.85rem; color: var(--gray); font-weight: 500; display: flex; align-items: center; gap: 5px; }
         
+        /* New Meal Group Styling (Image + Btn) */
+        .meal-action-group {
+            display: flex; align-items: center; gap: 12px;
+        }
+        
         .task-meal-img {
-            width: 50px; height: 50px; border-radius: 12px; margin-left: 12px;
+            width: 50px; height: 50px; border-radius: 12px;
             object-fit: cover; border: 2px solid #F1F2F6; flex-shrink: 0; cursor: pointer;
             transition: transform 0.2s; background: #eee;
         }
@@ -100,7 +105,7 @@
         .status-btn {
             width: 48px; height: 48px; border-radius: 50%; border: 2px solid #F1F2F6;
             display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
-            background: #fff; transition: 0.2s; color: #DFE4EA; flex-shrink: 0;
+            background: #fff; transition: 0.2s; color: #DFE4EA; flex-shrink: 0; cursor: pointer;
         }
         .status-btn.success { background-color: var(--success); border-color: var(--success); color: white; }
         .status-btn.fail { background-color: var(--danger); border-color: var(--danger); color: white; }
@@ -111,7 +116,7 @@
         .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(255, 107, 107, 0.2); }
 
         .meal-swipe-wrapper {
-            position: relative; width: 100%; height: 200px; /* Fixed height for meal card */
+            position: relative; width: 100%; height: 200px;
             margin-bottom: 15px; border-radius: 16px; overflow: hidden;
             box-shadow: 0 4px 15px rgba(0,0,0,0.04);
         }
@@ -134,15 +139,34 @@
         .menu-day-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 10px; color: var(--primary); }
         .menu-slot {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 10px 0; border-bottom: 1px solid #f0f0f0;
+            padding: 12px 0; border-bottom: 1px solid #f0f0f0;
         }
         .menu-slot:last-child { border-bottom: none; }
         .slot-label { font-weight: 600; font-size: 0.9rem; width: 60px; }
-        .slot-selector {
-            flex: 1; margin-right: 10px; padding: 8px; border-radius: 8px;
-            border: 1px solid #eee; background: #FAFAFC; font-size: 0.9rem;
-            color: var(--text); appearance: none;
+        
+        .slot-btn {
+            flex: 1; margin-right: 10px; padding: 10px; border-radius: 10px;
+            background: #FAFAFC; border: 1px solid #eee;
+            font-size: 0.9rem; color: var(--text); text-align: right;
+            display: flex; justify-content: space-between; align-items: center;
+            cursor: pointer; transition: 0.2s;
         }
+        .slot-btn.filled { background: white; border-color: var(--primary); color: var(--primary); font-weight: 600; }
+        .slot-arrow { font-size: 0.8rem; color: var(--gray); }
+
+        /* --- SELECTOR MODAL --- */
+        .selector-header { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+        .selector-search { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #F1F2F6; font-size: 1rem; }
+        .selector-list { max-height: 60vh; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+        .selector-item {
+            display: flex; align-items: center; padding: 10px; background: #FAFAFC; border-radius: 12px;
+            cursor: pointer; transition: 0.2s; border: 1px solid transparent;
+        }
+        .selector-item:active { transform: scale(0.98); background: #eee; }
+        .selector-item.selected { border-color: var(--primary); background: #FFF0F0; }
+        .selector-img { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; margin-left: 10px; background: #ddd; }
+        .selector-text { font-size: 1rem; font-weight: 600; color: var(--text); }
+        .selector-type { margin-right: auto; font-size: 0.75rem; padding: 3px 8px; border-radius: 6px; color: white; }
 
         /* Floating Buttons */
         .fabs-container { position: fixed; bottom: 110px; left: 25px; display: flex; flex-direction: column; gap: 15px; z-index: 30; align-items: center; }
@@ -317,6 +341,26 @@
         </div>
     </div>
 
+    <div id="mealSelectorModal" class="modal">
+        <div class="modal-content" style="height: 85%; display:flex; flex-direction:column;">
+            <h3 style="margin-top:0; text-align:center;">בחירת מנה</h3>
+            <div class="selector-header">
+                <input type="text" class="selector-search" id="selectorSearch" placeholder="חפש מנה..." onkeyup="renderSelectorList()">
+                <div class="meal-filters">
+                    <div class="filter-btn active" onclick="filterSelector('all', this)">הכל</div>
+                    <div class="filter-btn" onclick="filterSelector('meat', this)">בשרי</div>
+                    <div class="filter-btn" onclick="filterSelector('dairy', this)">חלבי</div>
+                    <div class="filter-btn" onclick="filterSelector('parve', this)">פרווה</div>
+                </div>
+            </div>
+            <div class="selector-list" id="selectorList"></div>
+            <div style="text-align:center; margin-top:20px;">
+                <button class="btn-cancel" onclick="selectMealFromSelector('')" style="color:var(--danger);">ניקוי בחירה</button>
+                <span onclick="closeModal('mealSelectorModal')" style="color:var(--gray); font-weight:600; cursor:pointer; margin-right:20px;">ביטול</span>
+            </div>
+        </div>
+    </div>
+
     <div id="deleteModal" class="modal">
         <div class="modal-content">
             <h3 style="margin-top:0; text-align:center; margin-bottom:10px;">מחיקת משימה</h3>
@@ -363,6 +407,10 @@
         let currentMealType = 'meat';
         let selectedDays = [];
         let currentView = 'daily';
+        
+        // Context for the selector
+        let selectionContext = { day: 0, slot: '' };
+        let currentSelectorFilter = 'all';
         
         const dayNames = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
         const dayShortNames = ['א\'','ב\'','ג\'','ד\'','ה\'','ו\'','ש\''];
@@ -415,29 +463,101 @@
             updateScoreBubble(0);
             const container = document.getElementById('menuList');
             container.innerHTML = '';
-            let optionsHtml = '<option value="">ללא בחירה</option>';
-            mealsData.forEach((m, idx) => { optionsHtml += `<option value="${idx}">${m.title}</option>`; });
+
             dayNames.forEach((dayName, dayIdx) => {
                 if(!weeklyMenu[dayIdx]) weeklyMenu[dayIdx] = { breakfast: '', lunch: '', dinner: '' };
+                
                 const dayCard = document.createElement('div');
                 dayCard.className = 'menu-day-card';
+                
+                const getSlotBtnContent = (val) => {
+                    if(val !== '' && mealsData[val]) return `<span style="font-weight:700;">${mealsData[val].title}</span> <span class="slot-arrow">✎</span>`;
+                    return `<span style="color:#aaa;">בחר מנה...</span> <span class="slot-arrow">▼</span>`;
+                };
+                
+                const valB = weeklyMenu[dayIdx].breakfast;
+                const valL = weeklyMenu[dayIdx].lunch;
+                const valD = weeklyMenu[dayIdx].dinner;
+
                 dayCard.innerHTML = `
                     <div class="menu-day-title">${dayName}</div>
-                    <div class="menu-slot"><div class="slot-label">בוקר</div><select class="slot-selector" onchange="updateMenu(${dayIdx}, 'breakfast', this.value)">${optionsHtml}</select></div>
-                    <div class="menu-slot"><div class="slot-label">צהריים</div><select class="slot-selector" onchange="updateMenu(${dayIdx}, 'lunch', this.value)">${optionsHtml}</select></div>
-                    <div class="menu-slot"><div class="slot-label">ערב</div><select class="slot-selector" onchange="updateMenu(${dayIdx}, 'dinner', this.value)">${optionsHtml}</select></div>
+                    <div class="menu-slot">
+                        <div class="slot-label">בוקר</div>
+                        <div class="slot-btn ${valB!==''?'filled':''}" onclick="openMealSelector(${dayIdx}, 'breakfast')">${getSlotBtnContent(valB)}</div>
+                    </div>
+                    <div class="menu-slot">
+                        <div class="slot-label">צהריים</div>
+                        <div class="slot-btn ${valL!==''?'filled':''}" onclick="openMealSelector(${dayIdx}, 'lunch')">${getSlotBtnContent(valL)}</div>
+                    </div>
+                    <div class="menu-slot">
+                        <div class="slot-label">ערב</div>
+                        <div class="slot-btn ${valD!==''?'filled':''}" onclick="openMealSelector(${dayIdx}, 'dinner')">${getSlotBtnContent(valD)}</div>
+                    </div>
                 `;
-                const selects = dayCard.querySelectorAll('select');
-                selects[0].value = weeklyMenu[dayIdx].breakfast;
-                selects[1].value = weeklyMenu[dayIdx].lunch;
-                selects[2].value = weeklyMenu[dayIdx].dinner;
                 container.appendChild(dayCard);
             });
         }
-        function updateMenu(dayIdx, slot, value) {
-            if(!weeklyMenu[dayIdx]) weeklyMenu[dayIdx] = {};
-            weeklyMenu[dayIdx][slot] = value;
+
+        // --- MEAL SELECTOR MODAL LOGIC ---
+        function openMealSelector(dayIdx, slot) {
+            selectionContext = { day: dayIdx, slot: slot };
+            currentSelectorFilter = 'all';
+            document.getElementById('selectorSearch').value = '';
+            document.querySelectorAll('#mealSelectorModal .filter-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector('#mealSelectorModal .filter-btn').classList.add('active'); 
+            renderSelectorList();
+            openModal('mealSelectorModal');
+        }
+
+        function filterSelector(type, btn) {
+            currentSelectorFilter = type;
+            document.querySelectorAll('#mealSelectorModal .filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderSelectorList();
+        }
+
+        function renderSelectorList() {
+            const query = document.getElementById('selectorSearch').value.toLowerCase();
+            const listEl = document.getElementById('selectorList');
+            listEl.innerHTML = '';
+
+            const filtered = mealsData.map((m, idx) => ({...m, idx})).filter(m => {
+                const matchesType = currentSelectorFilter === 'all' || m.type === currentSelectorFilter;
+                const matchesSearch = m.title.toLowerCase().includes(query);
+                return matchesType && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                listEl.innerHTML = '<div style="text-align:center; padding:20px; color:#ccc;">לא נמצאו תוצאות</div>';
+                return;
+            }
+
+            filtered.forEach(m => {
+                let typeColor = m.type === 'meat' ? 'var(--meat)' : m.type === 'dairy' ? 'var(--dairy)' : 'var(--parve)';
+                let typeName = m.type === 'meat' ? 'בשרי' : m.type === 'dairy' ? 'חלבי' : 'פרווה';
+                const displayImg = m.img || 'https://via.placeholder.com/50?text=Meal';
+                const item = document.createElement('div');
+                item.className = 'selector-item';
+                const currentVal = weeklyMenu[selectionContext.day][selectionContext.slot];
+                if(currentVal == m.idx) item.classList.add('selected');
+
+                item.onclick = () => selectMealFromSelector(m.idx);
+                item.innerHTML = `
+                    <img src="${displayImg}" class="selector-img">
+                    <div style="margin-left:10px; flex:1;">
+                        <div class="selector-text">${m.title}</div>
+                    </div>
+                    <div class="selector-type" style="background:${typeColor}">${typeName}</div>
+                `;
+                listEl.appendChild(item);
+            });
+        }
+
+        function selectMealFromSelector(val) {
+            if(!weeklyMenu[selectionContext.day]) weeklyMenu[selectionContext.day] = {};
+            weeklyMenu[selectionContext.day][selectionContext.slot] = val; 
             saveAll();
+            closeModal('mealSelectorModal');
         }
 
         // --- DAILY VIEW ---
@@ -460,9 +580,10 @@
             }
             
             document.getElementById('mainHeader').style.display = 'flex';
-            if (!trackerData[dateKey]) trackerData[dateKey] = { tasks: [], score: 0, deletedTemplateIds: [], deletedMealSlots: [] };
+            if (!trackerData[dateKey]) trackerData[dateKey] = { tasks: [], score: 0, deletedTemplateIds: [], deletedMealSlots: [], mealStatuses: {} };
             if (!trackerData[dateKey].deletedTemplateIds) trackerData[dateKey].deletedTemplateIds = [];
             if (!trackerData[dateKey].deletedMealSlots) trackerData[dateKey].deletedMealSlots = [];
+            if (!trackerData[dateKey].mealStatuses) trackerData[dateKey].mealStatuses = {};
 
             const dayOfWeek = currentDate.getDay();
             let displayTasks = [];
@@ -481,10 +602,7 @@
                 
                 const recipeId = menuForToday[slot.key];
                 let recipeData = { title: 'לא נבחר מתכון', img: '', link: '' };
-                
-                if(recipeId !== '' && mealsData[recipeId]) {
-                    recipeData = mealsData[recipeId];
-                }
+                if(recipeId !== '' && mealsData[recipeId]) recipeData = mealsData[recipeId];
 
                 displayTasks.push({
                     type: 'meal',
@@ -522,18 +640,28 @@
                 const wrapper = document.createElement('div');
                 wrapper.className = 'task-card-wrapper';
                 let contentHTML = '';
-                let statusClass = '', statusIcon = '';
                 
                 if(item.type === 'meal') {
                     const displayImg = item.img || 'https://via.placeholder.com/50?text=Meal';
+                    
+                    // Meal Status Logic
+                    const mealStatus = trackerData[dateKey].mealStatuses[item.slotKey];
+                    let mStatusClass = '', mStatusIcon = '';
+                    if (mealStatus === 'done') { mStatusIcon = '✓'; mStatusClass = 'success'; }
+                    else if (mealStatus === 'fail') { mStatusIcon = '✕'; mStatusClass = 'fail'; }
+
                     contentHTML = `
                         <div class="task-info">
                             <div class="task-name">${item.name}</div>
                             <div class="task-meta">${item.meta}</div>
                         </div>
-                        <img src="${displayImg}" class="task-meal-img" onclick="if('${item.link}') window.open('${item.link}', '_blank'); event.stopPropagation();">
+                        <div class="meal-action-group">
+                            <img src="${displayImg}" class="task-meal-img" onclick="if('${item.link}') window.open('${item.link}', '_blank'); event.stopPropagation();">
+                            <div class="status-btn ${mStatusClass}" onclick="toggleMealStatus('${item.slotKey}', event)">${mStatusIcon}</div>
+                        </div>
                     `;
                 } else {
+                    let statusClass = '', statusIcon = '';
                     if (item.status === 'done') { statusIcon = '✓'; statusClass = 'success'; }
                     else if (item.status === 'fail') { statusIcon = '✕'; statusClass = 'fail'; }
                     let typeStr = 'חד פעמי';
@@ -585,17 +713,12 @@
         }
 
         function toggleStatus(visualIndex, type, event) {
-            if(type === 'meal') return;
+            if(type === 'meal') return; // Handled by toggleMealStatus
             event.stopPropagation();
             const dateKey = getStorageKey(currentDate);
             const dayOfWeek = currentDate.getDay();
-            // Calculate real task index
             let mealCount = 0;
-            const slots = ['breakfast', 'lunch', 'dinner'];
-            // Count visible meals
-            slots.forEach(k => {
-                if(!trackerData[dateKey].deletedMealSlots.includes(k)) mealCount++;
-            });
+            ['breakfast', 'lunch', 'dinner'].forEach(k => { if(!trackerData[dateKey].deletedMealSlots.includes(k)) mealCount++; });
             
             const taskIndex = visualIndex - mealCount;
             const task = trackerData[dateKey].tasks[taskIndex];
@@ -603,10 +726,23 @@
             saveAll();
         }
 
+        function toggleMealStatus(slotKey, event) {
+            event.stopPropagation();
+            const dateKey = getStorageKey(currentDate);
+            if(!trackerData[dateKey].mealStatuses) trackerData[dateKey].mealStatuses = {};
+            
+            const current = trackerData[dateKey].mealStatuses[slotKey];
+            if (!current) trackerData[dateKey].mealStatuses[slotKey] = 'done';
+            else if (current === 'done') trackerData[dateKey].mealStatuses[slotKey] = 'fail';
+            else trackerData[dateKey].mealStatuses[slotKey] = null;
+            
+            saveAll();
+        }
+
         function handleDeleteSwipe(isMeal, idOrIndex, visualIndex) {
             const dateKey = getStorageKey(currentDate);
             if(isMeal) {
-                // Meals delete immediately for today
+                // Meals delete immediately
                 if(!trackerData[dateKey].deletedMealSlots) trackerData[dateKey].deletedMealSlots = [];
                 trackerData[dateKey].deletedMealSlots.push(idOrIndex);
                 saveAll();
@@ -614,7 +750,6 @@
                 // Tasks open modal
                 taskToDeleteIndex = idOrIndex;
                 openModal('deleteModal');
-                // Reset visual swipe
                 const el = document.getElementById(`content-${visualIndex}`);
                 if(el) el.style.transform = 'translateX(0)';
             }
@@ -718,6 +853,7 @@
 
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeDeleteModal() { closeModal('deleteModal'); taskToDeleteIndex = null; }
+        
         function confirmDeleteToday() {
             if (taskToDeleteIndex === null) return;
             const dateKey = getStorageKey(currentDate); const task = trackerData[dateKey].tasks[taskToDeleteIndex];
