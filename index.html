@@ -29,11 +29,8 @@
             overscroll-behavior-y: none; user-select: none;
         }
 
-        /* FIX: Removed side padding from main view to allow full edge access */
         .view-section { display: none; flex: 1; overflow-y: auto; padding: 15px 0; padding-bottom: 160px; }
         .view-section.active { display: block; }
-
-        /* Stats view needs padding back since we removed it globally */
         #view-stats { padding: 15px; padding-bottom: 160px; }
 
         /* Header */
@@ -77,17 +74,22 @@
         .bubble-crown svg { width: 60px; height: 50px; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.15)); }
         .bubble-label-text { font-size: 0.75rem; color: var(--gray); font-weight: 700; margin-top: 4px; }
 
-        /* --- TASK LIST ITEMS (THE FIX) --- */
+        /* --- TASK CARD FIX --- */
         .task-card {
-            background-color: var(--card); border-radius: 16px; padding: 18px; margin-bottom: 12px;
+            background-color: var(--card); 
+            border-radius: 16px; 
+            padding: 18px; 
+            margin-bottom: 12px;
             display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.02);
             position: relative; overflow: hidden; transition: 0.3s;
             
-            /* Strict Right Alignment */
-            width: 88%; /* רוחב המשימה */
-            margin-right: 5px; /* מרווח מינימלי מצד ימין */
-            margin-left: auto; /* דוחף את כל השאר שמאלה */
+            /* 1. רוחב כמעט מלא */
+            width: 98%; 
+            margin-right: auto; margin-left: auto; /* מרכוז */
+            
+            /* 2. ריפוד שמאלי גדול - דוחף את הכפתורים ימינה כדי לא להתנגש במינוס */
+            padding-left: 90px; 
         }
         
         .task-info { flex: 1; }
@@ -226,7 +228,6 @@
         <div class="fab fab-minus" id="minusBtn" onclick="toggleDeleteMode()">
             <svg viewBox="0 0 24 24"><rect x="6" y="11" width="12" height="2" rx="1"/></svg>
         </div>
-        
         <div class="fab fab-plus" onclick="openAddModal()">
             <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
         </div>
@@ -316,7 +317,6 @@
         let currentView = 'daily';
         let taskToDeleteIndex = null;
         let isDeleteMode = false;
-        
         const dayNames = ['א\'','ב\'','ג\'','ד\'','ה\'','ו\'','ש\''];
 
         function getStorageKey(date) { return date.toISOString().split('T')[0]; }
@@ -561,5 +561,3 @@
     </script>
 </body>
 </html>
-
-
