@@ -35,7 +35,7 @@
         .view-section.active { display: block; }
         #view-stats, #view-meals, #view-menu { padding: 15px; padding-bottom: 170px; }
 
-        /* Compact Header */
+        /* Header */
         header {
             background: var(--gradient); 
             padding: 0 15px;
@@ -83,27 +83,18 @@
         .bubble-label-text { font-size: 0.75rem; color: var(--gray); font-weight: 700; }
 
         /* Card Styles */
-        .task-card-wrapper { 
-            position: relative; width: 98%; 
-            margin: 0 auto 8px auto; 
-            height: 72px; 
-            border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
-        }
+        .task-card-wrapper { position: relative; width: 98%; margin: 0 auto 8px auto; height: 72px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
         .meal-swipe-wrapper { position: relative; width: 98%; margin: 0 auto 12px auto; height: 200px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
-        
         .task-action-bg { position: absolute; top: 0; bottom: 0; right: 0; left: 0; display: flex; justify-content: flex-start; z-index: 1; }
         .action-btn { width: 70px; height: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
         .action-btn svg { width: 24px; height: 24px; fill: white; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
-        
         .action-btn.edit { background: var(--gold-gradient); }
         .action-btn.delete { background: var(--red-gradient); }
-        
         .task-card-content, .meal-card-content { position: absolute; top: 0; bottom: 0; right: 0; left: 0; background-color: var(--card); display: flex; justify-content: space-between; align-items: center; padding: 0 15px 0 20px; border-radius: 16px; z-index: 2; transition: transform 0.2s ease-out; border: 1px solid rgba(0,0,0,0.02); }
         .meal-card-content { display: flex; flex-direction: column; align-items: stretch; padding: 0; }
         .task-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
         .task-name { font-weight: 600; font-size: 1.1rem; margin-bottom: 2px; color: var(--text); }
         .task-meta { font-size: 0.8rem; color: var(--gray); font-weight: 500; display: flex; align-items: center; gap: 5px; }
-        
         .meal-action-group { display: flex; align-items: center; gap: 12px; }
         .meal-stack-container { width: 50px; height: 50px; position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .task-meal-img { width: 45px; height: 45px; border-radius: 10px; object-fit: cover; border: 2px solid #fff; flex-shrink: 0; background: #eee; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
@@ -111,7 +102,6 @@
         .stack-img.layer-1 { z-index: 3; right: 0; }
         .stack-img.layer-2 { z-index: 2; right: 4px; top: -2px; transform: scale(0.95); opacity: 0.9; }
         .stack-img.layer-3 { z-index: 1; right: 8px; top: -4px; transform: scale(0.9); opacity: 0.8; }
-
         .status-btn { width: 42px; height: 42px; border-radius: 50%; border: 2px solid #F1F2F6; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; background: #fff; transition: 0.2s; color: #DFE4EA; flex-shrink: 0; cursor: pointer; }
         .status-btn.success { background-color: var(--success); border-color: var(--success); color: white; }
         .status-btn.fail { background-color: var(--danger); border-color: var(--danger); color: white; }
@@ -149,18 +139,25 @@
         .fab-plus svg { width: 24px; height: 24px; fill: currentColor; }
 
         /* Nav Bar */
-        .nav-bar { 
-            position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-height); 
-            background: var(--gradient); border-top: none; display: flex; flex-direction: column;
-            padding-bottom: max(5px, env(safe-area-inset-bottom)); z-index: 20; 
-            box-shadow: 0 -5px 20px rgba(255, 107, 107, 0.2); 
-        }
+        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-height); background: var(--gradient); border-top: none; display: flex; flex-direction: column; padding-bottom: max(5px, env(safe-area-inset-bottom)); z-index: 20; box-shadow: 0 -5px 20px rgba(255, 107, 107, 0.2); }
         .nav-icons-row { display: flex; width: 100%; flex: 1; align-items: center; }
         .nav-item { text-align: center; color: rgba(255, 255, 255, 0.5); font-size: 0.65rem; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.3s; font-weight: 500; height: 100%; }
         .nav-item.active { color: white; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .nav-icon svg { width: 24px; height: 24px; fill: currentColor; transition: 0.3s; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.05)); }
         .nav-item.active .nav-icon svg { transform: scale(1.1); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
         .nav-footer-status { width: 100%; text-align: center; font-size: 0.7rem; color: rgba(255,255,255,0.7); padding-bottom: 4px; font-weight: 600; background: rgba(0,0,0,0.05); }
+
+        /* Report / Stats Styles */
+        .stats-year-selector { display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 20px; font-size: 1.2rem; font-weight: 700; color: var(--primary); }
+        .stats-year-btn { background: white; border: 1px solid #F1F2F6; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--text); box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; transition: 0.2s; }
+        .stats-year-btn:active { transform: scale(0.9); background: #f0f0f0; }
+        
+        .months-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .month-card { background: white; border-radius: 12px; padding: 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.03); display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100px; transition: 0.3s; }
+        .month-card.empty { opacity: 0.6; background: #FAFAFC; }
+        .month-name { font-size: 0.9rem; font-weight: 700; margin-bottom: 5px; color: var(--text); }
+        .month-score { font-size: 0.8rem; color: var(--gray); font-weight: 500; }
+        .month-crown svg { width: 35px; height: 30px; margin-top: 5px; }
 
         /* Modals & Utils */
         .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(45, 52, 54, 0.6); backdrop-filter: blur(4px); align-items: flex-end; justify-content: center; z-index: 1000; }
@@ -201,19 +198,10 @@
         .recipe-view-body { text-align: right; white-space: pre-wrap; font-size: 1.1rem; line-height: 1.6; color: var(--text); margin-bottom: 20px; }
         .recipe-view-img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; margin-bottom: 20px; }
         
-        /* Updated Clear Button - Top Right */
-        .btn-clear-top { 
-            position: absolute; top: 25px; right: 25px; 
-            background: none; border: none; color: var(--danger); font-weight: 700; font-size: 0.9rem; cursor: pointer; z-index: 5;
-        }
-        
-        .btn-close-modal {
-            background: var(--gold-gradient); 
-            color: white; border: none; padding: 12px 30px; border-radius: 30px; font-weight: 700; font-size: 1rem;
-            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3); cursor: pointer; margin-top: 10px; display: inline-block; transition: transform 0.2s;
-        }
+        .btn-clear-top { position: absolute; top: 25px; right: 25px; background: none; border: none; color: var(--danger); font-weight: 700; font-size: 0.9rem; cursor: pointer; z-index: 5; }
+        .btn-close-modal { background: var(--gold-gradient); color: white; border: none; padding: 12px 30px; border-radius: 30px; font-weight: 700; font-size: 1rem; box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3); cursor: pointer; margin-top: 10px; display: inline-block; transition: transform 0.2s; }
         .btn-close-modal:active { transform: scale(0.95); }
-
+        
         .stack-list-item { display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
         .stack-list-item:last-child { border-bottom: none; }
         .stack-list-img { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; margin-left: 15px; }
@@ -266,11 +254,17 @@
     </div>
 
     <div id="view-stats" class="view-section">
-        <h2 style="margin-top:0; padding-right: 10px; color: var(--text);">סטטיסטיקות</h2>
-        <div class="stat-card-container">
-            <div class="stat-card"><div class="stat-crown" id="monthlyCrown"></div><div class="stat-label">ממוצע חודשי</div></div>
-            <div class="stat-card"><div class="stat-crown" id="yearlyCrown"></div><div class="stat-label">ממוצע שנתי</div></div>
+        <div class="view-header">
+            <h2 class="view-title">דוח שנתי</h2>
         </div>
+        
+        <div class="stats-year-selector">
+            <div class="stats-year-btn" onclick="changeStatsYear(-1)">&#10094;</div>
+            <span id="statsYearDisplay">2026</span>
+            <div class="stats-year-btn" onclick="changeStatsYear(1)">&#10095;</div>
+        </div>
+
+        <div class="months-grid" id="monthsGrid"></div>
     </div>
 
     <div id="scoreBubble" class="score-bubble-container"><div class="bubble-crown" id="bubbleCrown"></div><span class="bubble-label-text">ציון יומי</span></div>
@@ -287,7 +281,7 @@
             <div class="nav-item" onclick="switchView('menu', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/></svg></span>תפריט</div>
             <div class="nav-item" onclick="switchView('stats', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z" /></svg></span>דוח</div>
         </div>
-        <div id="navStatus" class="nav-footer-status">V.60 | טוען...</div>
+        <div id="navStatus" class="nav-footer-status">V.61 | טוען...</div>
     </div>
 
     <div id="taskModal" class="modal">
@@ -444,6 +438,10 @@
         let adminRecipes = safeLoad('myTrackerAdminMeals', []);
         let baseRecipes = fallbackRecipes; 
 
+        // Stats State
+        let currentStatsYear = new Date().getFullYear();
+        const monthNames = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
+
         let currentTaskType = 'once';
         let currentMealType = 'meat';
         let selectedDays = [];
@@ -456,21 +454,18 @@
         let adminToken = localStorage.getItem('adminToken') || null;
         let isAdminMode = !!adminToken;
         
-        // Multi-select temporary storage
         let tempSelectedMeals = [];
 
         const dayNames = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
         const dayShortNames = ['א\'','ב\'','ג\'','ד\'','ה\'','ו\'','ש\''];
 
-        // --- FIX DATA ON LOAD ---
+        // --- FIX DATA ---
         function cleanMenuData() {
             let changed = false;
-            // Iterate all days
             for (let d = 0; d < 7; d++) {
                 if (!weeklyMenu[d]) weeklyMenu[d] = { breakfast: [], lunch: [], dinner: [] };
                 ['breakfast', 'lunch', 'dinner'].forEach(slot => {
                     let val = weeklyMenu[d][slot];
-                    // If it is a number or string number, force to array
                     if (!Array.isArray(val)) {
                         if (val !== '' && val !== null && val !== undefined) {
                             weeklyMenu[d][slot] = [parseInt(val)];
@@ -479,7 +474,6 @@
                         }
                         changed = true;
                     } else {
-                        // Ensure all elements are numbers
                         const cleanArr = val.map(x => parseInt(x)).filter(x => !isNaN(x));
                         if (cleanArr.length !== val.length) {
                             weeklyMenu[d][slot] = cleanArr;
@@ -488,16 +482,13 @@
                     }
                 });
             }
-            if (changed) {
-                console.log("Menu Data Cleaned");
-                saveAll();
-            }
+            if (changed) saveAll();
         }
 
         // --- GITHUB API ---
         async function loadRemoteRecipes() {
             const statusEl = document.getElementById('navStatus');
-            statusEl.innerText = "V.60 | טוען...";
+            statusEl.innerText = "V.61 | טוען...";
             try {
                 const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/recipes.json?ts=${new Date().getTime()}`);
                 if(response.ok) {
@@ -506,7 +497,7 @@
                     const parsed = JSON.parse(decoded);
                     if (Array.isArray(parsed) && parsed.length > 0) {
                         baseRecipes = parsed;
-                        statusEl.innerText = "V.60 | מחובר לענן ✅";
+                        statusEl.innerText = "V.61 | מחובר לענן ✅";
                     } else {
                         throw new Error("Empty remote array");
                     }
@@ -516,7 +507,7 @@
             } catch(e) { 
                 console.log('Using fallback:', e); 
                 baseRecipes = fallbackRecipes;
-                statusEl.innerText = "V.60 | מצב גיבוי ⚠️";
+                statusEl.innerText = "V.61 | מצב גיבוי ⚠️";
             }
             renderCurrentView();
         }
@@ -806,7 +797,7 @@
             const allMeals = getAllMeals();
             
             dayNames.forEach((dayName, dayIdx) => {
-                if(!weeklyMenu[dayIdx]) weeklyMenu[dayIdx] = { breakfast: '', lunch: '', dinner: '' };
+                if(!weeklyMenu[dayIdx]) weeklyMenu[dayIdx] = { breakfast: [], lunch: [], dinner: [] };
                 const dayCard = document.createElement('div'); dayCard.className = 'menu-day-card';
                 
                 const getSlotContentHTML = (val) => {
@@ -835,21 +826,21 @@
                     <div class="menu-day-title">${dayName}</div>
                     <div class="menu-slot">
                         <div class="slot-label">בוקר</div>
-                        <div class="slot-btn ${valB!=='' && (Array.isArray(valB)?valB.length>0:true) ?'filled':''}" onclick="openMealSelector(${dayIdx}, 'breakfast')">
+                        <div class="slot-btn ${valB && valB.length>0 ?'filled':''}" onclick="openMealSelector(${dayIdx}, 'breakfast')">
                             ${getSlotContentHTML(valB)}
                             <div class="slot-arrow">✎</div>
                         </div>
                     </div>
                     <div class="menu-slot">
                         <div class="slot-label">צהריים</div>
-                        <div class="slot-btn ${valL!=='' && (Array.isArray(valL)?valL.length>0:true) ?'filled':''}" onclick="openMealSelector(${dayIdx}, 'lunch')">
+                        <div class="slot-btn ${valL && valL.length>0 ?'filled':''}" onclick="openMealSelector(${dayIdx}, 'lunch')">
                             ${getSlotContentHTML(valL)}
                             <div class="slot-arrow">✎</div>
                         </div>
                     </div>
                     <div class="menu-slot">
                         <div class="slot-label">ערב</div>
-                        <div class="slot-btn ${valD!=='' && (Array.isArray(valD)?valD.length>0:true) ?'filled':''}" onclick="openMealSelector(${dayIdx}, 'dinner')">
+                        <div class="slot-btn ${valD && valD.length>0 ?'filled':''}" onclick="openMealSelector(${dayIdx}, 'dinner')">
                             ${getSlotContentHTML(valD)}
                             <div class="slot-arrow">✎</div>
                         </div>
@@ -932,6 +923,67 @@
         function clearSelection() {
             tempSelectedMeals = [];
             renderSelectorList();
+        }
+
+        // --- STATS LOGIC ---
+        function changeStatsYear(dir) {
+            // Min year is 2025 (Assuming "Previous year" from 2026 perspective)
+            // But logic says "Previous year and 100 years forward" based on current.
+            const nowYear = new Date().getFullYear();
+            const newYear = currentStatsYear + dir;
+            if(newYear < nowYear - 1) return; // Limit previous
+            if(newYear > nowYear + 100) return; // Limit future
+            currentStatsYear = newYear;
+            renderStats();
+        }
+
+        function renderStats() {
+            document.getElementById('mainHeader').style.display = 'none'; 
+            updateScoreBubble(0);
+            
+            document.getElementById('statsYearDisplay').innerText = currentStatsYear;
+            const grid = document.getElementById('monthsGrid');
+            grid.innerHTML = '';
+
+            // Calculate stats per month for currentStatsYear
+            // Iterate all trackerData keys
+            let monthlySums = new Array(12).fill(0);
+            let monthlyCounts = new Array(12).fill(0);
+
+            Object.keys(trackerData).forEach(dateKey => {
+                if(dateKey === 'mealWeights' || dateKey === 'deletedMealSlots' || dateKey === 'deletedTemplateIds' || dateKey === 'mealStatuses') return;
+                
+                const d = new Date(dateKey);
+                if(isNaN(d.getTime())) return; 
+
+                if (d.getFullYear() === currentStatsYear) {
+                    const m = d.getMonth();
+                    const dayData = trackerData[dateKey];
+                    // Only count if score exists and > 0
+                    if (dayData && typeof dayData.score === 'number' && dayData.score > 0) {
+                        monthlySums[m] += dayData.score;
+                        monthlyCounts[m]++;
+                    }
+                }
+            });
+
+            for(let i=0; i<12; i++) {
+                const avg = monthlyCounts[i] > 0 ? Math.round(monthlySums[i] / monthlyCounts[i]) : 0;
+                const card = document.createElement('div');
+                card.className = avg > 0 ? 'month-card' : 'month-card empty';
+                
+                let crownHtml = '<div class="month-crown" style="height:30px;"></div>';
+                if(avg > 0) {
+                    crownHtml = `<div class="month-crown">${getCrownSVG(avg)}</div>`;
+                }
+
+                card.innerHTML = `
+                    <div class="month-name">${monthNames[i]}</div>
+                    <div class="month-score">${avg > 0 ? avg + '%' : '-'}</div>
+                    ${crownHtml}
+                `;
+                grid.appendChild(card);
+            }
         }
 
         // --- DAILY VIEW LOGIC (Updated for Stacks) ---
