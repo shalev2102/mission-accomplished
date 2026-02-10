@@ -70,7 +70,7 @@
         .bubble-crown svg { width: 50px; height: 40px; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.15)); margin-bottom: 2px; }
         .bubble-label-text { font-size: 0.75rem; color: var(--gray); font-weight: 700; }
 
-        /* --- SWIPEABLE CARD STYLES (Shared) --- */
+        /* --- SWIPEABLE CARD STYLES --- */
         .task-card-wrapper {
             position: relative; width: 98%; margin: 0 auto 12px auto; height: 85px;
             border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
@@ -90,11 +90,13 @@
         .task-name { font-weight: 600; font-size: 1.15rem; margin-bottom: 4px; color: var(--text); }
         .task-meta { font-size: 0.85rem; color: var(--gray); font-weight: 500; display: flex; align-items: center; gap: 5px; }
         
-        /* Meal Image in Task */
+        /* Meal Image in Task (Small, Clickable) */
         .task-meal-img {
-            width: 45px; height: 45px; border-radius: 50%; margin-left: 10px;
-            object-fit: cover; border: 2px solid #F1F2F6; flex-shrink: 0;
+            width: 50px; height: 50px; border-radius: 12px; margin-left: 12px;
+            object-fit: cover; border: 2px solid #F1F2F6; flex-shrink: 0; cursor: pointer;
+            transition: transform 0.2s; background: #eee;
         }
+        .task-meal-img:active { transform: scale(0.9); }
 
         .status-btn {
             width: 48px; height: 48px; border-radius: 50%; border: 2px solid #F1F2F6;
@@ -104,7 +106,7 @@
         .status-btn.success { background-color: var(--success); border-color: var(--success); color: white; }
         .status-btn.fail { background-color: var(--danger); border-color: var(--danger); color: white; }
 
-        /* --- MEALS LIBRARY STYLES (Updated for Swipe) --- */
+        /* --- MEALS LIBRARY STYLES --- */
         .meal-filters { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
         .filter-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid #eee; background: white; font-size: 0.9rem; color: var(--gray); font-weight: 600; white-space: nowrap; transition: 0.2s; }
         .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(255, 107, 107, 0.2); }
@@ -334,12 +336,10 @@
             return `<svg class="crown-svg crown-animate" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg"><defs>${defs}</defs><path d="M 15,75 L 85,75 L 80,50 L 50,60 L 20,50 Z" fill="${bodyFill}" stroke="${strokeColor}" stroke-width="1"/><path d="M 20,50 L 10,15 L 35,55 L 50,5 L 65,55 L 90,15 L 80,50 L 50,60 Z" fill="${bodyFill}" stroke="${strokeColor}" stroke-width="1"/>${gemsHTML}</svg>`;
         }
 
-        // Data Structure Update
         let currentDate = new Date();
         let trackerData = JSON.parse(localStorage.getItem('myTrackerData')) || {};
         let templates = JSON.parse(localStorage.getItem('myTrackerTemplates')) || [];
         let mealsData = JSON.parse(localStorage.getItem('myTrackerMeals')) || [];
-        // Weekly Menu: { 0: {breakfast: id, lunch: id, dinner: id}, 1: ... }
         let weeklyMenu = JSON.parse(localStorage.getItem('myTrackerMenu')) || {};
         
         let currentTaskType = 'once';
@@ -379,16 +379,13 @@
         function switchView(viewName, btn) {
             currentView = viewName;
             if (viewName === 'daily') currentDate = new Date();
-            
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.getElementById('view-' + viewName).classList.add('active');
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             btn.classList.add('active');
-            
             const fabContainer = document.querySelector('.fabs-container');
             if(viewName === 'stats' || viewName === 'menu') fabContainer.style.display = 'none';
             else fabContainer.style.display = 'flex';
-
             renderCurrentView();
         }
 
@@ -398,50 +395,25 @@
             updateScoreBubble(0);
             const container = document.getElementById('menuList');
             container.innerHTML = '';
-
-            // Generate options for select
             let optionsHtml = '<option value="">ללא בחירה</option>';
-            mealsData.forEach((m, idx) => {
-                optionsHtml += `<option value="${idx}">${m.title}</option>`;
-            });
-
+            mealsData.forEach((m, idx) => { optionsHtml += `<option value="${idx}">${m.title}</option>`; });
             dayNames.forEach((dayName, dayIdx) => {
                 if(!weeklyMenu[dayIdx]) weeklyMenu[dayIdx] = { breakfast: '', lunch: '', dinner: '' };
-                
                 const dayCard = document.createElement('div');
                 dayCard.className = 'menu-day-card';
                 dayCard.innerHTML = `
                     <div class="menu-day-title">${dayName}</div>
-                    <div class="menu-slot">
-                        <div class="slot-label">בוקר</div>
-                        <select class="slot-selector" onchange="updateMenu(${dayIdx}, 'breakfast', this.value)">
-                            ${optionsHtml}
-                        </select>
-                    </div>
-                    <div class="menu-slot">
-                        <div class="slot-label">צהריים</div>
-                        <select class="slot-selector" onchange="updateMenu(${dayIdx}, 'lunch', this.value)">
-                            ${optionsHtml}
-                        </select>
-                    </div>
-                    <div class="menu-slot">
-                        <div class="slot-label">ערב</div>
-                        <select class="slot-selector" onchange="updateMenu(${dayIdx}, 'dinner', this.value)">
-                            ${optionsHtml}
-                        </select>
-                    </div>
+                    <div class="menu-slot"><div class="slot-label">בוקר</div><select class="slot-selector" onchange="updateMenu(${dayIdx}, 'breakfast', this.value)">${optionsHtml}</select></div>
+                    <div class="menu-slot"><div class="slot-label">צהריים</div><select class="slot-selector" onchange="updateMenu(${dayIdx}, 'lunch', this.value)">${optionsHtml}</select></div>
+                    <div class="menu-slot"><div class="slot-label">ערב</div><select class="slot-selector" onchange="updateMenu(${dayIdx}, 'dinner', this.value)">${optionsHtml}</select></div>
                 `;
-                
-                // Set Selected Values
                 const selects = dayCard.querySelectorAll('select');
                 selects[0].value = weeklyMenu[dayIdx].breakfast;
                 selects[1].value = weeklyMenu[dayIdx].lunch;
                 selects[2].value = weeklyMenu[dayIdx].dinner;
-
                 container.appendChild(dayCard);
             });
         }
-
         function updateMenu(dayIdx, slot, value) {
             if(!weeklyMenu[dayIdx]) weeklyMenu[dayIdx] = {};
             weeklyMenu[dayIdx][slot] = value;
@@ -454,8 +426,6 @@
         function renderDay(animateDirection = 0) {
             const dateKey = getStorageKey(currentDate);
             const dateStr = currentDate.toLocaleDateString('he-IL', { weekday: 'long', day: 'numeric', month: 'numeric' });
-            
-            // Animation Header
             const container = document.getElementById('dateContainer');
             const newText = document.createElement('div');
             newText.className = 'date-text'; newText.innerText = dateStr;
@@ -475,39 +445,38 @@
             if (!trackerData[dateKey].deletedMealSlots) trackerData[dateKey].deletedMealSlots = [];
 
             const dayOfWeek = currentDate.getDay();
-            
-            // 1. Build List: Meals from Menu
             let displayTasks = [];
             
-            if(weeklyMenu[dayOfWeek]) {
-                const slots = [
-                    { key: 'breakfast', name: 'א.בוקר' },
-                    { key: 'lunch', name: 'א.צהריים' },
-                    { key: 'dinner', name: 'א.ערב' }
-                ];
-                
-                slots.forEach(slot => {
-                    const mealIdx = weeklyMenu[dayOfWeek][slot.key];
-                    // If recipe chosen AND not deleted today
-                    if(mealIdx !== '' && mealIdx !== undefined && !trackerData[dateKey].deletedMealSlots.includes(slot.key)) {
-                        const meal = mealsData[mealIdx];
-                        if(meal) {
-                            displayTasks.push({
-                                type: 'meal',
-                                slotKey: slot.key,
-                                name: slot.name,
-                                meta: meal.title,
-                                img: meal.img,
-                                link: meal.link,
-                                status: null, // Meals don't strictly need status, but could have
-                                weight: 0 // Default 0 or assign weight
-                            });
-                        }
-                    }
-                });
-            }
+            // Generate 3 Static Meal Tasks
+            const mealSlots = [
+                { key: 'breakfast', label: 'ארוחת בוקר' },
+                { key: 'lunch', label: 'ארוחת צהריים' },
+                { key: 'dinner', label: 'ארוחת ערב' }
+            ];
 
-            // 2. Build List: Templates
+            const menuForToday = weeklyMenu[dayOfWeek] || { breakfast: '', lunch: '', dinner: '' };
+
+            mealSlots.forEach(slot => {
+                if(trackerData[dateKey].deletedMealSlots.includes(slot.key)) return;
+                
+                const recipeId = menuForToday[slot.key];
+                let recipeData = { title: 'לא נבחר מתכון', img: '', link: '' };
+                
+                if(recipeId !== '' && mealsData[recipeId]) {
+                    recipeData = mealsData[recipeId];
+                }
+
+                displayTasks.push({
+                    type: 'meal',
+                    slotKey: slot.key,
+                    name: slot.label,
+                    meta: recipeData.title,
+                    img: recipeData.img,
+                    link: recipeData.link
+                });
+            });
+
+            // Template Tasks
             const relevantTemplates = templates.filter(t => t.days.includes(dayOfWeek));
             relevantTemplates.forEach(tpl => {
                 const alreadyExists = trackerData[dateKey].tasks.some(t => t.templateId === tpl.id);
@@ -517,18 +486,14 @@
                 }
             });
 
-            // Combine Arrays (Meals first, then Tasks)
             const combinedList = [...displayTasks, ...trackerData[dateKey].tasks];
-
             const taskListEl = document.getElementById('taskList');
             taskListEl.innerHTML = '';
             
             let totalWeight = 0; let currentScore = 0;
-
             if (combinedList.length === 0) taskListEl.innerHTML = '<div style="text-align:center; color:#B2BEC3; margin-top:40px;">אין משימות להיום</div>';
 
             combinedList.forEach((item, index) => {
-                // Calculate score only for regular tasks
                 if(item.type !== 'meal') {
                     totalWeight += parseInt(item.weight);
                     if (item.status === 'done') currentScore += parseInt(item.weight);
@@ -536,48 +501,35 @@
 
                 const wrapper = document.createElement('div');
                 wrapper.className = 'task-card-wrapper';
-                
                 let contentHTML = '';
                 let statusClass = '', statusIcon = '';
                 
                 if(item.type === 'meal') {
-                    // Render Meal Task
-                    const displayImg = item.img || 'https://via.placeholder.com/50';
+                    const displayImg = item.img || 'https://via.placeholder.com/50?text=Meal';
                     contentHTML = `
                         <div class="task-info">
                             <div class="task-name">${item.name}</div>
                             <div class="task-meta">${item.meta}</div>
                         </div>
-                        <img src="${displayImg}" class="task-meal-img" onclick="window.open('${item.link || '#'}', '_blank'); event.stopPropagation();">
+                        <img src="${displayImg}" class="task-meal-img" onclick="if('${item.link}') window.open('${item.link}', '_blank'); event.stopPropagation();">
                     `;
                 } else {
-                    // Render Regular Task
                     if (item.status === 'done') { statusIcon = '✓'; statusClass = 'success'; }
                     else if (item.status === 'fail') { statusIcon = '✕'; statusClass = 'fail'; }
-                    
                     let typeStr = 'חד פעמי';
                     if (item.fromTemplate && item.templateId) {
                         const tpl = templates.find(t => t.id === item.templateId);
-                        if (tpl) {
-                            if (tpl.days.length === 7) typeStr = 'כל יום';
-                            else typeStr = 'ימים ' + tpl.days.map(d => dayShortNames[d]).join(', ');
-                        } else { typeStr = 'קבוע'; }
+                        if (tpl) { if (tpl.days.length === 7) typeStr = 'כל יום'; else typeStr = 'ימים ' + tpl.days.map(d => dayShortNames[d]).join(', '); } else { typeStr = 'קבוע'; }
                     }
                     const metaString = `${item.weight}% | ${typeStr}`;
-                    
                     contentHTML = `
-                        <div class="task-info">
-                            <div class="task-name">${item.name}</div>
-                            <div class="task-meta">${metaString}</div>
-                        </div>
+                        <div class="task-info"><div class="task-name">${item.name}</div><div class="task-meta">${metaString}</div></div>
                         <div class="status-btn ${statusClass}" onclick="toggleStatus(${index}, '${item.type}', event)">${statusIcon}</div>
                     `;
                 }
 
-                // Delete Handler (Distinguish Meal vs Task)
-                // We need to know if it's a meal to pass correct ID to delete
                 const isMeal = item.type === 'meal';
-                const deleteParam = isMeal ? `'${item.slotKey}'` : index - displayTasks.length; // Adjust index for tasks array
+                const deleteParam = isMeal ? `'${item.slotKey}'` : index - displayTasks.length;
 
                 wrapper.innerHTML = `
                     <div class="task-action-bg" onclick="handleDeleteSwipe(${isMeal}, ${deleteParam})">🗑</div>
@@ -585,7 +537,6 @@
                         ${contentHTML}
                     </div>
                 `;
-                
                 taskListEl.appendChild(wrapper);
                 setupSwipe(wrapper.querySelector('.task-card-content'));
             });
@@ -613,27 +564,23 @@
             });
         }
 
-        // --- ACTIONS ---
         function toggleStatus(visualIndex, type, event) {
-            // Meals don't have status toggle yet, only tasks
             if(type === 'meal') return;
-            
             event.stopPropagation();
             const dateKey = getStorageKey(currentDate);
-            
-            // We need to map visualIndex back to trackerData.tasks index
-            // Since meals come first in visual list, we subtract their count
-            let mealCount = 0;
             const dayOfWeek = currentDate.getDay();
-            if(weeklyMenu[dayOfWeek]) {
-                 ['breakfast','lunch','dinner'].forEach(k => {
-                     if(weeklyMenu[dayOfWeek][k] !== '' && !trackerData[dateKey].deletedMealSlots.includes(k)) mealCount++;
-                 });
-            }
+            // Calculate real task index
+            let mealCount = 0;
+            const slots = ['breakfast', 'lunch', 'dinner'];
+            const menuForToday = weeklyMenu[dayOfWeek] || {};
+            
+            // Count visible meals
+            slots.forEach(k => {
+                if(!trackerData[dateKey].deletedMealSlots.includes(k)) mealCount++;
+            });
             
             const taskIndex = visualIndex - mealCount;
             const task = trackerData[dateKey].tasks[taskIndex];
-            
             if (!task.status) task.status = 'done'; else if (task.status === 'done') task.status = 'fail'; else task.status = null;
             saveAll();
         }
@@ -641,12 +588,10 @@
         function handleDeleteSwipe(isMeal, idOrIndex) {
             const dateKey = getStorageKey(currentDate);
             if(isMeal) {
-                // Delete Meal Slot for today
                 if(!trackerData[dateKey].deletedMealSlots) trackerData[dateKey].deletedMealSlots = [];
-                trackerData[dateKey].deletedMealSlots.push(idOrIndex); // idOrIndex is slotKey
+                trackerData[dateKey].deletedMealSlots.push(idOrIndex);
                 saveAll();
             } else {
-                // Delete Task logic (simplified for swipe)
                 const task = trackerData[dateKey].tasks[idOrIndex];
                 if (task.fromTemplate) {
                      if(!trackerData[dateKey].deletedTemplateIds) trackerData[dateKey].deletedTemplateIds = [];
@@ -657,37 +602,30 @@
             }
         }
 
-        // --- MEALS RENDER (With Swipe) ---
+        // --- MEALS RENDER ---
         function renderMeals(filter = 'all') {
             document.getElementById('mainHeader').style.display = 'none';
             updateScoreBubble(0);
             const container = document.getElementById('mealsList');
             container.innerHTML = '';
-            
             const filteredMeals = filter === 'all' ? mealsData : mealsData.filter(m => m.type === filter);
             if (filteredMeals.length === 0) { container.innerHTML = '<div style="text-align:center; color:#B2BEC3; margin-top:40px;">אין מתכונים בקטגוריה זו</div>'; return; }
-            
             filteredMeals.forEach((meal, index) => {
                 const realIndex = mealsData.indexOf(meal);
                 const wrapper = document.createElement('div');
-                wrapper.className = 'meal-swipe-wrapper'; // New wrapper for swipe
-                
+                wrapper.className = 'meal-swipe-wrapper';
                 let tagClass = '', tagText = '';
                 if(meal.type === 'meat') { tagClass = 'tag-meat'; tagText = 'בשרי'; }
                 else if(meal.type === 'dairy') { tagClass = 'tag-dairy'; tagText = 'חלבי'; }
                 else { tagClass = 'tag-parve'; tagText = 'פרווה'; }
                 const displayImg = meal.img || 'https://via.placeholder.com/400x200?text=No+Image';
-
                 wrapper.innerHTML = `
                     <div class="task-action-bg" onclick="deleteMeal(${realIndex})">🗑</div>
                     <div class="meal-card-content" onclick="window.open('${meal.link || '#'}', '_blank')">
                         <img src="${displayImg}" class="meal-img" alt="${meal.title}">
                         <div class="meal-info-box">
                             <div class="meal-title">${meal.title}</div>
-                            <div class="meal-details">
-                                <div class="meal-time">⏱ ${meal.time}</div>
-                                <div class="meal-tag ${tagClass}">${tagText}</div>
-                            </div>
+                            <div class="meal-details"><div class="meal-time">⏱ ${meal.time}</div><div class="meal-tag ${tagClass}">${tagText}</div></div>
                         </div>
                     </div>
                 `;
@@ -696,34 +634,36 @@
             });
         }
 
-        function handleFabPlus() {
-            if (currentView === 'meals') document.getElementById('mealModal').style.display = 'flex';
-            else document.getElementById('taskModal').style.display = 'flex';
-        }
-        
+        function handleFabPlus() { if (currentView === 'meals') document.getElementById('mealModal').style.display = 'flex'; else document.getElementById('taskModal').style.display = 'flex'; }
         function filterMeals(type, btn) { document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderMeals(type); }
-        
         function saveMeal() {
-            const title = document.getElementById('mealTitle').value;
-            const time = document.getElementById('mealTime').value;
-            const img = document.getElementById('mealImgUrl').value;
-            const link = document.getElementById('mealLinkUrl').value;
+            const title = document.getElementById('mealTitle').value; const time = document.getElementById('mealTime').value; const img = document.getElementById('mealImgUrl').value; const link = document.getElementById('mealLinkUrl').value;
             if(!title) return alert('נא להזין שם מנה');
             mealsData.push({ title, time, img, link, type: currentMealType });
             saveAll(); document.getElementById('mealModal').style.display = 'none'; if(currentView === 'meals') renderMeals();
         }
-        function setMealType(type) {
-            currentMealType = type;
-            document.getElementById('opt-meat').className = type === 'meat' ? 'toggle-opt selected' : 'toggle-opt';
-            document.getElementById('opt-dairy').className = type === 'dairy' ? 'toggle-opt selected' : 'toggle-opt';
-            document.getElementById('opt-parve').className = type === 'parve' ? 'toggle-opt selected' : 'toggle-opt';
-        }
-        function deleteMeal(index) {
-            if(confirm('למחוק את המתכון?')) { mealsData.splice(index, 1); saveAll(); renderMeals(); }
+        function setMealType(type) { currentMealType = type; document.getElementById('opt-meat').className = type === 'meat' ? 'toggle-opt selected' : 'toggle-opt'; document.getElementById('opt-dairy').className = type === 'dairy' ? 'toggle-opt selected' : 'toggle-opt'; document.getElementById('opt-parve').className = type === 'parve' ? 'toggle-opt selected' : 'toggle-opt'; }
+        function deleteMeal(index) { if(confirm('למחוק את המתכון?')) { mealsData.splice(index, 1); saveAll(); renderMeals(); } }
+
+        // --- STATS & HELPERS ---
+        function renderStats() {
+            document.getElementById('mainHeader').style.display = 'none';
+            updateScoreBubble(0); 
+            const keys = Object.keys(trackerData);
+            let monthSum = 0, monthCount = 0, yearSum = 0, yearCount = 0;
+            const now = new Date();
+            keys.forEach(key => {
+                const date = new Date(key); const data = trackerData[key];
+                if (data.tasks && data.tasks.length > 0) {
+                    if (date.getFullYear() === now.getFullYear()) { yearSum += data.score; yearCount++; if (date.getMonth() === now.getMonth()) { monthSum += data.score; monthCount++; } }
+                }
+            });
+            const mAvg = monthCount ? Math.round(monthSum / monthCount) : 0;
+            const yAvg = yearCount ? Math.round(yearSum / yearCount) : 0;
+            document.getElementById('monthlyCrown').innerHTML = getCrownSVG(mAvg || 1);
+            document.getElementById('yearlyCrown').innerHTML = getCrownSVG(yAvg || 1);
         }
 
-        // Stats & Modal Helpers
-        function renderStats() { /* Same as before */ }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
         function openAddModal() { document.getElementById('taskModal').style.display = 'flex'; setTaskType('once'); }
         function setTaskType(type) {
