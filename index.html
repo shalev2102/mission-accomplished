@@ -35,21 +35,18 @@
         .view-section.active { display: block; }
         #view-stats, #view-meals, #view-menu { padding: 15px; padding-bottom: 160px; }
 
-        /* Header */
+        /* Header & Status */
         header {
-            background: var(--gradient);
-            padding: 15px; padding-top: max(15px, env(safe-area-inset-top));
+            background: var(--gradient); padding: 15px; padding-top: max(15px, env(safe-area-inset-top));
             display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
-            z-index: 10; color: white; height: 80px;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3); z-index: 10; color: white; height: 80px;
         }
         header button { background: none; border: none; font-size: 2rem; color: white; padding: 0 20px; cursor: pointer; opacity: 0.8; transition: 0.2s; z-index: 2; }
         header button:active { opacity: 1; transform: scale(1.1); }
         .date-wrapper { position: relative; height: 30px; width: 200px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
         .date-text { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,0.1); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s; white-space: nowrap; backface-visibility: hidden; }
-
-        /* Status Bar */
-        #statusMsg { position: fixed; top: 85px; left: 0; right: 0; text-align: center; font-size: 0.75rem; color: var(--gray); z-index: 5; pointer-events: none; }
+        
+        #statusMsg { position: fixed; top: 85px; left: 0; right: 0; text-align: center; font-size: 0.75rem; color: var(--gray); z-index: 5; pointer-events: none; text-shadow: 0 1px 2px white; font-weight: 600; }
 
         /* Bubble */
         .score-bubble-container {
@@ -61,7 +58,7 @@
         .bubble-crown svg { width: 50px; height: 40px; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.15)); margin-bottom: 2px; }
         .bubble-label-text { font-size: 0.75rem; color: var(--gray); font-weight: 700; }
 
-        /* Card Styles */
+        /* Cards */
         .task-card-wrapper, .meal-swipe-wrapper { position: relative; width: 98%; margin: 0 auto 12px auto; height: 85px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
         .meal-swipe-wrapper { height: 200px; }
         .task-action-bg { position: absolute; top: 0; bottom: 0; right: 0; left: 0; display: flex; justify-content: flex-start; z-index: 1; }
@@ -117,7 +114,7 @@
         .nav-icon svg { width: 24px; height: 24px; fill: currentColor; transition: 0.3s; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.05)); }
         .nav-item.active .nav-icon svg { transform: scale(1.1); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
 
-        /* Modals */
+        /* Modals & Utils */
         .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(45, 52, 54, 0.6); backdrop-filter: blur(4px); align-items: flex-end; justify-content: center; z-index: 1000; }
         .modal-content { background: #ffffff; padding: 30px; border-top-left-radius: 25px; border-top-right-radius: 25px; width: 100%; max-width: 600px; animation: slideUp 0.3s; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
@@ -132,10 +129,10 @@
         .full-width-btn { width: 100%; padding: 12px; background: #F1F2F6; border: none; border-radius: 10px; font-weight: 600; margin-bottom: 15px; }
         .btn-save { width: 100%; padding: 16px; background: var(--gradient); color: white; border:none; border-radius: 14px; font-size: 1.1rem; font-weight: 700; }
         
-        /* Spinner & Utils */
         #loadingOverlay { display: none; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(255,255,255,0.8); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; }
         .spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
         .selector-header { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
         .selector-search { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #F1F2F6; font-size: 1rem; }
         .selector-list { max-height: 60vh; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
@@ -151,16 +148,15 @@
         .btn-delete-forever { width: 100%; padding: 15px; background: #FF4757; color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; }
         .btn-cancel { width: 100%; padding: 15px; background: transparent; color: var(--gray); border: none; font-size: 1rem; font-weight: 500; }
 
+        .version-footer { text-align: center; font-size: 0.7rem; color: #ccc; padding: 15px; margin-bottom: var(--nav-height); }
+
         @keyframes popCrown { 0% { transform: scale(0.5); opacity: 0; } 60% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
         .crown-animate { animation: popCrown 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
     </style>
 </head>
 <body>
 
-    <div id="loadingOverlay">
-        <div class="spinner"></div>
-        <div style="margin-top:10px; font-weight:bold; color:var(--primary);">מעדכן נתונים...</div>
-    </div>
+    <div id="loadingOverlay"><div class="spinner"></div><div style="margin-top:10px; font-weight:bold; color:var(--primary);">מעדכן נתונים...</div></div>
 
     <header id="mainHeader">
         <button onclick="changeDate(-1)">&#10094;</button> 
@@ -170,7 +166,7 @@
     
     <div id="statusMsg"></div>
 
-    <div id="view-daily" class="view-section active"><div id="taskList"></div></div>
+    <div id="view-daily" class="view-section active"><div id="taskList"></div><div class="version-footer">גרסה 50.0</div></div>
 
     <div id="view-meals" class="view-section">
         <h2 style="margin-top:0; padding-right: 10px; color: var(--text);">מאגר מתכונים</h2>
@@ -309,11 +305,11 @@
     </div>
 
     <script>
-        // --- 1. SETTINGS: PRE-FILLED FOR SHALEV ---
+        // --- 1. SETTINGS ---
         const GITHUB_USERNAME = "shalev2102"; 
         const REPO_NAME = "mission-accomplished"; 
 
-        // --- 2. FALLBACK RECIPES (SAFETY NET) ---
+        // --- 2. FALLBACK RECIPES ---
         const fallbackRecipes = [
             { title: "שקשוקה קלאסית", time: "20 דקות", type: "dairy", img: "https://images.unsplash.com/photo-1590412200988-a436970781fa?w=500&auto=format&fit=crop&q=60", link: "https://www.mako.co.il/food-cooking_magazine/flavors-shakshuka/Recipe-76d06631623bd21006.htm" },
             { title: "שניצל ופירה", time: "40 דקות", type: "meat", img: "https://images.unsplash.com/photo-1599921841143-819065a55cc6?w=500&auto=format&fit=crop&q=60", link: "https://www.nikib.co.il/lunch/4624/" },
@@ -340,7 +336,7 @@
         let weeklyMenu = safeLoad('myTrackerMenu', {});
         let userMeals = safeLoad('myTrackerMeals', []);
         let adminRecipes = safeLoad('myTrackerAdminMeals', []);
-        let baseRecipes = []; // Will be loaded or fallback
+        let baseRecipes = fallbackRecipes; // Default to fallback initially
 
         let currentTaskType = 'once';
         let currentMealType = 'meat';
@@ -362,22 +358,26 @@
             const statusEl = document.getElementById('statusMsg');
             statusEl.innerText = "טוען מתכונים...";
             try {
-                const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/recipes.json`);
+                const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/recipes.json?ts=${new Date().getTime()}`);
                 if(response.ok) {
                     const data = await response.json();
                     const decoded = decodeURIComponent(escape(window.atob(data.content)));
                     const parsed = JSON.parse(decoded);
-                    baseRecipes = (Array.isArray(parsed) && parsed.length > 0) ? parsed : fallbackRecipes;
-                    statusEl.innerText = "מחובר למאגר הענן ✅";
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        baseRecipes = parsed;
+                        statusEl.innerText = "מחובר למאגר הענן ✅";
+                        statusEl.style.color = "var(--success)";
+                    } else {
+                        throw new Error("Empty remote array");
+                    }
                 } else {
-                    console.log('Repo not found or empty, using fallback.');
-                    baseRecipes = fallbackRecipes;
-                    statusEl.innerText = "משתמש במאגר גיבוי (לא נמצא ענן) ⚠️";
+                    throw new Error("Repo not found");
                 }
             } catch(e) { 
-                console.log('Remote load failed, using fallback', e); 
+                console.log('Using fallback:', e); 
                 baseRecipes = fallbackRecipes;
-                statusEl.innerText = "אין חיבור לאינטרנט - מצב אופליין 📡";
+                statusEl.innerText = "מצב אופליין (גיבוי) ⚠️";
+                statusEl.style.color = "var(--edit-btn)";
             }
             renderCurrentView();
         }
@@ -408,7 +408,7 @@
                     alert("המאגר עודכן בהצלחה בגיטהאב!");
                     baseRecipes = newRecipesArray;
                 } else {
-                    alert("שגיאה בעדכון גיטהאב. בדוק שהטוקן תקין ויש לו הרשאות Repo.");
+                    alert("שגיאה בעדכון גיטהאב.");
                 }
             } catch(e) { alert("שגיאת תקשורת: " + e.message); }
             document.getElementById('loadingOverlay').style.display = 'none';
@@ -418,7 +418,7 @@
         // --- DATA HELPERS ---
         function getAllMeals() {
             let all = [];
-            // Ensure arrays exist
+            // Fail-safe check
             const safeBase = Array.isArray(baseRecipes) ? baseRecipes : fallbackRecipes;
             const safeAdmin = Array.isArray(adminRecipes) ? adminRecipes : [];
             const safeUser = Array.isArray(userMeals) ? userMeals : [];
@@ -437,7 +437,7 @@
                 localStorage.setItem('myTrackerMeals', JSON.stringify(userMeals));
                 localStorage.setItem('myTrackerAdminMeals', JSON.stringify(adminRecipes)); 
                 localStorage.setItem('myTrackerMenu', JSON.stringify(weeklyMenu));
-            } catch(e) { console.error("Save failed", e); alert("שגיאה בשמירת נתונים - הזיכרון מלא?"); }
+            } catch(e) { console.error("Save failed", e); }
             renderCurrentView();
         }
 
@@ -465,42 +465,186 @@
             renderCurrentView();
         }
 
-        // --- MENU LOGIC ---
-        function renderMenu() {
+        // --- CROWN SVG ---
+        function getCrownSVG(score) {
+            if (score === 0) return ''; 
+            let defs = '', bodyFill = '', strokeColor = '#000', gemsHTML = '';
+            if (score < 20) { defs = `<linearGradient id="bronzeGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#CD7F32"/><stop offset="50%" stop-color="#A0522D"/><stop offset="100%" stop-color="#8B4513"/></linearGradient>`; bodyFill = "url(#bronzeGrad)"; strokeColor = "#5D4037"; } 
+            else if (score < 40) { defs = `<linearGradient id="silverGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ECF0F1"/><stop offset="50%" stop-color="#BDC3C7"/><stop offset="100%" stop-color="#95A5A6"/></linearGradient>`; bodyFill = "url(#silverGrad)"; strokeColor = "#7F8C8D"; } 
+            else { defs = `<linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F1C40F"/><stop offset="30%" stop-color="#F39C12"/><stop offset="70%" stop-color="#F1C40F"/><stop offset="100%" stop-color="#D35400"/></linearGradient>`; bodyFill = "url(#goldGrad)"; strokeColor = "#E67E22"; }
+            if (score >= 60 && score < 80) { defs += `<radialGradient id="rubyDiamondGrad" cx="30%" cy="30%" r="70%"><stop offset="0%" stop-color="#ff7675"/><stop offset="100%" stop-color="#d63031"/></radialGradient>`; gemsHTML = `<path d="M20,52 L25,58 L20,64 L15,58 Z" fill="url(#rubyDiamondGrad)" stroke="#c0392b" stroke-width="0.5"/><path d="M50,40 L57,48 L50,56 L43,48 Z" fill="url(#rubyDiamondGrad)" stroke="#c0392b" stroke-width="0.5"/><path d="M80,52 L85,58 L80,64 L75,58 Z" fill="url(#rubyDiamondGrad)" stroke="#c0392b" stroke-width="0.5"/>`; } 
+            else if (score >= 80) { defs += `<radialGradient id="diamondGrad" cx="30%" cy="30%" r="70%"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#74b9ff"/></radialGradient>`; gemsHTML = `<path d="M20,52 L25,58 L20,64 L15,58 Z" fill="url(#diamondGrad)" stroke="#0984e3" stroke-width="0.5"/><path d="M50,40 L57,48 L50,56 L43,48 Z" fill="url(#diamondGrad)" stroke="#0984e3" stroke-width="0.5"/><path d="M80,52 L85,58 L80,64 L75,58 Z" fill="url(#diamondGrad)" stroke="#0984e3" stroke-width="0.5"/>`; }
+            return `<svg class="crown-svg crown-animate" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg"><defs>${defs}</defs><path d="M 15,75 L 85,75 L 80,50 L 50,60 L 20,50 Z" fill="${bodyFill}" stroke="${strokeColor}" stroke-width="1"/><path d="M 20,50 L 10,15 L 35,55 L 50,5 L 65,55 L 90,15 L 80,50 L 50,60 Z" fill="${bodyFill}" stroke="${strokeColor}" stroke-width="1"/>${gemsHTML}</svg>`;
+        }
+
+        // --- UPDATE CROWN ---
+        function updateScoreBubble(score) {
+            const bubble = document.getElementById('scoreBubble');
+            if (score > 0 && currentView === 'daily') {
+                document.getElementById('bubbleCrown').innerHTML = getCrownSVG(score);
+                bubble.classList.add('visible');
+            } else {
+                bubble.classList.remove('visible');
+            }
+        }
+
+        // --- ADMIN LOGIN ---
+        function openAdminLogin() {
+            if(isAdminMode) {
+                if(confirm("האם לצאת ממצב מנהל? (המפתח יימחק מהזיכרון)")) {
+                    localStorage.removeItem('adminToken'); adminToken = null; isAdminMode = false; renderCurrentView();
+                }
+            } else { openModal('adminModal'); }
+        }
+
+        function loginAdmin() {
+            const token = document.getElementById('adminToken').value.trim();
+            if(token.length > 10) {
+                adminToken = token; localStorage.setItem('adminToken', token); isAdminMode = true; closeModal('adminModal');
+                alert("נכנסת למצב מנהל."); renderCurrentView();
+            } else { alert("מפתח לא תקין"); }
+        }
+
+        // --- MEALS LOGIC ---
+        function renderMeals(filter = 'all') {
             document.getElementById('mainHeader').style.display = 'none';
             updateScoreBubble(0);
-            const container = document.getElementById('menuList');
+            const container = document.getElementById('mealsList');
             container.innerHTML = '';
             
             const allMeals = getAllMeals();
+            const filteredMeals = allMeals.filter(m => filter === 'all' || m.type === filter);
 
-            dayNames.forEach((dayName, dayIdx) => {
-                if(!weeklyMenu[dayIdx]) weeklyMenu[dayIdx] = { breakfast: '', lunch: '', dinner: '' };
-                const dayCard = document.createElement('div');
-                dayCard.className = 'menu-day-card';
+            if (filteredMeals.length === 0) { container.innerHTML = '<div style="text-align:center; color:#B2BEC3; margin-top:40px;">אין מתכונים</div>'; return; }
+            
+            filteredMeals.forEach((meal) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'meal-swipe-wrapper';
+                let tagClass = '', tagText = '';
+                if(meal.type === 'meat') { tagClass = 'tag-meat'; tagText = 'בשרי'; }
+                else if(meal.type === 'dairy') { tagClass = 'tag-dairy'; tagText = 'חלבי'; }
+                else { tagClass = 'tag-parve'; tagText = 'פרווה'; }
+                const displayImg = meal.img || 'https://via.placeholder.com/400x200?text=No+Image';
                 
-                const getSlotBtnContent = (val) => {
-                    if(val !== '' && allMeals[val]) return `<span style="font-weight:700;">${allMeals[val].title}</span> <span class="slot-arrow">✎</span>`;
-                    return `<span style="color:#aaa;">בחר מנה...</span> <span class="slot-arrow">▼</span>`;
-                };
+                const isBase = meal.source === 'base';
+                const isLocked = isBase && !isAdminMode;
+                const showLock = isLocked ? '<div class="locked-icon">🔒</div>' : '';
                 
-                const valB = weeklyMenu[dayIdx].breakfast;
-                const valL = weeklyMenu[dayIdx].lunch;
-                const valD = weeklyMenu[dayIdx].dinner;
+                let swipeContent = '';
+                if(!isLocked) {
+                    swipeContent = `
+                    <div class="task-action-bg">
+                        <div class="action-btn edit" onclick="editMeal('${meal.source}', ${meal.originalIndex})">✎</div>
+                        <div class="action-btn delete" onclick="deleteMeal('${meal.source}', ${meal.originalIndex})">🗑</div>
+                    </div>`;
+                }
 
-                dayCard.innerHTML = `
-                    <div class="menu-day-title">${dayName}</div>
-                    <div class="menu-slot"><div class="slot-label">בוקר</div><div class="slot-btn ${valB!==''?'filled':''}" onclick="openMealSelector(${dayIdx}, 'breakfast')">${getSlotBtnContent(valB)}</div></div>
-                    <div class="menu-slot"><div class="slot-label">צהריים</div><div class="slot-btn ${valL!==''?'filled':''}" onclick="openMealSelector(${dayIdx}, 'lunch')">${getSlotBtnContent(valL)}</div></div>
-                    <div class="menu-slot"><div class="slot-label">ערב</div><div class="slot-btn ${valD!==''?'filled':''}" onclick="openMealSelector(${dayIdx}, 'dinner')">${getSlotBtnContent(valD)}</div></div>
+                wrapper.innerHTML = `
+                    ${swipeContent}
+                    <div class="meal-card-content" onclick="window.open('${meal.link || '#'}', '_blank')">
+                        ${showLock}
+                        <img src="${displayImg}" class="meal-img" alt="${meal.title}">
+                        <div class="meal-info-box">
+                            <div class="meal-title">${meal.title}</div>
+                            <div class="meal-details"><div class="meal-time">⏱ ${meal.time}</div><div class="meal-tag ${tagClass}">${tagText}</div></div>
+                        </div>
+                    </div>
                 `;
-                container.appendChild(dayCard);
+                container.appendChild(wrapper);
+                if(!isLocked) setupSwipe(wrapper.querySelector('.meal-card-content'));
             });
         }
 
+        function handleFabPlus() { 
+            if (currentView === 'meals') {
+                editingMealData = null;
+                document.getElementById('mealModalTitle').innerText = 'מתכון חדש';
+                document.getElementById('mealSaveBtn').innerText = 'שמור מתכון';
+                document.getElementById('mealTitle').value = '';
+                document.getElementById('mealTime').value = '';
+                document.getElementById('mealImgUrl').value = '';
+                document.getElementById('mealLinkUrl').value = '';
+                setMealType('meat');
+                openModal('mealModal');
+            } else { openAddModal(); }
+        }
+
+        function editMeal(source, index) {
+            const contents = document.querySelectorAll('.meal-card-content');
+            contents.forEach(c => c.style.transform = 'translateX(0)');
+            editingMealData = { source, index };
+            let meal;
+            if(source === 'base') meal = baseRecipes[index];
+            else if(source === 'admin') meal = adminRecipes[index];
+            else meal = userMeals[index];
+            
+            if(!meal) return;
+            document.getElementById('mealModalTitle').innerText = 'עריכת מתכון';
+            document.getElementById('mealSaveBtn').innerText = 'עדכן מתכון';
+            document.getElementById('mealTitle').value = meal.title;
+            document.getElementById('mealTime').value = meal.time;
+            document.getElementById('mealImgUrl').value = meal.img;
+            document.getElementById('mealLinkUrl').value = meal.link;
+            setMealType(meal.type);
+            openModal('mealModal');
+        }
+
+        async function saveMeal() {
+            const title = document.getElementById('mealTitle').value; const time = document.getElementById('mealTime').value; const img = document.getElementById('mealImgUrl').value; const link = document.getElementById('mealLinkUrl').value;
+            if(!title) return alert('נא להזין שם מנה');
+            const mealObj = { title, time, img, link, type: currentMealType };
+            
+            if (editingMealData) {
+                if (editingMealData.source === 'base') {
+                    baseRecipes[editingMealData.index] = mealObj; await saveToGitHub(baseRecipes);
+                } else if (editingMealData.source === 'admin') {
+                    adminRecipes[editingMealData.index] = mealObj; saveAll();
+                } else {
+                    userMeals[editingMealData.index] = mealObj; saveAll();
+                }
+            } else {
+                if(isAdminMode) {
+                    if(confirm("האם להוסיף למאגר הכללי (גיטהאב)?")) {
+                        baseRecipes.push(mealObj); await saveToGitHub(baseRecipes);
+                    } else {
+                        userMeals.push(mealObj); saveAll();
+                    }
+                } else {
+                    userMeals.push(mealObj); saveAll();
+                }
+            }
+            closeModal('mealModal'); if(currentView === 'meals') renderMeals();
+        }
+
+        async function deleteMeal(source, index) { 
+            if(confirm('למחוק את המתכון?')) { 
+                if(source === 'base') {
+                    baseRecipes.splice(index, 1); await saveToGitHub(baseRecipes);
+                } else if(source === 'admin') {
+                    adminRecipes.splice(index, 1); saveAll();
+                } else {
+                    userMeals.splice(index, 1); saveAll(); 
+                }
+                renderMeals(); 
+            } 
+        }
+
+        // --- MENU LOGIC ---
+        function renderMenu() {
+            document.getElementById('mainHeader').style.display = 'none'; updateScoreBubble(0);
+            const container = document.getElementById('menuList'); container.innerHTML = '';
+            const allMeals = getAllMeals();
+            dayNames.forEach((dayName, dayIdx) => {
+                if(!weeklyMenu[dayIdx]) weeklyMenu[dayIdx] = { breakfast: '', lunch: '', dinner: '' };
+                const dayCard = document.createElement('div'); dayCard.className = 'menu-day-card';
+                const getSlotBtnContent = (val) => { if(val !== '' && allMeals[val]) return `<span style="font-weight:700;">${allMeals[val].title}</span> <span class="slot-arrow">✎</span>`; return `<span style="color:#aaa;">בחר מנה...</span> <span class="slot-arrow">▼</span>`; };
+                const valB = weeklyMenu[dayIdx].breakfast; const valL = weeklyMenu[dayIdx].lunch; const valD = weeklyMenu[dayIdx].dinner;
+                dayCard.innerHTML = `<div class="menu-day-title">${dayName}</div><div class="menu-slot"><div class="slot-label">בוקר</div><div class="slot-btn ${valB!==''?'filled':''}" onclick="openMealSelector(${dayIdx}, 'breakfast')">${getSlotBtnContent(valB)}</div></div><div class="menu-slot"><div class="slot-label">צהריים</div><div class="slot-btn ${valL!==''?'filled':''}" onclick="openMealSelector(${dayIdx}, 'lunch')">${getSlotBtnContent(valL)}</div></div><div class="menu-slot"><div class="slot-label">ערב</div><div class="slot-btn ${valD!==''?'filled':''}" onclick="openMealSelector(${dayIdx}, 'dinner')">${getSlotBtnContent(valD)}</div></div>`;
+                container.appendChild(dayCard);
+            });
+        }
         function openMealSelector(dayIdx, slot) { selectionContext = { day: dayIdx, slot: slot }; currentSelectorFilter = 'all'; document.getElementById('selectorSearch').value = ''; document.querySelectorAll('#mealSelectorModal .filter-btn').forEach(b => b.classList.remove('active')); document.querySelector('#mealSelectorModal .filter-btn').classList.add('active'); renderSelectorList(); openModal('mealSelectorModal'); }
         function filterSelector(type, btn) { currentSelectorFilter = type; document.querySelectorAll('#mealSelectorModal .filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderSelectorList(); }
-        
         function renderSelectorList() {
             const query = document.getElementById('selectorSearch').value.toLowerCase(); const listEl = document.getElementById('selectorList'); listEl.innerHTML = '';
             const allMeals = getAllMeals();
@@ -509,8 +653,6 @@
             filtered.forEach(m => { let typeColor = m.type === 'meat' ? 'var(--meat)' : m.type === 'dairy' ? 'var(--dairy)' : 'var(--parve)'; let typeName = m.type === 'meat' ? 'בשרי' : m.type === 'dairy' ? 'חלבי' : 'פרווה'; const displayImg = m.img || 'https://via.placeholder.com/50?text=Meal'; const item = document.createElement('div'); item.className = 'selector-item'; const currentVal = weeklyMenu[selectionContext.day][selectionContext.slot]; if(currentVal == m.globalIdx) item.classList.add('selected'); item.onclick = () => selectMealFromSelector(m.globalIdx); item.innerHTML = `<img src="${displayImg}" class="selector-img"><div style="margin-left:10px; flex:1;"><div class="selector-text">${m.title}</div></div><div class="selector-type" style="background:${typeColor}">${typeName}</div>`; listEl.appendChild(item); });
         }
         function selectMealFromSelector(val) { if(!weeklyMenu[selectionContext.day]) weeklyMenu[selectionContext.day] = {}; weeklyMenu[selectionContext.day][selectionContext.slot] = val; saveAll(); closeModal('mealSelectorModal'); }
-
-        // --- DAILY VIEW ---
         function changeDate(direction) { currentDate.setDate(currentDate.getDate() + direction); renderDay(direction); }
         function renderDay(animateDirection = 0) {
             const dateKey = getStorageKey(currentDate); const dateStr = currentDate.toLocaleDateString('he-IL', { weekday: 'long', day: 'numeric', month: 'numeric' });
@@ -572,69 +714,9 @@
         function toggleStatus(visualIndex, type, event) { if(type === 'meal') return; const content = document.getElementById(`content-${visualIndex}`); if (content.style.transform === 'translateX(-140px)') return; event.stopPropagation(); const dateKey = getStorageKey(currentDate); const dayOfWeek = currentDate.getDay(); let mealCount = 0; ['breakfast', 'lunch', 'dinner'].forEach(k => { if(!trackerData[dateKey].deletedMealSlots.includes(k)) mealCount++; }); const taskIndex = visualIndex - mealCount; const task = trackerData[dateKey].tasks[taskIndex]; if (!task.status) task.status = 'done'; else if (task.status === 'done') task.status = 'fail'; else task.status = null; saveAll(); }
         function toggleMealStatus(slotKey, event) { event.stopPropagation(); const dateKey = getStorageKey(currentDate); if(!trackerData[dateKey].mealStatuses) trackerData[dateKey].mealStatuses = {}; const current = trackerData[dateKey].mealStatuses[slotKey]; if (!current) trackerData[dateKey].mealStatuses[slotKey] = 'done'; else if (current === 'done') trackerData[dateKey].mealStatuses[slotKey] = 'fail'; else trackerData[dateKey].mealStatuses[slotKey] = null; saveAll(); }
         function handleDeleteSwipe(isMeal, idOrIndex, visualIndex) { const el = document.getElementById(`content-${visualIndex}`); if(el) el.style.transform = 'translateX(0)'; const dateKey = getStorageKey(currentDate); if(isMeal) { if(!trackerData[dateKey].deletedMealSlots) trackerData[dateKey].deletedMealSlots = []; trackerData[dateKey].deletedMealSlots.push(idOrIndex); saveAll(); } else { taskToDeleteIndex = idOrIndex; openModal('deleteModal'); } }
-        
-        // --- MEALS RENDER ---
-        function renderMeals(filter = 'all') {
-            document.getElementById('mainHeader').style.display = 'none'; updateScoreBubble(0);
-            const container = document.getElementById('mealsList'); container.innerHTML = '';
-            
-            const allMeals = getAllMeals();
-            const filteredMeals = allMeals.filter(m => filter === 'all' || m.type === filter);
-
-            if (filteredMeals.length === 0) { container.innerHTML = '<div style="text-align:center; color:#B2BEC3; margin-top:40px;">אין מתכונים</div>'; return; }
-            
-            filteredMeals.forEach((meal) => {
-                const wrapper = document.createElement('div'); wrapper.className = 'meal-swipe-wrapper';
-                let tagClass = '', tagText = '';
-                if(meal.type === 'meat') { tagClass = 'tag-meat'; tagText = 'בשרי'; } else if(meal.type === 'dairy') { tagClass = 'tag-dairy'; tagText = 'חלבי'; } else { tagClass = 'tag-parve'; tagText = 'פרווה'; }
-                const displayImg = meal.img || 'https://via.placeholder.com/400x200?text=No+Image';
-                const isBase = meal.source === 'base'; const isLocked = isBase && !isAdminMode; const showLock = isLocked ? '<div class="locked-icon">🔒</div>' : '';
-                let swipeContent = '';
-                if(!isLocked) { swipeContent = `<div class="task-action-bg"><div class="action-btn edit" onclick="editMeal('${meal.source}', ${meal.originalIndex})">✎</div><div class="action-btn delete" onclick="deleteMeal('${meal.source}', ${meal.originalIndex})">🗑</div></div>`; }
-                wrapper.innerHTML = `${swipeContent}<div class="meal-card-content" onclick="window.open('${meal.link || '#'}', '_blank')">${showLock}<img src="${displayImg}" class="meal-img" alt="${meal.title}"><div class="meal-info-box"><div class="meal-title">${meal.title}</div><div class="meal-details"><div class="meal-time">⏱ ${meal.time}</div><div class="meal-tag ${tagClass}">${tagText}</div></div></div></div>`;
-                container.appendChild(wrapper); if(!isLocked) setupSwipe(wrapper.querySelector('.meal-card-content'));
-            });
-        }
-
-        // --- ACTIONS ---
-        function handleFabPlus() { if (currentView === 'meals') { editingMealData = null; document.getElementById('mealModalTitle').innerText = 'מתכון חדש'; document.getElementById('mealSaveBtn').innerText = 'שמור מתכון'; document.getElementById('mealTitle').value = ''; document.getElementById('mealTime').value = ''; document.getElementById('mealImgUrl').value = ''; document.getElementById('mealLinkUrl').value = ''; setMealType('meat'); openModal('mealModal'); } else { openAddModal(); } }
-        function editMeal(source, index) {
-            const contents = document.querySelectorAll('.meal-card-content'); contents.forEach(c => c.style.transform = 'translateX(0)');
-            editingMealData = { source, index };
-            let meal = (source === 'base') ? baseRecipes[index] : (source === 'admin' ? adminRecipes[index] : userMeals[index]);
-            if(!meal) return;
-            document.getElementById('mealModalTitle').innerText = 'עריכת מתכון'; document.getElementById('mealSaveBtn').innerText = 'עדכן מתכון';
-            document.getElementById('mealTitle').value = meal.title; document.getElementById('mealTime').value = meal.time; document.getElementById('mealImgUrl').value = meal.img; document.getElementById('mealLinkUrl').value = meal.link; setMealType(meal.type);
-            openModal('mealModal');
-        }
-        async function saveMeal() {
-            const title = document.getElementById('mealTitle').value; const time = document.getElementById('mealTime').value; const img = document.getElementById('mealImgUrl').value; const link = document.getElementById('mealLinkUrl').value;
-            if(!title) return alert('נא להזין שם מנה');
-            const mealObj = { title, time, img, link, type: currentMealType };
-            if (editingMealData) {
-                if (editingMealData.source === 'base') { baseRecipes[editingMealData.index] = mealObj; await saveToGitHub(baseRecipes); } 
-                else if (editingMealData.source === 'admin') { adminRecipes[editingMealData.index] = mealObj; saveAll(); }
-                else { userMeals[editingMealData.index] = mealObj; saveAll(); }
-            } else {
-                if(isAdminMode) { if(confirm("האם להוסיף למאגר הכללי (גיטהאב)?")) { baseRecipes.push(mealObj); await saveToGitHub(baseRecipes); } else { userMeals.push(mealObj); saveAll(); } }
-                else { userMeals.push(mealObj); saveAll(); }
-            }
-            closeModal('mealModal'); if(currentView === 'meals') renderMeals();
-        }
-        async function deleteMeal(source, index) { 
-            if(confirm('למחוק את המתכון?')) { 
-                if(source === 'base') { baseRecipes.splice(index, 1); await saveToGitHub(baseRecipes); } 
-                else if(source === 'admin') { adminRecipes.splice(index, 1); saveAll(); }
-                else { userMeals.splice(index, 1); saveAll(); }
-                renderMeals(); 
-            } 
-        }
-        function openAdminLogin() { if(isAdminMode) { if(confirm("האם לצאת ממצב מנהל?")) { localStorage.removeItem('adminToken'); adminToken = null; isAdminMode = false; renderCurrentView(); } } else { openModal('adminModal'); } }
-        function loginAdmin() { const token = document.getElementById('adminToken').value.trim(); if(token.length > 10) { adminToken = token; localStorage.setItem('adminToken', token); isAdminMode = true; closeModal('adminModal'); alert("נכנסת למצב מנהל."); renderCurrentView(); } else { alert("מפתח לא תקין"); } }
         function filterMeals(type, btn) { document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderMeals(type); }
         function setMealType(type) { currentMealType = type; document.getElementById('opt-meat').className = type === 'meat' ? 'toggle-opt selected' : 'toggle-opt'; document.getElementById('opt-dairy').className = type === 'dairy' ? 'toggle-opt selected' : 'toggle-opt'; document.getElementById('opt-parve').className = type === 'parve' ? 'toggle-opt selected' : 'toggle-opt'; }
         function renderStats() { document.getElementById('mainHeader').style.display = 'none'; updateScoreBubble(0); const keys = Object.keys(trackerData); let monthSum = 0, monthCount = 0, yearSum = 0, yearCount = 0; const now = new Date(); keys.forEach(key => { if(key === 'mealWeights') return; const date = new Date(key); const data = trackerData[key]; if (data.tasks && data.score > 0) { if (date.getFullYear() === now.getFullYear()) { yearSum += data.score; yearCount++; if (date.getMonth() === now.getMonth()) { monthSum += data.score; monthCount++; } } } }); const mAvg = monthCount ? Math.round(monthSum / monthCount) : 0; const yAvg = yearCount ? Math.round(yearSum / yearCount) : 0; document.getElementById('monthlyCrown').innerHTML = getCrownSVG(mAvg || 1); document.getElementById('yearlyCrown').innerHTML = getCrownSVG(yAvg || 1); }
-        function getCrownSVG(score) { if (score === 0) return ''; let defs = '', bodyFill = '', strokeColor = '#000', gemsHTML = ''; if (score < 20) { defs = `<linearGradient id="bronzeGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#CD7F32"/><stop offset="50%" stop-color="#A0522D"/><stop offset="100%" stop-color="#8B4513"/></linearGradient>`; bodyFill = "url(#bronzeGrad)"; strokeColor = "#5D4037"; } else if (score < 40) { defs = `<linearGradient id="silverGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ECF0F1"/><stop offset="50%" stop-color="#BDC3C7"/><stop offset="100%" stop-color="#95A5A6"/></linearGradient>`; bodyFill = "url(#silverGrad)"; strokeColor = "#7F8C8D"; } else { defs = `<linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F1C40F"/><stop offset="30%" stop-color="#F39C12"/><stop offset="70%" stop-color="#F1C40F"/><stop offset="100%" stop-color="#D35400"/></linearGradient>`; bodyFill = "url(#goldGrad)"; strokeColor = "#E67E22"; } if (score >= 60 && score < 80) { defs += `<radialGradient id="rubyDiamondGrad" cx="30%" cy="30%" r="70%"><stop offset="0%" stop-color="#ff7675"/><stop offset="100%" stop-color="#d63031"/></radialGradient>`; gemsHTML = `<path d="M20,52 L25,58 L20,64 L15,58 Z" fill="url(#rubyDiamondGrad)" stroke="#c0392b" stroke-width="0.5"/><path d="M50,40 L57,48 L50,56 L43,48 Z" fill="url(#rubyDiamondGrad)" stroke="#c0392b" stroke-width="0.5"/><path d="M80,52 L85,58 L80,64 L75,58 Z" fill="url(#rubyDiamondGrad)" stroke="#c0392b" stroke-width="0.5"/>`; } else if (score >= 80) { defs += `<radialGradient id="diamondGrad" cx="30%" cy="30%" r="70%"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#74b9ff"/></radialGradient>`; gemsHTML = `<path d="M20,52 L25,58 L20,64 L15,58 Z" fill="url(#diamondGrad)" stroke="#0984e3" stroke-width="0.5"/><path d="M50,40 L57,48 L50,56 L43,48 Z" fill="url(#diamondGrad)" stroke="#0984e3" stroke-width="0.5"/><path d="M80,52 L85,58 L80,64 L75,58 Z" fill="url(#diamondGrad)" stroke="#0984e3" stroke-width="0.5"/>`; } return `<svg class="crown-svg crown-animate" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg"><defs>${defs}</defs><path d="M 15,75 L 85,75 L 80,50 L 50,60 L 20,50 Z" fill="${bodyFill}" stroke="${strokeColor}" stroke-width="1"/><path d="M 20,50 L 10,15 L 35,55 L 50,5 L 65,55 L 90,15 L 80,50 L 50,60 Z" fill="${bodyFill}" stroke="${strokeColor}" stroke-width="1"/>${gemsHTML}</svg>`; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
         function openAddModal() { document.getElementById('taskModal').style.display = 'flex'; setTaskType('once'); }
         function setTaskType(type) { currentTaskType = type; document.getElementById('opt-once').className = type === 'once' ? 'toggle-opt selected' : 'toggle-opt'; document.getElementById('opt-recurring').className = type === 'recurring' ? 'toggle-opt selected' : 'toggle-opt'; document.getElementById('recurring-options').style.display = type === 'recurring' ? 'block' : 'none'; if(type === 'recurring') { selectedDays = []; updateDaysUI(); } }
