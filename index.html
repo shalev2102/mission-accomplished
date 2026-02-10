@@ -35,17 +35,19 @@
         .view-section.active { display: block; }
         #view-stats, #view-meals, #view-menu { padding: 15px; padding-bottom: 170px; }
 
-        /* Header */
+        /* Compact Header */
         header {
-            background: var(--gradient); padding: 15px; padding-top: max(15px, env(safe-area-inset-top));
+            background: var(--gradient); 
+            padding: 0 15px; /* Reduced padding */
+            padding-top: max(5px, env(safe-area-inset-top));
             display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
-            z-index: 10; color: white; height: 80px;
+            box-shadow: 0 2px 10px rgba(255, 107, 107, 0.3);
+            z-index: 10; color: white; height: 50px; /* Reduced Height by ~40% */
         }
-        header button { background: none; border: none; font-size: 2rem; color: white; padding: 0 20px; cursor: pointer; opacity: 0.8; transition: 0.2s; z-index: 2; }
+        header button { background: none; border: none; font-size: 1.5rem; color: white; padding: 0 20px; cursor: pointer; opacity: 0.9; transition: 0.2s; z-index: 2; }
         header button:active { opacity: 1; transform: scale(1.1); }
         .date-wrapper { position: relative; height: 30px; width: 200px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
-        .date-text { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,0.1); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s; white-space: nowrap; backface-visibility: hidden; }
+        .date-text { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,0.1); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s; white-space: nowrap; backface-visibility: hidden; }
 
         /* General Header for Views */
         .view-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
@@ -57,7 +59,7 @@
             background: none; border: none; cursor: pointer; color: var(--gray); transition: 0.3s; 
             display: flex; align-items: center; justify-content: center; padding: 5px;
         }
-        .header-icon-btn svg { width: 28px; height: 28px; fill: currentColor; }
+        .header-icon-btn svg { width: 26px; height: 26px; fill: currentColor; }
         .header-icon-btn.active { color: var(--primary); transform: scale(1.1); }
 
         .recipe-link-btn {
@@ -104,19 +106,8 @@
         
         /* New Stack Styles */
         .meal-action-group { display: flex; align-items: center; gap: 12px; }
-        
-        /* Image Stack Container */
-        .meal-stack-container {
-            width: 50px; height: 50px; position: relative; 
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
-        }
-        .task-meal-img { 
-            width: 45px; height: 45px; border-radius: 10px; object-fit: cover; 
-            border: 2px solid #fff; flex-shrink: 0; background: #eee; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        /* Stack Effect */
+        .meal-stack-container { width: 50px; height: 50px; position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .task-meal-img { width: 45px; height: 45px; border-radius: 10px; object-fit: cover; border: 2px solid #fff; flex-shrink: 0; background: #eee; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .stack-img { position: absolute; right: 0; transition: 0.2s; }
         .stack-img.layer-1 { z-index: 3; right: 0; }
         .stack-img.layer-2 { z-index: 2; right: 4px; top: -2px; transform: scale(0.95); opacity: 0.9; }
@@ -212,6 +203,23 @@
         .recipe-view-body { text-align: right; white-space: pre-wrap; font-size: 1.1rem; line-height: 1.6; color: var(--text); margin-bottom: 20px; }
         .recipe-view-img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; margin-bottom: 20px; }
         
+        /* Prominent Close Button */
+        .btn-close-modal {
+            background: var(--gold-gradient); /* Same as edit button */
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px; /* Pill shape */
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+            cursor: pointer;
+            margin-top: 10px;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+        .btn-close-modal:active { transform: scale(0.95); }
+        
         /* Stack List Modal Items */
         .stack-list-item { display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
         .stack-list-item:last-child { border-bottom: none; }
@@ -238,7 +246,7 @@
         <div class="view-header">
             <h2 class="view-title">מאגר מתכונים</h2>
             <button id="adminBtn" class="header-icon-btn" onclick="openAdminLogin()">
-                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 1.74.5 3.37 1.41 4.84.95 1.54 2.2 2.86 3.59 4.16V20h4v-2c1.39-1.3 2.64-2.62 3.59-4.16C18.5 12.37 19 10.74 19 9c0-3.87-3.13-7-7-7zm0 2c2.76 0 5 2.24 5 5 0 1.2-.43 2.34-1.21 3.28C15.04 13.24 14.07 14 12 14c-2.07 0-3.04-.76-3.79-1.72C7.43 11.34 7 10.2 7 9c0-2.76 2.24-5 5-5zM8 21v1h8v-1H8z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-8-2h4v2h-4V4zM4 19v-8h16v8H4z"/></svg>
             </button>
         </div>
         <div class="meal-filters">
@@ -286,7 +294,7 @@
             <div class="nav-item" onclick="switchView('menu', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/></svg></span>תפריט</div>
             <div class="nav-item" onclick="switchView('stats', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z" /></svg></span>דוח</div>
         </div>
-        <div id="navStatus" class="nav-footer-status">V.57 | טוען...</div>
+        <div id="navStatus" class="nav-footer-status">V.58 | טוען...</div>
     </div>
 
     <div id="taskModal" class="modal">
@@ -339,7 +347,9 @@
             <img id="recipeViewImg" class="recipe-view-img" src="">
             <div id="recipeViewBody" class="recipe-view-body"></div>
             <button id="recipeViewLinkBtn" class="btn-save" style="margin-bottom:15px;">מעבר למתכון המקורי</button>
-            <div style="text-align:center;"><span onclick="closeModal('recipeViewModal')" style="color:var(--gray); font-weight:600; cursor:pointer;">סגור</span></div>
+            <div style="text-align:center;">
+                <button class="btn-close-modal" onclick="closeModal('recipeViewModal')">סגור</button>
+            </div>
         </div>
     </div>
 
@@ -347,7 +357,9 @@
         <div class="modal-content" style="max-height: 80vh; overflow-y: auto;">
             <h3 style="margin-top:0; text-align:center; margin-bottom:15px;">מנות בארוחה</h3>
             <div id="stackListContainer"></div>
-            <div style="text-align:center; margin-top:20px;"><span onclick="closeModal('stackModal')" style="color:var(--gray); font-weight:600; cursor:pointer;">סגור</span></div>
+            <div style="text-align:center; margin-top:20px;">
+                <button class="btn-close-modal" onclick="closeModal('stackModal')">סגור</button>
+            </div>
         </div>
     </div>
 
@@ -459,7 +471,7 @@
         // --- GITHUB API ---
         async function loadRemoteRecipes() {
             const statusEl = document.getElementById('navStatus');
-            statusEl.innerText = "V.57 | טוען...";
+            statusEl.innerText = "V.58 | טוען...";
             try {
                 const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/recipes.json?ts=${new Date().getTime()}`);
                 if(response.ok) {
@@ -468,7 +480,7 @@
                     const parsed = JSON.parse(decoded);
                     if (Array.isArray(parsed) && parsed.length > 0) {
                         baseRecipes = parsed;
-                        statusEl.innerText = "V.57 | מחובר לענן ✅";
+                        statusEl.innerText = "V.58 | מחובר לענן ✅";
                     } else {
                         throw new Error("Empty remote array");
                     }
@@ -478,7 +490,7 @@
             } catch(e) { 
                 console.log('Using fallback:', e); 
                 baseRecipes = fallbackRecipes;
-                statusEl.innerText = "V.57 | מצב גיבוי ⚠️";
+                statusEl.innerText = "V.58 | מצב גיבוי ⚠️";
             }
             renderCurrentView();
         }
