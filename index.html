@@ -157,7 +157,7 @@
         .nav-item.active .nav-icon svg { transform: scale(1.1); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
         .nav-footer-status { width: 100%; text-align: center; font-size: 0.7rem; color: rgba(255,255,255,0.7); padding-bottom: 4px; font-weight: 600; background: rgba(0,0,0,0.05); }
 
-        /* Report / Stats Styles REBORN */
+        /* Report / Stats Styles */
         .stats-year-selector { display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 20px; font-size: 1.2rem; font-weight: 700; color: var(--primary); }
         .stats-year-btn { background: white; border: 1px solid #F1F2F6; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--text); box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; transition: 0.2s; }
         .stats-year-btn:active { transform: scale(0.9); background: #f0f0f0; }
@@ -291,7 +291,7 @@
             <div class="nav-item" onclick="switchView('menu', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/></svg></span>תפריט</div>
             <div class="nav-item" onclick="switchView('stats', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z" /></svg></span>דוח</div>
         </div>
-        <div id="navStatus" class="nav-footer-status">V.65 | טוען...</div>
+        <div id="navStatus" class="nav-footer-status">V.66 | טוען...</div>
     </div>
 
     <div id="taskModal" class="modal">
@@ -314,7 +314,6 @@
                     <div class="day-circle" onclick="toggleDay(6)" data-day="6">ש</div>
                 </div>
             </div>
-            <input type="number" id="newTaskWeight" placeholder="חשיבות (1-100)" inputmode="numeric" pattern="[0-9]*">
             <button class="btn-save" onclick="saveTask()">שמור משימה</button>
             <div style="text-align:center; margin-top:20px;"><span onclick="closeModal('taskModal')" style="color:var(--gray); font-weight:600; cursor:pointer;">ביטול</span></div>
         </div>
@@ -393,15 +392,6 @@
         </div>
     </div>
 
-    <div id="weightModal" class="modal">
-        <div class="modal-content" style="max-width: 300px;">
-            <h3 style="margin-top:0; text-align:center;">עריכת חשיבות</h3>
-            <input type="number" id="editWeightInput" placeholder="חשיבות באחוזים" inputmode="numeric">
-            <button class="btn-save" onclick="saveWeightEdit()">שמור</button>
-            <div style="text-align:center; margin-top:20px;"><span onclick="closeModal('weightModal')" style="color:var(--gray); cursor:pointer;">ביטול</span></div>
-        </div>
-    </div>
-
     <div id="deleteModal" class="modal">
         <div class="modal-content">
             <h3 style="margin-top:0; text-align:center; margin-bottom:10px;">מחיקת משימה</h3>
@@ -450,7 +440,6 @@
 
         // Stats State
         let currentStatsYear = new Date().getFullYear();
-        // Defined LOCALLY in renderStats to be safe, but can be global too.
         
         let currentTaskType = 'once';
         let currentMealType = 'meat';
@@ -460,7 +449,7 @@
         let selectionContext = { day: 0, slot: '' };
         let currentSelectorFilter = 'all';
         let editingMealData = null; 
-        let editingWeightSlot = null;
+        // weight slot removed
         let adminToken = localStorage.getItem('adminToken') || null;
         let isAdminMode = !!adminToken;
         
@@ -498,7 +487,7 @@
         // --- GITHUB API ---
         async function loadRemoteRecipes() {
             const statusEl = document.getElementById('navStatus');
-            statusEl.innerText = "V.65 | טוען...";
+            statusEl.innerText = "V.66 | טוען...";
             try {
                 const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/recipes.json?ts=${new Date().getTime()}`);
                 if(response.ok) {
@@ -507,7 +496,7 @@
                     const parsed = JSON.parse(decoded);
                     if (Array.isArray(parsed) && parsed.length > 0) {
                         baseRecipes = parsed;
-                        statusEl.innerText = "V.65 | מחובר לענן ✅";
+                        statusEl.innerText = "V.66 | מחובר לענן ✅";
                     } else {
                         throw new Error("Empty remote array");
                     }
@@ -517,7 +506,7 @@
             } catch(e) { 
                 console.log('Using fallback:', e); 
                 baseRecipes = fallbackRecipes;
-                statusEl.innerText = "V.65 | מצב גיבוי ⚠️";
+                statusEl.innerText = "V.66 | מצב גיבוי ⚠️";
             }
             renderCurrentView();
         }
@@ -737,14 +726,11 @@
             } else { openAddModal(); }
         }
 
-        // --- FIXED SAVE TASK FUNCTION ---
         function saveTask() {
             const name = document.getElementById('newTaskName').value;
-            let weight = parseInt(document.getElementById('newTaskWeight').value);
-            
+            // No weight reading
             if(!name) return alert('חובה להזין שם משימה');
-            if(isNaN(weight) || weight <= 0) weight = 10; 
-
+            
             if (currentTaskType === 'once') {
                 const dateKey = getStorageKey(currentDate);
                 if (!trackerData[dateKey]) trackerData[dateKey] = { tasks: [], score: 0 };
@@ -752,18 +738,15 @@
                 
                 trackerData[dateKey].tasks.push({
                     name: name,
-                    weight: weight,
                     status: null,
                     fromTemplate: false
                 });
                 saveAll();
             } else {
-                // Recurring
                 if (selectedDays.length === 0) return alert('אנא בחר ימים לחזרה');
                 const newTpl = {
                     id: Date.now(),
                     name: name,
-                    weight: weight,
                     days: selectedDays
                 };
                 templates.push(newTpl);
@@ -900,7 +883,6 @@
             currentSelectorFilter = 'all'; 
             document.getElementById('selectorSearch').value = ''; 
             
-            // STRICT INTEGER PARSING FIX FOR GHOST SELECTION
             let raw = weeklyMenu[dayIdx][slot];
             if (Array.isArray(raw)) {
                 tempSelectedMeals = raw.map(x => parseInt(x)).filter(x => !isNaN(x));
@@ -944,7 +926,6 @@
                 const item = document.createElement('div'); 
                 item.className = 'selector-item'; 
                 
-                // Compare Integers
                 if (tempSelectedMeals.includes(m.globalIdx)) { item.classList.add('selected'); }
                 
                 item.onclick = () => toggleMealSelection(m.globalIdx, item); 
@@ -970,7 +951,7 @@
             renderSelectorList();
         }
 
-        // --- STATS LOGIC REBORN ---
+        // --- STATS LOGIC ---
         function changeStatsYear(dir) {
             const nowYear = new Date().getFullYear();
             const newYear = currentStatsYear + dir;
@@ -984,57 +965,52 @@
             document.getElementById('mainHeader').style.display = 'none'; 
             updateScoreBubble(0);
             
-            // 1. Get Elements
-            const grid = document.getElementById('monthsGrid');
-            const yearDisplay = document.getElementById('statsYearDisplay');
-            if(!grid || !yearDisplay) return;
-
-            // 2. Set Year
             if (!currentStatsYear) currentStatsYear = new Date().getFullYear();
-            yearDisplay.innerText = currentStatsYear;
+            document.getElementById('statsYearDisplay').innerText = currentStatsYear;
+            const grid = document.getElementById('monthsGrid');
+            if(!grid) return;
+            grid.innerHTML = '';
 
-            // 3. Prepare Data Buckets
-            const monthTotals = new Array(12).fill(0);
-            const monthCounts = new Array(12).fill(0);
+            let monthlySums = new Array(12).fill(0);
+            let monthlyCounts = new Array(12).fill(0);
 
-            // 4. Loop Data Safe
-            Object.keys(trackerData).forEach(key => {
-               if(key.includes('-')) { // Simple check for date format YYYY-MM-DD
-                   const d = new Date(key);
-                   if(!isNaN(d.getTime()) && d.getFullYear() === currentStatsYear) {
-                       const val = trackerData[key].score;
-                       if(typeof val === 'number' && val > 0) {
-                           monthTotals[d.getMonth()] += val;
-                           monthCounts[d.getMonth()]++;
+            try {
+                Object.keys(trackerData).forEach(dateKey => {
+                    if(dateKey.includes('-')) { 
+                       const d = new Date(dateKey);
+                       if(!isNaN(d.getTime()) && d.getFullYear() === currentStatsYear) {
+                           const dayData = trackerData[dateKey];
+                           if(dayData && typeof dayData.score === 'number' && dayData.score > 0) {
+                               monthlySums[d.getMonth()] += dayData.score;
+                               monthlyCounts[d.getMonth()]++;
+                           }
                        }
                    }
-               }
-            });
+                });
+            } catch(e) { console.error("Stats Calc Error", e); }
 
-            // 5. Build HTML
             const mNames = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
-            let html = '';
-            
+
             for(let i=0; i<12; i++) {
-                const avg = monthCounts[i] > 0 ? Math.round(monthTotals[i] / monthCounts[i]) : 0;
-                const isEmpty = avg === 0;
+                const avg = monthlyCounts[i] > 0 ? Math.round(monthlySums[i] / monthlyCounts[i]) : 0;
+                const card = document.createElement('div');
+                card.className = avg > 0 ? 'month-card' : 'month-card empty';
                 
                 let crownHtml = '<div class="month-crown" style="height:30px;"></div>';
                 if(avg > 0) {
                     crownHtml = `<div class="month-crown">${getCrownSVG(avg)}</div>`;
                 }
 
-                html += `
-                <div class="month-card ${isEmpty ? 'empty' : ''}">
+                card.innerHTML = `
                     <div class="month-name">${mNames[i]}</div>
                     <div class="month-score">${avg > 0 ? avg + '%' : '-'}</div>
                     ${crownHtml}
-                </div>`;
+                `;
+                grid.appendChild(card);
             }
-            grid.innerHTML = html;
         }
 
-        // --- DAILY VIEW LOGIC (Updated for Stacks) ---
+        // --- DAILY VIEW LOGIC (UPDATED SCORE) ---
         function changeDate(direction) { currentDate.setDate(currentDate.getDate() + direction); renderDay(direction); }
         function renderDay(animateDirection = 0) {
             const dateKey = getStorageKey(currentDate); const dateStr = currentDate.toLocaleDateString('he-IL', { weekday: 'long', day: 'numeric', month: 'numeric' });
@@ -1045,7 +1021,7 @@
             if (!trackerData[dateKey].deletedTemplateIds) trackerData[dateKey].deletedTemplateIds = [];
             if (!trackerData[dateKey].deletedMealSlots) trackerData[dateKey].deletedMealSlots = [];
             if (!trackerData[dateKey].mealStatuses) trackerData[dateKey].mealStatuses = {};
-            if (!trackerData.mealWeights) trackerData.mealWeights = { breakfast: 20, lunch: 20, dinner: 20 };
+            // removed mealWeights default init
             
             const dayOfWeek = currentDate.getDay(); 
             const allMeals = getAllMeals(); 
@@ -1062,11 +1038,11 @@
                 else if (rawVal !== '' && rawVal !== null) indices = [parseInt(rawVal)];
 
                 if (indices.length === 0) {
-                    displayTasks.push({ type: 'meal', slotKey: slot.key, name: slot.label, meta: 'לא נבחר מתכון', indices: [], weight: trackerData.mealWeights[slot.key] });
+                    displayTasks.push({ type: 'meal', slotKey: slot.key, name: slot.label, meta: 'לא נבחר מתכון', indices: [] });
                 } else {
                     let combinedTitle = "";
                     indices.forEach((idx, i) => { const m = allMeals[idx]; if (m) combinedTitle += (i>0 ? ", " : "") + m.title; });
-                    displayTasks.push({ type: 'meal', slotKey: slot.key, name: slot.label, meta: combinedTitle, indices: indices, weight: trackerData.mealWeights[slot.key] });
+                    displayTasks.push({ type: 'meal', slotKey: slot.key, name: slot.label, meta: combinedTitle, indices: indices });
                 }
             });
 
@@ -1074,25 +1050,34 @@
             relevantTemplates.forEach(tpl => {
                 const alreadyExists = trackerData[dateKey].tasks.some(t => t.templateId === tpl.id);
                 const wasDeleted = trackerData[dateKey].deletedTemplateIds.includes(tpl.id);
-                if (!alreadyExists && !wasDeleted) { trackerData[dateKey].tasks.push({ name: tpl.name, weight: tpl.weight, status: null, fromTemplate: true, templateId: tpl.id }); }
+                if (!alreadyExists && !wasDeleted) { trackerData[dateKey].tasks.push({ name: tpl.name, status: null, fromTemplate: true, templateId: tpl.id }); }
             });
             const combinedList = [...displayTasks, ...trackerData[dateKey].tasks]; const taskListEl = document.getElementById('taskList'); taskListEl.innerHTML = '';
-            let totalWeight = 0; let currentScore = 0;
+            
+            // --- NEW SCORE LOGIC (Count based) ---
+            let totalItems = 0; 
+            let completedItems = 0;
+
             if (combinedList.length === 0) taskListEl.innerHTML = '<div style="text-align:center; color:#B2BEC3; margin-top:40px;">אין משימות להיום</div>';
             
             combinedList.forEach((item, index) => {
-                let itemStatus = null; if(item.type === 'meal') itemStatus = trackerData[dateKey].mealStatuses[item.slotKey]; else itemStatus = item.status;
-                totalWeight += parseInt(item.weight); if (itemStatus === 'done') currentScore += parseInt(item.weight);
+                // Count item
+                totalItems++;
+                let itemStatus = null; 
+                if(item.type === 'meal') itemStatus = trackerData[dateKey].mealStatuses[item.slotKey]; 
+                else itemStatus = item.status;
+                
+                if (itemStatus === 'done') completedItems++;
+
                 const wrapper = document.createElement('div'); wrapper.className = 'task-card-wrapper'; let contentHTML = '';
                 
                 if(item.type === 'meal') {
                     const mStatus = trackerData[dateKey].mealStatuses[item.slotKey];
                     let mStatusClass = '', mStatusIcon = ''; if (mStatus === 'done') { mStatusIcon = '✓'; mStatusClass = 'success'; } else if (mStatus === 'fail') { mStatusIcon = '✕'; mStatusClass = 'fail'; }
-                    const metaString = `${item.weight}% | ${item.meta}`;
+                    const metaString = item.meta; // removed weight %
                     
                     let visualHTML = '';
                     if (item.indices.length > 1) {
-                        // Stack
                         visualHTML = `<div class="meal-stack-container" onclick="openStackModal('${item.slotKey}')">`;
                         item.indices.slice(0, 3).forEach((idx, i) => {
                             const m = allMeals[idx];
@@ -1101,7 +1086,6 @@
                         });
                         visualHTML += `</div>`;
                     } else if (item.indices.length === 1) {
-                        // Single
                         const m = allMeals[item.indices[0]];
                         const img = m ? (m.img || 'https://via.placeholder.com/50') : '';
                         const src = m ? (m.source === 'base' ? m.originalIndex : (m.source === 'admin' ? 1000 + m.originalIndex : 2000 + m.originalIndex)) : -1;
@@ -1115,14 +1099,20 @@
                 } else {
                     let statusClass = '', statusIcon = ''; if (item.status === 'done') { statusIcon = '✓'; statusClass = 'success'; } else if (item.status === 'fail') { statusIcon = '✕'; statusClass = 'fail'; }
                     let typeStr = 'חד פעמי'; if (item.fromTemplate && item.templateId) { const tpl = templates.find(t => t.id === item.templateId); if (tpl) { if (tpl.days.length === 7) typeStr = 'כל יום'; else typeStr = 'ימים ' + tpl.days.map(d => dayShortNames[d]).join(', '); } else { typeStr = 'קבוע'; } }
-                    const metaString = `${item.weight}% | ${typeStr}`;
+                    const metaString = typeStr; // removed weight %
                     contentHTML = `<div class="task-info"><div class="task-name">${item.name}</div><div class="task-meta">${metaString}</div></div><div class="status-btn ${statusClass}" onclick="toggleStatus(${index}, '${item.type}', event)">${statusIcon}</div>`;
                 }
-                const isMeal = item.type === 'meal'; const deleteParam = isMeal ? `'${item.slotKey}'` : index - displayTasks.length; const editAction = isMeal ? `openWeightModal('${item.slotKey}')` : `alert('עריכת משימה תתווסף בקרוב')`;
-                wrapper.innerHTML = `<div class="task-action-bg"><div class="action-btn edit" onclick="${editAction}"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></div><div class="action-btn delete" onclick="handleDeleteSwipe(${isMeal}, ${deleteParam}, ${index})"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></div></div><div class="task-card-content" id="content-${index}">${contentHTML}</div>`;
+                const isMeal = item.type === 'meal'; const deleteParam = isMeal ? `'${item.slotKey}'` : index - displayTasks.length; 
+                // Removed edit button completely for daily items
+                wrapper.innerHTML = `<div class="task-action-bg"><div class="action-btn delete" onclick="handleDeleteSwipe(${isMeal}, ${deleteParam}, ${index})"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></div></div><div class="task-card-content" id="content-${index}">${contentHTML}</div>`;
                 taskListEl.appendChild(wrapper); setupSwipe(wrapper.querySelector('.task-card-content'));
             });
-            let finalScore = totalWeight > 0 ? Math.round((currentScore / totalWeight) * 100) : 0; trackerData[dateKey].score = finalScore; updateScoreBubble(finalScore); localStorage.setItem('myTrackerData', JSON.stringify(trackerData));
+            
+            // Calc Score
+            let finalScore = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0; 
+            trackerData[dateKey].score = finalScore; 
+            updateScoreBubble(finalScore); 
+            localStorage.setItem('myTrackerData', JSON.stringify(trackerData));
         }
 
         // Stack Modal Logic
@@ -1180,9 +1170,7 @@
         function closeDeleteModal() { closeModal('deleteModal'); taskToDeleteIndex = null; }
         function confirmDeleteToday() { if (taskToDeleteIndex === null) return; const dateKey = getStorageKey(currentDate); const task = trackerData[dateKey].tasks[taskToDeleteIndex]; if (task.fromTemplate) { if(!trackerData[dateKey].deletedTemplateIds) trackerData[dateKey].deletedTemplateIds = []; trackerData[dateKey].deletedTemplateIds.push(task.templateId); } trackerData[dateKey].tasks.splice(taskToDeleteIndex, 1); saveAll(); closeDeleteModal(); }
         function confirmDeleteForever() { if (taskToDeleteIndex === null) return; const dateKey = getStorageKey(currentDate); const task = trackerData[dateKey].tasks[taskToDeleteIndex]; if (task.fromTemplate) { const tplIndex = templates.findIndex(t => t.id === task.templateId); if (tplIndex > -1) templates.splice(tplIndex, 1); Object.keys(trackerData).forEach(dayKey => { if (trackerData[dayKey].tasks) { trackerData[dayKey].tasks = trackerData[dayKey].tasks.filter(t => t.templateId !== task.templateId); } }); } else { trackerData[dateKey].tasks.splice(taskToDeleteIndex, 1); } saveAll(); closeDeleteModal(); }
-        function openWeightModal(slotKey) { const contents = document.querySelectorAll('.task-card-content'); contents.forEach(c => c.style.transform = 'translateX(0)'); editingWeightSlot = slotKey; const currentWeight = trackerData.mealWeights[slotKey]; document.getElementById('editWeightInput').value = currentWeight; openModal('weightModal'); }
-        function saveWeightEdit() { const val = parseInt(document.getElementById('editWeightInput').value); if(!isNaN(val) && val > 0 && val <= 100) { trackerData.mealWeights[editingWeightSlot] = val; saveAll(); closeModal('weightModal'); } else { alert('אנא הכנס מספר תקין בין 1 ל-100'); } }
-
+        
         // Start
         cleanMenuData(); // AUTO-FIX DATA ON LOAD
         renderCurrentView(); 
