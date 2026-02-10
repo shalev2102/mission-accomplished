@@ -314,7 +314,16 @@
         const GITHUB_USERNAME = "shalev2102"; 
         const REPO_NAME = "mission-accomplished"; 
 
-        // --- 2. CROWN SVG ---
+        // --- 2. FALLBACK RECIPES (SAFETY NET) ---
+        const fallbackRecipes = [
+            { title: "שקשוקה קלאסית", time: "20 דקות", type: "dairy", img: "https://images.unsplash.com/photo-1590412200988-a436970781fa?w=500&auto=format&fit=crop&q=60", link: "https://www.mako.co.il/food-cooking_magazine/flavors-shakshuka/Recipe-76d06631623bd21006.htm" },
+            { title: "שניצל ופירה", time: "40 דקות", type: "meat", img: "https://images.unsplash.com/photo-1599921841143-819065a55cc6?w=500&auto=format&fit=crop&q=60", link: "https://www.nikib.co.il/lunch/4624/" },
+            { title: "פסטה עגבניות", time: "15 דקות", type: "parve", img: "https://images.unsplash.com/photo-1626844131082-256783844137?w=500&auto=format&fit=crop&q=60", link: "https://www.foodisgood.co.il/recipe/pasta-tomato-sauce/" },
+            { title: "חזה עוף בתנור", time: "25 דקות", type: "meat", img: "https://images.unsplash.com/photo-1632778149955-e80f8ceca2e8?w=500&auto=format&fit=crop&q=60", link: "https://www.10dakot.co.il/recipe/%D7%97%D7%96%D7%94-%D7%A2%D7%95%D7%A3-%D7%91%D7%AA%D7%A0%D7%95%D7%A8/" },
+            { title: "סלט יווני", time: "10 דקות", type: "dairy", img: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=500&auto=format&fit=crop&q=60", link: "https://www.foodsdictionary.co.il/Recipes/3673" }
+        ];
+
+        // --- 3. CROWN SVG ---
         function getCrownSVG(score) {
             if (score === 0) return ''; 
             let defs = '', bodyFill = '', strokeColor = '#000', gemsHTML = '';
@@ -331,11 +340,9 @@
         let trackerData = JSON.parse(localStorage.getItem('myTrackerData')) || {};
         let templates = JSON.parse(localStorage.getItem('myTrackerTemplates')) || [];
         let weeklyMenu = JSON.parse(localStorage.getItem('myTrackerMenu')) || {};
-        
-        // This line ensures user recipes are loaded from the correct key
         let userMeals = JSON.parse(localStorage.getItem('myTrackerMeals')) || [];
         
-        // GitHub recipes (Base)
+        // Base Recipes Init (Empty at first, filled by Fetch or Fallback)
         let baseRecipes = []; 
         let adminRecipes = JSON.parse(localStorage.getItem('myTrackerAdminMeals')) || [];
         
@@ -361,11 +368,17 @@
                 if(response.ok) {
                     const data = await response.json();
                     const decoded = decodeURIComponent(escape(window.atob(data.content)));
-                    baseRecipes = JSON.parse(decoded);
+                    const parsed = JSON.parse(decoded);
+                    // Use parsed data if valid array, otherwise fallback
+                    baseRecipes = (Array.isArray(parsed) && parsed.length > 0) ? parsed : fallbackRecipes;
                 } else {
-                    console.log('Repo not found, using empty base.');
+                    console.log('Repo not found or empty, using fallback.');
+                    baseRecipes = fallbackRecipes;
                 }
-            } catch(e) { console.log('Remote load failed', e); }
+            } catch(e) { 
+                console.log('Remote load failed, using fallback', e); 
+                baseRecipes = fallbackRecipes;
+            }
             renderCurrentView();
         }
 
@@ -374,9 +387,15 @@
             document.getElementById('loadingOverlay').style.display = 'flex';
             
             try {
-                const getResp = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/recipes.json`);
-                const getData = await getResp.json();
-                const sha = getData.sha;
+                // Get SHA
+                let sha = "";
+                try {
+                    const getResp = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/recipes.json`);
+                    if(getResp.ok) {
+                        const getData = await getResp.json();
+                        sha = getData.sha;
+                    }
+                } catch(e) { console.log('File does not exist yet, creating new.'); }
 
                 const contentStr = JSON.stringify(newRecipesArray, null, 2);
                 const contentBase64 = window.btoa(unescape(encodeURIComponent(contentStr)));
@@ -384,14 +403,14 @@
                 const putResp = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/recipes.json`, {
                     method: 'PUT',
                     headers: { 'Authorization': `token ${adminToken}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: "Update recipes", content: contentBase64, sha: sha })
+                    body: JSON.stringify({ message: "Update recipes", content: contentBase64, sha: sha ? sha : undefined })
                 });
 
                 if(putResp.ok) {
                     alert("המאגר עודכן בהצלחה בגיטהאב!");
                     baseRecipes = newRecipesArray;
                 } else {
-                    alert("שגיאה בעדכון גיטהאב. בדוק הרשאות.");
+                    alert("שגיאה בעדכון גיטהאב. בדוק הרשאות ושמות.");
                 }
             } catch(e) { alert("שגיאת תקשורת: " + e.message); }
             document.getElementById('loadingOverlay').style.display = 'none';
@@ -401,9 +420,12 @@
         // --- DATA HELPERS ---
         function getAllMeals() {
             let all = [];
-            if(baseRecipes && Array.isArray(baseRecipes)) baseRecipes.forEach((m, i) => all.push({...m, source: 'base', originalIndex: i}));
-            if(adminRecipes && Array.isArray(adminRecipes)) adminRecipes.forEach((m, i) => all.push({...m, source: 'admin', originalIndex: i}));
-            if(userMeals && Array.isArray(userMeals)) userMeals.forEach((m, i) => all.push({...m, source: 'user', originalIndex: i}));
+            // Fail-safe check
+            const safeBase = Array.isArray(baseRecipes) ? baseRecipes : fallbackRecipes;
+            
+            safeBase.forEach((m, i) => all.push({...m, source: 'base', originalIndex: i}));
+            if(Array.isArray(adminRecipes)) adminRecipes.forEach((m, i) => all.push({...m, source: 'admin', originalIndex: i}));
+            if(Array.isArray(userMeals)) userMeals.forEach((m, i) => all.push({...m, source: 'user', originalIndex: i}));
             return all;
         }
 
@@ -417,6 +439,7 @@
             renderCurrentView();
         }
 
+        // --- RENDERERS ---
         function renderCurrentView() {
             if(isAdminMode) document.getElementById('adminBtn').classList.add('active');
             else document.getElementById('adminBtn').classList.remove('active');
@@ -581,7 +604,7 @@
             } 
         }
 
-        // --- COMMON ---
+        // --- MENU LOGIC ---
         function renderMenu() {
             document.getElementById('mainHeader').style.display = 'none'; updateScoreBubble(0);
             const container = document.getElementById('menuList'); container.innerHTML = '';
@@ -682,9 +705,10 @@
         function openWeightModal(slotKey) { const contents = document.querySelectorAll('.task-card-content'); contents.forEach(c => c.style.transform = 'translateX(0)'); editingWeightSlot = slotKey; const currentWeight = trackerData.mealWeights[slotKey]; document.getElementById('editWeightInput').value = currentWeight; openModal('weightModal'); }
         function saveWeightEdit() { const val = parseInt(document.getElementById('editWeightInput').value); if(!isNaN(val) && val > 0 && val <= 100) { trackerData.mealWeights[editingWeightSlot] = val; saveAll(); closeModal('weightModal'); } else { alert('אנא הכנס מספר תקין בין 1 ל-100'); } }
 
-        // Start
+        // Immediately show UI even before fetch completes
+        renderCurrentView();
+        // Then try fetching
         loadRemoteRecipes();
     </script>
 </body>
 </html>
-
