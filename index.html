@@ -50,8 +50,14 @@
         /* General Header for Views */
         .view-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .view-title { margin: 0; padding-right: 10px; color: var(--text); font-size: 1.5rem; }
-        .admin-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray); transition: 0.3s; }
-        .admin-btn.active { color: var(--primary); transform: scale(1.1); }
+        
+        /* Header Buttons (Admin / Recipes) */
+        .header-icon-btn { 
+            background: none; border: none; cursor: pointer; color: var(--gray); transition: 0.3s; 
+            display: flex; align-items: center; justify-content: center; padding: 5px;
+        }
+        .header-icon-btn svg { width: 28px; height: 28px; fill: currentColor; }
+        .header-icon-btn.active { color: var(--primary); transform: scale(1.1); }
 
         /* Bubble */
         .score-bubble-container {
@@ -186,7 +192,7 @@
     <div id="view-meals" class="view-section">
         <div class="view-header">
             <h2 class="view-title">מאגר מתכונים</h2>
-            <button id="adminBtn" class="admin-btn" onclick="openAdminLogin()">💼</button>
+            <button id="adminBtn" class="header-icon-btn" onclick="openAdminLogin()">💼</button>
         </div>
         <div class="meal-filters">
             <div class="filter-btn active" onclick="filterMeals('all', this)">הכל</div>
@@ -198,8 +204,11 @@
     </div>
 
     <div id="view-menu" class="view-section">
-        <div class="menu-header">
-            <h2 style="margin:0; padding-right: 10px; color: var(--text);">תפריט שבועי</h2>
+        <div class="view-header">
+            <h2 class="view-title">תפריט שבועי</h2>
+            <button class="header-icon-btn" onclick="switchView('meals', null)">
+                <svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>
+            </button>
         </div>
         <div id="menuList"></div>
     </div>
@@ -224,10 +233,9 @@
         <div class="nav-icons-row">
             <div class="nav-item active" onclick="switchView('daily', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19,4H18V2H16V4H8V2H6V4H5A2,2 0 0,0 3,6V20A2,2 0 0,0 5,22H19A2,2 0 0,0 21,20V6A2,2 0 0,0 19,4M19,20H5V10H19V20M19,8H5V6H19V8M9,14L7,12L5.5,13.5L9,17L15,11L13.5,9.5L9,14Z" /></svg></span>משימות</div>
             <div class="nav-item" onclick="switchView('menu', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/></svg></span>תפריט</div>
-            <div class="nav-item" onclick="switchView('meals', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg></span>מתכונים</div>
             <div class="nav-item" onclick="switchView('stats', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z" /></svg></span>דוח</div>
         </div>
-        <div id="navStatus" class="nav-footer-status">V.53 | טוען...</div>
+        <div id="navStatus" class="nav-footer-status">V.54 | טוען...</div>
     </div>
 
     <div id="taskModal" class="modal">
@@ -387,7 +395,7 @@
         // --- GITHUB API ---
         async function loadRemoteRecipes() {
             const statusEl = document.getElementById('navStatus');
-            statusEl.innerText = "V.53 | טוען...";
+            statusEl.innerText = "V.54 | טוען...";
             try {
                 const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/recipes.json?ts=${new Date().getTime()}`);
                 if(response.ok) {
@@ -396,7 +404,7 @@
                     const parsed = JSON.parse(decoded);
                     if (Array.isArray(parsed) && parsed.length > 0) {
                         baseRecipes = parsed;
-                        statusEl.innerText = "V.53 | מחובר לענן ✅";
+                        statusEl.innerText = "V.54 | מחובר לענן ✅";
                     } else {
                         throw new Error("Empty remote array");
                     }
@@ -406,7 +414,7 @@
             } catch(e) { 
                 console.log('Using fallback:', e); 
                 baseRecipes = fallbackRecipes;
-                statusEl.innerText = "V.53 | מצב גיבוי ⚠️";
+                statusEl.innerText = "V.54 | מצב גיבוי ⚠️";
             }
             renderCurrentView();
         }
@@ -486,7 +494,7 @@
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.getElementById('view-' + viewName).classList.add('active');
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            btn.classList.add('active');
+            if(btn) btn.classList.add('active');
             const fabContainer = document.querySelector('.fabs-container');
             if(viewName === 'stats' || viewName === 'menu') fabContainer.style.display = 'none';
             else fabContainer.style.display = 'flex';
