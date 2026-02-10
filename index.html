@@ -90,7 +90,6 @@
         .task-name { font-weight: 600; font-size: 1.15rem; margin-bottom: 4px; color: var(--text); }
         .task-meta { font-size: 0.85rem; color: var(--gray); font-weight: 500; display: flex; align-items: center; gap: 5px; }
         
-        /* Meal Image in Task (Small, Clickable) */
         .task-meal-img {
             width: 50px; height: 50px; border-radius: 12px; margin-left: 12px;
             object-fit: cover; border: 2px solid #F1F2F6; flex-shrink: 0; cursor: pointer;
@@ -184,6 +183,12 @@
         .day-circle.active { background: var(--gradient); color: white; }
         .full-width-btn { width: 100%; padding: 12px; background: #F1F2F6; border: none; border-radius: 10px; font-weight: 600; margin-bottom: 15px; }
         .btn-save { width: 100%; padding: 16px; background: var(--gradient); color: white; border:none; border-radius: 14px; font-size: 1.1rem; font-weight: 700; }
+
+        /* Delete Modal */
+        .delete-btn-group { display: flex; flex-direction: column; gap: 10px; }
+        .btn-delete-today { width: 100%; padding: 15px; background: #F1F2F6; color: var(--text); border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; }
+        .btn-delete-forever { width: 100%; padding: 15px; background: #FF4757; color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; }
+        .btn-cancel { width: 100%; padding: 15px; background: transparent; color: var(--gray); border: none; font-size: 1rem; font-weight: 500; }
 
         @keyframes popCrown { 0% { transform: scale(0.5); opacity: 0; } 60% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
         .crown-animate { animation: popCrown 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
@@ -312,6 +317,18 @@
         </div>
     </div>
 
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h3 style="margin-top:0; text-align:center; margin-bottom:10px;">מחיקת משימה</h3>
+            <p style="text-align:center; color:var(--gray); margin-bottom:25px;">בחר את סוג המחיקה למשימה זו</p>
+            <div class="delete-btn-group">
+                <button class="btn-delete-today" onclick="confirmDeleteToday()">מחק להיום בלבד</button>
+                <button class="btn-delete-forever" onclick="confirmDeleteForever()">מחק לצמיתות (הכל)</button>
+                <button class="btn-cancel" onclick="closeDeleteModal()">ביטול</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         function getCrownSVG(score) {
             if (score === 0) return ''; 
@@ -379,13 +396,16 @@
         function switchView(viewName, btn) {
             currentView = viewName;
             if (viewName === 'daily') currentDate = new Date();
+            
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.getElementById('view-' + viewName).classList.add('active');
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             btn.classList.add('active');
+            
             const fabContainer = document.querySelector('.fabs-container');
             if(viewName === 'stats' || viewName === 'menu') fabContainer.style.display = 'none';
             else fabContainer.style.display = 'flex';
+
             renderCurrentView();
         }
 
@@ -447,7 +467,7 @@
             const dayOfWeek = currentDate.getDay();
             let displayTasks = [];
             
-            // Generate 3 Static Meal Tasks
+            // 3 Static Meal Tasks
             const mealSlots = [
                 { key: 'breakfast', label: 'ארוחת בוקר' },
                 { key: 'lunch', label: 'ארוחת צהריים' },
@@ -532,7 +552,7 @@
                 const deleteParam = isMeal ? `'${item.slotKey}'` : index - displayTasks.length;
 
                 wrapper.innerHTML = `
-                    <div class="task-action-bg" onclick="handleDeleteSwipe(${isMeal}, ${deleteParam})">🗑</div>
+                    <div class="task-action-bg" onclick="handleDeleteSwipe(${isMeal}, ${deleteParam}, ${index})">🗑</div>
                     <div class="task-card-content" id="content-${index}">
                         ${contentHTML}
                     </div>
@@ -572,8 +592,6 @@
             // Calculate real task index
             let mealCount = 0;
             const slots = ['breakfast', 'lunch', 'dinner'];
-            const menuForToday = weeklyMenu[dayOfWeek] || {};
-            
             // Count visible meals
             slots.forEach(k => {
                 if(!trackerData[dateKey].deletedMealSlots.includes(k)) mealCount++;
@@ -585,20 +603,20 @@
             saveAll();
         }
 
-        function handleDeleteSwipe(isMeal, idOrIndex) {
+        function handleDeleteSwipe(isMeal, idOrIndex, visualIndex) {
             const dateKey = getStorageKey(currentDate);
             if(isMeal) {
+                // Meals delete immediately for today
                 if(!trackerData[dateKey].deletedMealSlots) trackerData[dateKey].deletedMealSlots = [];
                 trackerData[dateKey].deletedMealSlots.push(idOrIndex);
                 saveAll();
             } else {
-                const task = trackerData[dateKey].tasks[idOrIndex];
-                if (task.fromTemplate) {
-                     if(!trackerData[dateKey].deletedTemplateIds) trackerData[dateKey].deletedTemplateIds = [];
-                     trackerData[dateKey].deletedTemplateIds.push(task.templateId);
-                }
-                trackerData[dateKey].tasks.splice(idOrIndex, 1);
-                saveAll();
+                // Tasks open modal
+                taskToDeleteIndex = idOrIndex;
+                openModal('deleteModal');
+                // Reset visual swipe
+                const el = document.getElementById(`content-${visualIndex}`);
+                if(el) el.style.transform = 'translateX(0)';
             }
         }
 
@@ -698,6 +716,31 @@
             saveAll(); closeModal('taskModal'); renderDay(0);
         }
 
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeDeleteModal() { closeModal('deleteModal'); taskToDeleteIndex = null; }
+        function confirmDeleteToday() {
+            if (taskToDeleteIndex === null) return;
+            const dateKey = getStorageKey(currentDate); const task = trackerData[dateKey].tasks[taskToDeleteIndex];
+            if (task.fromTemplate) {
+                 if(!trackerData[dateKey].deletedTemplateIds) trackerData[dateKey].deletedTemplateIds = [];
+                 trackerData[dateKey].deletedTemplateIds.push(task.templateId);
+            }
+            trackerData[dateKey].tasks.splice(taskToDeleteIndex, 1);
+            saveAll(); closeDeleteModal();
+        }
+        function confirmDeleteForever() {
+            if (taskToDeleteIndex === null) return;
+            const dateKey = getStorageKey(currentDate); const task = trackerData[dateKey].tasks[taskToDeleteIndex];
+            if (task.fromTemplate) {
+                const tplIndex = templates.findIndex(t => t.id === task.templateId);
+                if (tplIndex > -1) templates.splice(tplIndex, 1);
+                Object.keys(trackerData).forEach(dayKey => {
+                    if (trackerData[dayKey].tasks) { trackerData[dayKey].tasks = trackerData[dayKey].tasks.filter(t => t.templateId !== task.templateId); }
+                });
+            } else { trackerData[dateKey].tasks.splice(taskToDeleteIndex, 1); }
+            saveAll(); closeDeleteModal();
+        }
+        
         renderDay(0);
     </script>
 </body>
