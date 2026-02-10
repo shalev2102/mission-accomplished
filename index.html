@@ -53,7 +53,6 @@
         .view-title { margin: 0; color: var(--text); font-size: 1.5rem; }
         .view-subtitle { font-size: 0.85rem; color: var(--gray); margin-top: 5px; line-height: 1.3; }
         
-        /* Header Buttons (Admin / Recipes) */
         .header-icon-btn { 
             background: none; border: none; cursor: pointer; color: var(--gray); transition: 0.3s; 
             display: flex; align-items: center; justify-content: center; padding: 5px;
@@ -61,7 +60,6 @@
         .header-icon-btn svg { width: 28px; height: 28px; fill: currentColor; }
         .header-icon-btn.active { color: var(--primary); transform: scale(1.1); }
 
-        /* New Recipe Button Style */
         .recipe-link-btn {
             background: white; border: 1px solid #F1F2F6; border-radius: 20px;
             padding: 8px 12px; display: flex; align-items: center; gap: 8px;
@@ -82,9 +80,14 @@
         .bubble-crown svg { width: 50px; height: 40px; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.15)); margin-bottom: 2px; }
         .bubble-label-text { font-size: 0.75rem; color: var(--gray); font-weight: 700; }
 
-        /* Card Styles */
-        .task-card-wrapper, .meal-swipe-wrapper { position: relative; width: 98%; margin: 0 auto 12px auto; height: 85px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
-        .meal-swipe-wrapper { height: 200px; }
+        /* --- COMPACT CARD STYLES --- */
+        .task-card-wrapper { 
+            position: relative; width: 98%; 
+            margin: 0 auto 8px auto; /* Reduced margin */
+            height: 72px; /* Reduced height */
+            border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
+        }
+        .meal-swipe-wrapper { position: relative; width: 98%; margin: 0 auto 12px auto; height: 200px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
         
         .task-action-bg { position: absolute; top: 0; bottom: 0; right: 0; left: 0; display: flex; justify-content: flex-start; z-index: 1; }
         .action-btn { width: 70px; height: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
@@ -96,12 +99,30 @@
         .task-card-content, .meal-card-content { position: absolute; top: 0; bottom: 0; right: 0; left: 0; background-color: var(--card); display: flex; justify-content: space-between; align-items: center; padding: 0 15px 0 20px; border-radius: 16px; z-index: 2; transition: transform 0.2s ease-out; border: 1px solid rgba(0,0,0,0.02); }
         .meal-card-content { display: flex; flex-direction: column; align-items: stretch; padding: 0; }
         .task-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
-        .task-name { font-weight: 600; font-size: 1.15rem; margin-bottom: 4px; color: var(--text); }
-        .task-meta { font-size: 0.85rem; color: var(--gray); font-weight: 500; display: flex; align-items: center; gap: 5px; }
+        .task-name { font-weight: 600; font-size: 1.1rem; margin-bottom: 2px; color: var(--text); }
+        .task-meta { font-size: 0.8rem; color: var(--gray); font-weight: 500; display: flex; align-items: center; gap: 5px; }
+        
+        /* New Stack Styles */
         .meal-action-group { display: flex; align-items: center; gap: 12px; }
-        .task-meal-img { width: 50px; height: 50px; border-radius: 12px; object-fit: cover; border: 2px solid #F1F2F6; flex-shrink: 0; cursor: pointer; transition: transform 0.2s; background: #eee; }
-        .task-meal-img:active { transform: scale(0.9); }
-        .status-btn { width: 48px; height: 48px; border-radius: 50%; border: 2px solid #F1F2F6; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; background: #fff; transition: 0.2s; color: #DFE4EA; flex-shrink: 0; cursor: pointer; }
+        
+        /* Image Stack Container */
+        .meal-stack-container {
+            width: 50px; height: 50px; position: relative; 
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+        }
+        .task-meal-img { 
+            width: 45px; height: 45px; border-radius: 10px; object-fit: cover; 
+            border: 2px solid #fff; flex-shrink: 0; background: #eee; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        /* Stack Effect */
+        .stack-img { position: absolute; right: 0; transition: 0.2s; }
+        .stack-img.layer-1 { z-index: 3; right: 0; }
+        .stack-img.layer-2 { z-index: 2; right: 4px; top: -2px; transform: scale(0.95); opacity: 0.9; }
+        .stack-img.layer-3 { z-index: 1; right: 8px; top: -4px; transform: scale(0.9); opacity: 0.8; }
+
+        .status-btn { width: 42px; height: 42px; border-radius: 50%; border: 2px solid #F1F2F6; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; background: #fff; transition: 0.2s; color: #DFE4EA; flex-shrink: 0; cursor: pointer; }
         .status-btn.success { background-color: var(--success); border-color: var(--success); color: white; }
         .status-btn.fail { background-color: var(--danger); border-color: var(--danger); color: white; }
 
@@ -124,10 +145,8 @@
         .menu-slot:last-child { border-bottom: none; }
         .slot-label { font-weight: 600; font-size: 0.9rem; width: 60px; }
         .slot-btn { flex: 1; margin-right: 10px; padding: 8px 12px; border-radius: 10px; background: #FAFAFC; border: 1px solid #eee; font-size: 0.9rem; color: var(--text); text-align: right; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; min-height: 45px; }
-        .slot-btn.filled { background: white; border-color: var(--primary); }
+        .slot-btn.filled { background: white; border-color: var(--primary); color: var(--primary); font-weight: 600; }
         .slot-arrow { font-size: 0.8rem; color: var(--gray); margin-right: 5px; }
-        
-        /* New Multiple Badges Style */
         .slot-content-wrapper { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; flex: 1; }
         .slot-badge { background: rgba(255, 107, 107, 0.1); color: var(--primary); font-weight: 700; font-size: 0.8rem; padding: 2px 8px; border-radius: 6px; border: 1px solid rgba(255, 107, 107, 0.2); }
         .slot-placeholder { color: #aaa; font-style: italic; }
@@ -192,6 +211,12 @@
         /* Recipe View Styles */
         .recipe-view-body { text-align: right; white-space: pre-wrap; font-size: 1.1rem; line-height: 1.6; color: var(--text); margin-bottom: 20px; }
         .recipe-view-img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; margin-bottom: 20px; }
+        
+        /* Stack List Modal Items */
+        .stack-list-item { display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
+        .stack-list-item:last-child { border-bottom: none; }
+        .stack-list-img { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; margin-left: 15px; }
+        .stack-list-title { font-weight: 600; color: var(--text); font-size: 1.1rem; }
 
         @keyframes popCrown { 0% { transform: scale(0.5); opacity: 0; } 60% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
         .crown-animate { animation: popCrown 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
@@ -261,7 +286,7 @@
             <div class="nav-item" onclick="switchView('menu', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/></svg></span>תפריט</div>
             <div class="nav-item" onclick="switchView('stats', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z" /></svg></span>דוח</div>
         </div>
-        <div id="navStatus" class="nav-footer-status">V.56 | טוען...</div>
+        <div id="navStatus" class="nav-footer-status">V.57 | טוען...</div>
     </div>
 
     <div id="taskModal" class="modal">
@@ -315,6 +340,14 @@
             <div id="recipeViewBody" class="recipe-view-body"></div>
             <button id="recipeViewLinkBtn" class="btn-save" style="margin-bottom:15px;">מעבר למתכון המקורי</button>
             <div style="text-align:center;"><span onclick="closeModal('recipeViewModal')" style="color:var(--gray); font-weight:600; cursor:pointer;">סגור</span></div>
+        </div>
+    </div>
+
+    <div id="stackModal" class="modal">
+        <div class="modal-content" style="max-height: 80vh; overflow-y: auto;">
+            <h3 style="margin-top:0; text-align:center; margin-bottom:15px;">מנות בארוחה</h3>
+            <div id="stackListContainer"></div>
+            <div style="text-align:center; margin-top:20px;"><span onclick="closeModal('stackModal')" style="color:var(--gray); font-weight:600; cursor:pointer;">סגור</span></div>
         </div>
     </div>
 
@@ -426,7 +459,7 @@
         // --- GITHUB API ---
         async function loadRemoteRecipes() {
             const statusEl = document.getElementById('navStatus');
-            statusEl.innerText = "V.56 | טוען...";
+            statusEl.innerText = "V.57 | טוען...";
             try {
                 const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/recipes.json?ts=${new Date().getTime()}`);
                 if(response.ok) {
@@ -435,7 +468,7 @@
                     const parsed = JSON.parse(decoded);
                     if (Array.isArray(parsed) && parsed.length > 0) {
                         baseRecipes = parsed;
-                        statusEl.innerText = "V.56 | מחובר לענן ✅";
+                        statusEl.innerText = "V.57 | מחובר לענן ✅";
                     } else {
                         throw new Error("Empty remote array");
                     }
@@ -445,7 +478,7 @@
             } catch(e) { 
                 console.log('Using fallback:', e); 
                 baseRecipes = fallbackRecipes;
-                statusEl.innerText = "V.56 | מצב גיבוי ⚠️";
+                statusEl.innerText = "V.57 | מצב גיבוי ⚠️";
             }
             renderCurrentView();
         }
@@ -608,7 +641,7 @@
 
                 wrapper.innerHTML = `
                     ${swipeContent}
-                    <div class="meal-card-content" onclick="handleMealClick(${meal.source === 'base' ? meal.originalIndex : (meal.source === 'admin' ? 1000 + meal.originalIndex : 2000 + meal.originalIndex)}, '${meal.source}')">
+                    <div class="meal-card-content" onclick="handleSmartClick(${meal.source === 'base' ? meal.originalIndex : (meal.source === 'admin' ? 1000 + meal.originalIndex : 2000 + meal.originalIndex)}, '${meal.source}')">
                         ${showLock}
                         <img src="${displayImg}" class="meal-img" alt="${meal.title}">
                         <div class="meal-info-box">
@@ -622,8 +655,8 @@
             });
         }
 
-        // New function to handle recipe click (Text vs Link)
-        function handleMealClick(index, source) {
+        // Universal Click Handler
+        function handleSmartClick(index, source) {
             let realIndex = index;
             if(source === 'admin') realIndex -= 1000;
             if(source === 'user') realIndex -= 2000;
@@ -647,8 +680,6 @@
                 openModal('recipeViewModal');
             } else if (meal.link) {
                 window.open(meal.link, '_blank');
-            } else {
-                alert('אין פרטים נוספים למתכון זה');
             }
         }
 
@@ -741,7 +772,6 @@
                 const dayCard = document.createElement('div'); dayCard.className = 'menu-day-card';
                 
                 const getSlotContentHTML = (val) => {
-                    // Logic to handle multiple items: val can be int, string, or array
                     let indices = [];
                     if (Array.isArray(val)) indices = val;
                     else if (val !== '') indices = [val];
@@ -795,13 +825,10 @@
             selectionContext = { day: dayIdx, slot: slot }; 
             currentSelectorFilter = 'all'; 
             document.getElementById('selectorSearch').value = ''; 
-            
-            // Init temp selection from current state
             const currentVal = weeklyMenu[dayIdx][slot];
             if (Array.isArray(currentVal)) tempSelectedMeals = [...currentVal];
             else if (currentVal !== '') tempSelectedMeals = [currentVal];
             else tempSelectedMeals = [];
-
             document.querySelectorAll('#mealSelectorModal .filter-btn').forEach(b => b.classList.remove('active')); 
             document.querySelector('#mealSelectorModal .filter-btn').classList.add('active'); 
             renderSelectorList(); 
@@ -833,48 +860,28 @@
                 let typeColor = m.type === 'meat' ? 'var(--meat)' : m.type === 'dairy' ? 'var(--dairy)' : 'var(--parve)'; 
                 let typeName = m.type === 'meat' ? 'בשרי' : m.type === 'dairy' ? 'חלבי' : 'פרווה'; 
                 const displayImg = m.img || 'https://via.placeholder.com/50?text=Meal'; 
-                
                 const item = document.createElement('div'); 
                 item.className = 'selector-item'; 
-                
-                // Check if currently selected
-                if (tempSelectedMeals.includes(m.globalIdx)) {
-                    item.classList.add('selected');
-                }
-
+                if (tempSelectedMeals.includes(m.globalIdx)) { item.classList.add('selected'); }
                 item.onclick = () => toggleMealSelection(m.globalIdx, item); 
-                
-                item.innerHTML = `
-                    <img src="${displayImg}" class="selector-img">
-                    <div style="margin-left:10px; flex:1;">
-                        <div class="selector-text">${m.title}</div>
-                    </div>
-                    <div class="selector-type" style="background:${typeColor}">${typeName}</div>
-                    <div class="check-icon">✓</div>
-                `; 
+                item.innerHTML = `<img src="${displayImg}" class="selector-img"><div style="margin-left:10px; flex:1;"><div class="selector-text">${m.title}</div></div><div class="selector-type" style="background:${typeColor}">${typeName}</div><div class="check-icon">✓</div>`; 
                 listEl.appendChild(item); 
             });
         }
 
         function toggleMealSelection(globalIdx, itemElement) {
             const idx = tempSelectedMeals.indexOf(globalIdx);
-            if (idx > -1) {
-                tempSelectedMeals.splice(idx, 1);
-                itemElement.classList.remove('selected');
-            } else {
-                tempSelectedMeals.push(globalIdx);
-                itemElement.classList.add('selected');
-            }
+            if (idx > -1) { tempSelectedMeals.splice(idx, 1); itemElement.classList.remove('selected'); } 
+            else { tempSelectedMeals.push(globalIdx); itemElement.classList.add('selected'); }
         }
 
         function saveSelection() {
             if(!weeklyMenu[selectionContext.day]) weeklyMenu[selectionContext.day] = {}; 
-            weeklyMenu[selectionContext.day][selectionContext.slot] = [...tempSelectedMeals]; // Save copy
-            saveAll(); 
-            closeModal('mealSelectorModal'); 
+            weeklyMenu[selectionContext.day][selectionContext.slot] = [...tempSelectedMeals];
+            saveAll(); closeModal('mealSelectorModal'); 
         }
 
-        // --- DAILY VIEW LOGIC (Updated for arrays) ---
+        // --- DAILY VIEW LOGIC (Updated for Stacks) ---
         function changeDate(direction) { currentDate.setDate(currentDate.getDate() + direction); renderDay(direction); }
         function renderDay(animateDirection = 0) {
             const dateKey = getStorageKey(currentDate); const dateStr = currentDate.toLocaleDateString('he-IL', { weekday: 'long', day: 'numeric', month: 'numeric' });
@@ -896,33 +903,17 @@
             
             mealSlots.forEach(slot => {
                 if(trackerData[dateKey].deletedMealSlots.includes(slot.key)) return;
-                
                 const rawVal = menuForToday[slot.key];
                 let indices = [];
                 if (Array.isArray(rawVal)) indices = rawVal;
                 else if (rawVal !== '') indices = [rawVal];
 
                 if (indices.length === 0) {
-                    // Empty slot logic
-                    const slotWeight = trackerData.mealWeights[slot.key];
-                    displayTasks.push({ type: 'meal', slotKey: slot.key, name: slot.label, meta: 'לא נבחר מתכון', img: '', link: '', weight: slotWeight });
+                    displayTasks.push({ type: 'meal', slotKey: slot.key, name: slot.label, meta: 'לא נבחר מתכון', indices: [], weight: trackerData.mealWeights[slot.key] });
                 } else {
-                    // Split weight among items? or treat as one block? simpler to treat as one block for now visualy but logic handles per slot
-                    const slotWeight = trackerData.mealWeights[slot.key];
-                    // Just show the first one as main + count, OR create a combined entry
                     let combinedTitle = "";
-                    let mainImg = "";
-                    let mainLink = "";
-                    
-                    indices.forEach((idx, i) => {
-                        const m = allMeals[idx];
-                        if (m) {
-                            if (i===0) { mainImg = m.img; mainLink = m.link; }
-                            combinedTitle += (i>0 ? ", " : "") + m.title;
-                        }
-                    });
-                    
-                    displayTasks.push({ type: 'meal', slotKey: slot.key, name: slot.label, meta: combinedTitle, img: mainImg, link: mainLink, weight: slotWeight });
+                    indices.forEach((idx, i) => { const m = allMeals[idx]; if (m) combinedTitle += (i>0 ? ", " : "") + m.title; });
+                    displayTasks.push({ type: 'meal', slotKey: slot.key, name: slot.label, meta: combinedTitle, indices: indices, weight: trackerData.mealWeights[slot.key] });
                 }
             });
 
@@ -935,16 +926,41 @@
             const combinedList = [...displayTasks, ...trackerData[dateKey].tasks]; const taskListEl = document.getElementById('taskList'); taskListEl.innerHTML = '';
             let totalWeight = 0; let currentScore = 0;
             if (combinedList.length === 0) taskListEl.innerHTML = '<div style="text-align:center; color:#B2BEC3; margin-top:40px;">אין משימות להיום</div>';
+            
             combinedList.forEach((item, index) => {
                 let itemStatus = null; if(item.type === 'meal') itemStatus = trackerData[dateKey].mealStatuses[item.slotKey]; else itemStatus = item.status;
                 totalWeight += parseInt(item.weight); if (itemStatus === 'done') currentScore += parseInt(item.weight);
                 const wrapper = document.createElement('div'); wrapper.className = 'task-card-wrapper'; let contentHTML = '';
+                
                 if(item.type === 'meal') {
-                    const displayImg = item.img || 'https://via.placeholder.com/50?text=Meal';
                     const mStatus = trackerData[dateKey].mealStatuses[item.slotKey];
                     let mStatusClass = '', mStatusIcon = ''; if (mStatus === 'done') { mStatusIcon = '✓'; mStatusClass = 'success'; } else if (mStatus === 'fail') { mStatusIcon = '✕'; mStatusClass = 'fail'; }
                     const metaString = `${item.weight}% | ${item.meta}`;
-                    contentHTML = `<div class="task-info"><div class="task-name">${item.name}</div><div class="task-meta">${metaString}</div></div><div class="meal-action-group"><img src="${displayImg}" class="task-meal-img" onclick="if('${item.link}') window.open('${item.link}', '_blank'); event.stopPropagation();"><div class="status-btn ${mStatusClass}" onclick="toggleMealStatus('${item.slotKey}', event)">${mStatusIcon}</div></div>`;
+                    
+                    let visualHTML = '';
+                    if (item.indices.length > 1) {
+                        // Stack
+                        visualHTML = `<div class="meal-stack-container" onclick="openStackModal('${item.slotKey}')">`;
+                        // Take up to 3 for visual
+                        item.indices.slice(0, 3).forEach((idx, i) => {
+                            const m = allMeals[idx];
+                            const img = m ? (m.img || 'https://via.placeholder.com/50') : '';
+                            visualHTML += `<img src="${img}" class="stack-img layer-${i+1} task-meal-img">`;
+                        });
+                        visualHTML += `</div>`;
+                    } else if (item.indices.length === 1) {
+                        // Single
+                        const m = allMeals[item.indices[0]];
+                        const img = m ? (m.img || 'https://via.placeholder.com/50') : '';
+                        const src = m ? (m.source === 'base' ? m.originalIndex : (m.source === 'admin' ? 1000 + m.originalIndex : 2000 + m.originalIndex)) : -1;
+                        const sType = m ? m.source : '';
+                        visualHTML = `<img src="${img}" class="task-meal-img" onclick="handleSmartClick(${src}, '${sType}')">`;
+                    } else {
+                        // Empty
+                        visualHTML = `<div style="width:45px;height:45px;background:#eee;border-radius:10px;"></div>`;
+                    }
+
+                    contentHTML = `<div class="task-info"><div class="task-name">${item.name}</div><div class="task-meta">${metaString}</div></div><div class="meal-action-group">${visualHTML}<div class="status-btn ${mStatusClass}" onclick="toggleMealStatus('${item.slotKey}', event)">${mStatusIcon}</div></div>`;
                 } else {
                     let statusClass = '', statusIcon = ''; if (item.status === 'done') { statusIcon = '✓'; statusClass = 'success'; } else if (item.status === 'fail') { statusIcon = '✕'; statusClass = 'fail'; }
                     let typeStr = 'חד פעמי'; if (item.fromTemplate && item.templateId) { const tpl = templates.find(t => t.id === item.templateId); if (tpl) { if (tpl.days.length === 7) typeStr = 'כל יום'; else typeStr = 'ימים ' + tpl.days.map(d => dayShortNames[d]).join(', '); } else { typeStr = 'קבוע'; } }
@@ -957,6 +973,38 @@
             });
             let finalScore = totalWeight > 0 ? Math.round((currentScore / totalWeight) * 100) : 0; trackerData[dateKey].score = finalScore; updateScoreBubble(finalScore); localStorage.setItem('myTrackerData', JSON.stringify(trackerData));
         }
+
+        // Stack Modal Logic
+        function openStackModal(slotKey) {
+            const dayOfWeek = currentDate.getDay();
+            const menuForToday = weeklyMenu[dayOfWeek] || {};
+            const indices = menuForToday[slotKey] || [];
+            const allMeals = getAllMeals();
+            
+            const listContainer = document.getElementById('stackListContainer');
+            listContainer.innerHTML = '';
+            
+            indices.forEach(idx => {
+                const m = allMeals[idx];
+                if (m) {
+                    const src = m.source === 'base' ? m.originalIndex : (m.source === 'admin' ? 1000 + m.originalIndex : 2000 + m.originalIndex);
+                    const item = document.createElement('div');
+                    item.className = 'stack-list-item';
+                    item.onclick = () => { handleSmartClick(src, m.source); };
+                    item.innerHTML = `
+                        <img src="${m.img || 'https://via.placeholder.com/50'}" class="stack-list-img">
+                        <div style="flex:1; margin-right:15px;">
+                            <div class="stack-list-title">${m.title}</div>
+                            <div style="font-size:0.8rem; color:#888;">לחץ לצפייה</div>
+                        </div>
+                        <div>➤</div>
+                    `;
+                    listContainer.appendChild(item);
+                }
+            });
+            openModal('stackModal');
+        }
+
         function setupSwipe(content) {
             let startX, currentX;
             content.addEventListener('touchstart', (e) => { document.querySelectorAll('.task-card-content, .meal-card-content').forEach(el => { if(el!==content) el.style.transform = 'translateX(0)'; }); startX = e.touches[0].clientX; content.style.transition = 'none'; }, {passive: true});
