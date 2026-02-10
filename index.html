@@ -46,43 +46,30 @@
         }
         
         .logo-container {
-            display: flex; 
-            flex-direction: column; /* שינוי: מסדר את הטקסט אחד מתחת לשני */
-            justify-content: center;
-            align-items: flex-start;
+            display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
         }
 
         .brand-logo {
-            font-size: 1.6rem; /* קצת הקטנתי כדי שיהיה מקום */
-            font-weight: 900; 
-            letter-spacing: -1px; 
-            font-family: sans-serif; 
-            color: transparent; 
-            -webkit-text-stroke: 1.2px white; 
-            background: white; 
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: white; 
-            filter: drop-shadow(0 2px 0 rgba(0,0,0,0.1));
-            line-height: 1;
-            margin-bottom: -2px; /* מצמיד את הטקסט התחתון */
+            font-size: 1.6rem; font-weight: 900; letter-spacing: -1px; font-family: sans-serif; 
+            color: white;
+            -webkit-text-stroke: 1.2px white; /* White Stroke */
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+            line-height: 1; margin-bottom: 2px;
         }
 
         .brand-subtitle {
-            font-family: sans-serif;
-            font-size: 0.65rem;
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            text-transform: uppercase; /* אותיות גדולות באנגלית נראה יותר כמו לוגו */
-            margin-left: 2px;
+            font-family: sans-serif; font-size: 0.6rem; color: rgba(255, 255, 255, 0.9);
+            font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; margin-right: 2px;
         }
 
         .date-control-group {
-            display: flex; align-items: center;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 20px;
-            padding: 2px;
+            display: flex; align-items: center; background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px; padding: 2px;
         }
+        header button { background: none; border: none; font-size: 1.2rem; color: white; padding: 0 12px; cursor: pointer; opacity: 0.9; transition: 0.2s; }
+        header button:active { opacity: 1; transform: scale(1.1); }
+        .date-wrapper { position: relative; height: 28px; width: 110px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+        .date-text { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 700; white-space: nowrap; }
 
         /* General Header for Views */
         .view-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
@@ -107,26 +94,15 @@
         .recipe-link-btn svg { width: 18px; height: 18px; fill: currentColor; }
         .recipe-link-btn:active { transform: scale(0.95); background: #f9f9f9; }
 
-        /* Bubble */
-        .score-bubble-container {
-            position: fixed; bottom: var(--nav-height); left: 50%; width: 140px; height: 70px; border-radius: 100px 100px 0 0;
-            background: white; box-shadow: 0 -5px 15px rgba(0,0,0,0.08); display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-            padding-bottom: 8px; z-index: 15; transform: translateX(-50%) translateY(100%); transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); opacity: 0; pointer-events: none;
-        }
-        .score-bubble-container.visible { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
-        .bubble-crown svg { width: 50px; height: 40px; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.15)); margin-bottom: 2px; }
-        .bubble-label-text { font-size: 0.75rem; color: var(--gray); font-weight: 700; }
-
         /* Card Styles */
         .task-card-wrapper { 
-            position: relative; width: 98%; 
-            margin: 0 auto 8px auto; 
-            height: 72px; 
+            position: relative; width: 98%; margin: 0 auto 8px auto; height: 72px; 
             border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
         }
         .meal-swipe-wrapper { position: relative; width: 98%; margin: 0 auto 12px auto; height: 200px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
         
-        .task-action-bg { position: absolute; top: 0; bottom: 0; right: 0; left: 0; display: flex; justify-content: flex-end; z-index: 1; }
+        /* FIX: justify-content to flex-start for RTL delete button to align right */
+        .task-action-bg { position: absolute; top: 0; bottom: 0; right: 0; left: 0; display: flex; justify-content: flex-start; z-index: 1; }
         .action-btn { width: 70px; height: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
         .action-btn svg { width: 24px; height: 24px; fill: white; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
         
@@ -134,7 +110,7 @@
         .action-btn.delete { background: var(--red-gradient); }
         
         .task-card-content, .meal-card-content { position: absolute; top: 0; bottom: 0; right: 0; left: 0; background-color: var(--card); display: flex; justify-content: space-between; align-items: center; padding: 0 15px 0 20px; border-radius: 16px; z-index: 2; transition: transform 0.2s ease-out; border: 1px solid rgba(0,0,0,0.02); }
-        .meal-card-content { display: flex; flex-direction: column; align-items: stretch; padding: 0; }
+        
         .task-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
         .task-name { font-weight: 600; font-size: 1.1rem; margin-bottom: 2px; color: var(--text); }
         .task-meta { font-size: 0.8rem; color: var(--gray); font-weight: 500; display: flex; align-items: center; gap: 5px; }
@@ -150,18 +126,6 @@
         .status-btn { width: 42px; height: 42px; border-radius: 50%; border: 2px solid #F1F2F6; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; background: #fff; transition: 0.2s; color: #DFE4EA; flex-shrink: 0; cursor: pointer; }
         .status-btn.success { background-color: var(--success); border-color: var(--success); color: white; }
         .status-btn.fail { background-color: var(--danger); border-color: var(--danger); color: white; }
-
-        /* Meals Lib */
-        .meal-filters { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
-        .filter-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid #eee; background: white; font-size: 0.9rem; color: var(--gray); font-weight: 600; white-space: nowrap; transition: 0.2s; }
-        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(255, 107, 107, 0.2); }
-        .meal-img { width: 100%; height: 130px; object-fit: cover; background: #f0f0f0; }
-        .meal-info-box { padding: 12px 15px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
-        .meal-title { font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 5px; }
-        .meal-details { display: flex; justify-content: space-between; align-items: center; }
-        .meal-tag { font-size: 0.75rem; padding: 3px 8px; border-radius: 6px; color: white; font-weight: 600; }
-        .tag-meat { background: var(--meat); } .tag-dairy { background: var(--dairy); } .tag-parve { background: var(--parve); }
-        .locked-icon { position: absolute; top: 10px; left: 10px; font-size: 1.2rem; color: rgba(0,0,0,0.3); z-index: 5; }
 
         /* Menu */
         .menu-day-card { background: white; border-radius: 16px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
@@ -192,11 +156,9 @@
         .nav-item.active .nav-icon svg { transform: scale(1.1); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
         .nav-footer-status { width: 100%; text-align: center; font-size: 0.7rem; color: rgba(255,255,255,0.7); padding-bottom: 4px; font-weight: 600; background: rgba(0,0,0,0.05); }
 
-        /* Report / Stats Styles */
+        /* Stats grid */
         .stats-year-selector { display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 20px; font-size: 1.2rem; font-weight: 700; color: var(--primary); }
         .stats-year-btn { background: white; border: 1px solid #F1F2F6; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--text); box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; transition: 0.2s; }
-        .stats-year-btn:active { transform: scale(0.9); background: #f0f0f0; }
-        
         .months-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 5px; }
         .month-card { background: white; border-radius: 12px; padding: 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.03); display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100px; transition: 0.3s; }
         .month-card.empty { opacity: 0.6; background: #FAFAFC; }
@@ -208,7 +170,7 @@
         .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(45, 52, 54, 0.6); backdrop-filter: blur(4px); align-items: flex-end; justify-content: center; z-index: 1000; }
         .modal-content { background: #ffffff; padding: 30px; border-top-left-radius: 25px; border-top-right-radius: 25px; width: 100%; max-width: 600px; animation: slideUp 0.3s; max-height: 90vh; overflow-y: auto; position: relative; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .modal-content input, .modal-content select, .modal-content textarea { width: 100%; padding: 16px; margin-bottom: 15px; border: 2px solid #F1F2F6; border-radius: 12px; font-size: 1.1rem; font-family: inherit; }
+        .modal-content input, .modal-content textarea { width: 100%; padding: 16px; margin-bottom: 15px; border: 2px solid #F1F2F6; border-radius: 12px; font-size: 1.1rem; font-family: inherit; }
         .modal-content textarea { resize: vertical; min-height: 100px; }
         .toggle-container { background: #F1F2F6; padding: 4px; border-radius: 12px; display: flex; margin-bottom: 25px; }
         .toggle-opt { flex: 1; text-align: center; padding: 10px; border-radius: 10px; color: var(--gray); }
@@ -223,34 +185,24 @@
         #loadingOverlay { display: none; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(255,255,255,0.8); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; }
         .spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .selector-header { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
-        .selector-search { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #F1F2F6; font-size: 1rem; }
-        .selector-list { max-height: 50vh; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
-        .selector-item { display: flex; align-items: center; padding: 10px; background: #FAFAFC; border-radius: 12px; cursor: pointer; transition: 0.2s; border: 2px solid transparent; }
-        .selector-item:active { transform: scale(0.98); background: #eee; }
-        .selector-item.selected { border-color: var(--primary); background: #FFF0F0; }
-        .selector-img { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; margin-left: 10px; background: #ddd; }
-        .selector-text { font-size: 1rem; font-weight: 600; color: var(--text); }
-        .selector-type { margin-right: auto; font-size: 0.75rem; padding: 3px 8px; border-radius: 6px; color: white; }
-        .check-icon { font-size: 1.2rem; color: var(--primary); margin-left: 10px; opacity: 0; transition: 0.2s; }
-        .selector-item.selected .check-icon { opacity: 1; }
-        
-        .delete-btn-group { display: flex; flex-direction: column; gap: 10px; }
-        .btn-delete-today { width: 100%; padding: 15px; background: #F1F2F6; color: var(--text); border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; }
-        .btn-delete-forever { width: 100%; padding: 15px; background: #FF4757; color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; }
-        .btn-cancel { width: 100%; padding: 15px; background: transparent; color: var(--gray); border: none; font-size: 1rem; font-weight: 500; }
-
-        .recipe-view-body { text-align: right; white-space: pre-wrap; font-size: 1.1rem; line-height: 1.6; color: var(--text); margin-bottom: 20px; }
-        .recipe-view-img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; margin-bottom: 20px; }
         
         .btn-clear-top { position: absolute; top: 25px; right: 25px; background: none; border: none; color: var(--danger); font-weight: 700; font-size: 0.9rem; cursor: pointer; z-index: 5; }
         .btn-close-modal { background: var(--gold-gradient); color: white; border: none; padding: 12px 30px; border-radius: 30px; font-weight: 700; font-size: 1rem; box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3); cursor: pointer; margin-top: 10px; display: inline-block; transition: transform 0.2s; }
-        .btn-close-modal:active { transform: scale(0.95); }
-        
+
+        .selector-list { max-height: 50vh; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
+        .selector-item { display: flex; align-items: center; padding: 10px; background: #FAFAFC; border-radius: 12px; cursor: pointer; transition: 0.2s; border: 2px solid transparent; }
+        .selector-item.selected { border-color: var(--primary); background: #FFF0F0; }
+        .selector-img { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; margin-left: 10px; background: #ddd; }
+        .selector-text { font-size: 1rem; font-weight: 600; color: var(--text); flex: 1; text-align: right; }
+        .selector-type { font-size: 0.75rem; padding: 3px 8px; border-radius: 6px; color: white; margin-right: 10px; }
+        .check-icon { font-size: 1.2rem; color: var(--primary); opacity: 0; }
+        .selector-item.selected .check-icon { opacity: 1; }
+
         .stack-list-item { display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
-        .stack-list-item:last-child { border-bottom: none; }
         .stack-list-img { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; margin-left: 15px; }
-        .stack-list-title { font-weight: 600; color: var(--text); font-size: 1.1rem; }
+        
+        .recipe-view-body { text-align: right; white-space: pre-wrap; font-size: 1.1rem; line-height: 1.6; color: var(--text); margin-bottom: 20px; }
+        .recipe-view-img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; margin-bottom: 20px; }
 
         @keyframes popCrown { 0% { transform: scale(0.5); opacity: 0; } 60% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
         .crown-animate { animation: popCrown 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
@@ -268,7 +220,7 @@
         
         <div class="date-control-group">
             <button onclick="changeDate(-1)">&#10094;</button> 
-            <div class="date-wrapper" id="dateContainer" style="width: 110px;"></div>
+            <div class="date-wrapper" id="dateContainer"></div>
             <button onclick="changeDate(1)">&#10095;</button> 
         </div>
     </header>
@@ -306,16 +258,12 @@
     </div>
 
     <div id="view-stats" class="view-section">
-        <div class="view-header">
-            <h2 class="view-title">דוח שנתי</h2>
-        </div>
-        
+        <div class="view-header"><h2 class="view-title">דוח שנתי</h2></div>
         <div class="stats-year-selector">
             <div class="stats-year-btn" onclick="changeStatsYear(-1)">&#10094;</div>
             <span id="statsYearDisplay">2026</span>
             <div class="stats-year-btn" onclick="changeStatsYear(1)">&#10095;</div>
         </div>
-
         <div class="months-grid" id="monthsGrid"></div>
     </div>
 
@@ -333,7 +281,7 @@
             <div class="nav-item" onclick="switchView('menu', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/></svg></span>תפריט</div>
             <div class="nav-item" onclick="switchView('stats', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z" /></svg></span>דוח</div>
         </div>
-        <div id="navStatus" class="nav-footer-status">V.70 | טוען...</div>
+        <div id="navStatus" class="nav-footer-status">V.71 | טוען...</div>
     </div>
 
     <div id="taskModal" class="modal">
@@ -356,7 +304,6 @@
                     <div class="day-circle" onclick="toggleDay(6)" data-day="6">ש</div>
                 </div>
             </div>
-            <input type="number" id="newTaskWeight" placeholder="חשיבות (1-100)" inputmode="numeric" pattern="[0-9]*" style="display:none;"> 
             <button class="btn-save" onclick="saveTask()">שמור משימה</button>
             <div style="text-align:center; margin-top:20px;"><span onclick="closeModal('taskModal')" style="color:var(--gray); font-weight:600; cursor:pointer;">ביטול</span></div>
         </div>
@@ -386,9 +333,7 @@
             <img id="recipeViewImg" class="recipe-view-img" src="">
             <div id="recipeViewBody" class="recipe-view-body"></div>
             <button id="recipeViewLinkBtn" class="btn-save" style="margin-bottom:15px;">מעבר למתכון המקורי</button>
-            <div style="text-align:center;">
-                <button class="btn-close-modal" onclick="closeModal('recipeViewModal')">סגור</button>
-            </div>
+            <div style="text-align:center;"><button class="btn-close-modal" onclick="closeModal('recipeViewModal')">סגור</button></div>
         </div>
     </div>
 
@@ -396,9 +341,7 @@
         <div class="modal-content" style="max-height: 80vh; overflow-y: auto;">
             <h3 style="margin-top:0; text-align:center; margin-bottom:15px;">מנות בארוחה</h3>
             <div id="stackListContainer"></div>
-            <div style="text-align:center; margin-top:20px;">
-                <button class="btn-close-modal" onclick="closeModal('stackModal')">סגור</button>
-            </div>
+            <div style="text-align:center; margin-top:20px;"><button class="btn-close-modal" onclick="closeModal('stackModal')">סגור</button></div>
         </div>
     </div>
 
@@ -406,21 +349,10 @@
         <div class="modal-content" style="height: 85%; display:flex; flex-direction:column;">
             <button class="btn-clear-top" onclick="clearSelection()">נקה הכל</button>
             <h3 style="margin-top:0; text-align:center;">בחירת מנה</h3>
-            <div class="selector-header">
-                <input type="text" class="selector-search" id="selectorSearch" placeholder="חפש מנה..." onkeyup="renderSelectorList()">
-                <div class="meal-filters">
-                    <div class="filter-btn active" onclick="filterSelector('all', this)">הכל</div>
-                    <div class="filter-btn" onclick="filterSelector('meat', this)">בשרי</div>
-                    <div class="filter-btn" onclick="filterSelector('dairy', this)">חלבי</div>
-                    <div class="filter-btn" onclick="filterSelector('parve', this)">פרווה</div>
-                </div>
-            </div>
             <div class="selector-list" id="selectorList"></div>
             <div style="margin-top:auto; display:flex; flex-direction:column; gap:10px;">
                 <button class="btn-save" onclick="saveSelection()" style="width:100%; padding:15px;">שמור בחירה</button>
-                <div style="text-align:center;">
-                    <span onclick="closeModal('mealSelectorModal')" style="color:var(--gray); font-weight:600; cursor:pointer;">ביטול</span>
-                </div>
+                <div style="text-align:center;"><span onclick="closeModal('mealSelectorModal')" style="color:var(--gray); font-weight:600; cursor:pointer;">ביטול</span></div>
             </div>
         </div>
     </div>
@@ -428,8 +360,7 @@
     <div id="adminModal" class="modal">
         <div class="modal-content" style="max-width: 300px;">
             <h3 style="margin-top:0; text-align:center;">כניסת מנהל</h3>
-            <p style="text-align:center; font-size:0.8rem; color:var(--gray); margin-bottom:15px;">הכנס את ה-Token מגיטהאב</p>
-            <input type="password" id="adminToken" placeholder="GitHub Token" style="font-size:0.9rem;">
+            <input type="password" id="adminToken" placeholder="GitHub Token">
             <button class="btn-save" onclick="loginAdmin()">כניסה</button>
             <div style="text-align:center; margin-top:20px;"><span onclick="closeModal('adminModal')" style="color:var(--gray); cursor:pointer;">ביטול</span></div>
         </div>
@@ -438,7 +369,6 @@
     <div id="deleteModal" class="modal">
         <div class="modal-content">
             <h3 style="margin-top:0; text-align:center; margin-bottom:10px;">מחיקת משימה</h3>
-            <p style="text-align:center; color:var(--gray); margin-bottom:25px;">בחר את סוג המחיקה למשימה זו</p>
             <div class="delete-btn-group">
                 <button class="btn-delete-today" onclick="confirmDeleteToday()">מחק להיום בלבד</button>
                 <button class="btn-delete-forever" onclick="confirmDeleteForever()">מחק לצמיתות (הכל)</button>
@@ -448,31 +378,19 @@
     </div>
 
     <script>
-        // --- 1. SETTINGS: FILL THIS IN! ---
+        // --- SETTINGS ---
         const GITHUB_USERNAME = "shalev2102"; 
         const REPO_NAME = "mission-accomplished"; 
 
-        // --- 2. FALLBACK RECIPES ---
         const fallbackRecipes = [
             { title: "שקשוקה קלאסית", time: "20 דקות", type: "dairy", img: "https://images.unsplash.com/photo-1590412200988-a436970781fa?w=500&auto=format&fit=crop&q=60", link: "https://www.mako.co.il/food-cooking_magazine/flavors-shakshuka/Recipe-76d06631623bd21006.htm" },
-            { title: "שניצל ופירה", time: "40 דקות", type: "meat", img: "https://images.unsplash.com/photo-1599921841143-819065a55cc6?w=500&auto=format&fit=crop&q=60", link: "https://www.nikib.co.il/lunch/4624/" },
-            { title: "פסטה עגבניות", time: "15 דקות", type: "parve", img: "https://images.unsplash.com/photo-1626844131082-256783844137?w=500&auto=format&fit=crop&q=60", link: "https://www.foodisgood.co.il/recipe/pasta-tomato-sauce/" },
-            { title: "חזה עוף בתנור", time: "25 דקות", type: "meat", img: "https://images.unsplash.com/photo-1632778149955-e80f8ceca2e8?w=500&auto=format&fit=crop&q=60", link: "https://www.10dakot.co.il/recipe/%D7%97%D7%96%D7%94-%D7%A2%D7%95%D7%A3-%D7%91%D7%AA%D7%A0%D7%95%D7%A8/" },
-            { title: "סלט יווני", time: "10 דקות", type: "dairy", img: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=500&auto=format&fit=crop&q=60", link: "https://www.foodsdictionary.co.il/Recipes/3673" }
+            { title: "שניצל ופירה", time: "40 דקות", type: "meat", img: "https://images.unsplash.com/photo-1599921841143-819065a55cc6?w=500&auto=format&fit=crop&q=60", link: "https://www.nikib.co.il/lunch/4624/" }
         ];
 
-        // --- 3. HELPER: SAFE LOAD ---
         function safeLoad(key, defaultVal) {
-            try {
-                const item = localStorage.getItem(key);
-                return item ? JSON.parse(item) : defaultVal;
-            } catch (e) {
-                console.error("Error loading " + key, e);
-                return defaultVal;
-            }
+            try { const item = localStorage.getItem(key); return item ? JSON.parse(item) : defaultVal; } catch (e) { return defaultVal; }
         }
 
-        // --- 4. APP STATE ---
         let currentDate = new Date();
         let trackerData = safeLoad('myTrackerData', {});
         let templates = safeLoad('myTrackerTemplates', []);
@@ -480,28 +398,19 @@
         let userMeals = safeLoad('myTrackerMeals', []);
         let adminRecipes = safeLoad('myTrackerAdminMeals', []);
         let baseRecipes = fallbackRecipes; 
-
-        // Stats State
         let currentStatsYear = new Date().getFullYear();
-        
         let currentTaskType = 'once';
         let currentMealType = 'meat';
         let selectedDays = [];
         let currentView = 'daily';
-        
         let selectionContext = { day: 0, slot: '' };
-        let currentSelectorFilter = 'all';
         let editingMealData = null; 
-        
         let adminToken = localStorage.getItem('adminToken') || null;
         let isAdminMode = !!adminToken;
-        
         let tempSelectedMeals = [];
-
         const dayNames = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
         const dayShortNames = ['א\'','ב\'','ג\'','ד\'','ה\'','ו\'','ש\''];
 
-        // --- FIX DATA ---
         function cleanMenuData() {
             let changed = false;
             for (let d = 0; d < 7; d++) {
@@ -509,48 +418,24 @@
                 ['breakfast', 'lunch', 'dinner'].forEach(slot => {
                     let val = weeklyMenu[d][slot];
                     if (!Array.isArray(val)) {
-                        if (val !== '' && val !== null && val !== undefined) {
-                            weeklyMenu[d][slot] = [parseInt(val)];
-                        } else {
-                            weeklyMenu[d][slot] = [];
-                        }
-                        changed = true;
-                    } else {
-                        const cleanArr = val.map(x => parseInt(x)).filter(x => !isNaN(x));
-                        if (cleanArr.length !== val.length) {
-                            weeklyMenu[d][slot] = cleanArr;
-                            changed = true;
-                        }
+                        weeklyMenu[d][slot] = (val !== '' && val !== null) ? [parseInt(val)] : []; changed = true;
                     }
                 });
             }
             if (changed) saveAll();
         }
 
-        // --- GITHUB API ---
         async function loadRemoteRecipes() {
             const statusEl = document.getElementById('navStatus');
-            statusEl.innerText = "V.70 | טוען...";
             try {
                 const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/recipes.json?ts=${new Date().getTime()}`);
                 if(response.ok) {
                     const data = await response.json();
                     const decoded = decodeURIComponent(escape(window.atob(data.content)));
-                    const parsed = JSON.parse(decoded);
-                    if (Array.isArray(parsed) && parsed.length > 0) {
-                        baseRecipes = parsed;
-                        statusEl.innerText = "V.70 | מחובר לענן ✅";
-                    } else {
-                        throw new Error("Empty remote array");
-                    }
-                } else {
-                    throw new Error("Repo not found");
-                }
-            } catch(e) { 
-                console.log('Using fallback:', e); 
-                baseRecipes = fallbackRecipes;
-                statusEl.innerText = "V.70 | מצב גיבוי ⚠️";
-            }
+                    baseRecipes = JSON.parse(decoded);
+                    statusEl.innerText = "V.71 | מחובר לענן ✅";
+                } else { throw new Error(); }
+            } catch(e) { baseRecipes = fallbackRecipes; statusEl.innerText = "V.71 | מצב גיבוי ⚠️"; }
             renderCurrentView();
         }
 
@@ -559,65 +444,42 @@
             document.getElementById('loadingOverlay').style.display = 'flex';
             try {
                 let sha = "";
-                try {
-                    const getResp = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/recipes.json`);
-                    if(getResp.ok) {
-                        const getData = await getResp.json();
-                        sha = getData.sha;
-                    }
-                } catch(e) {}
-
+                const getResp = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/recipes.json`);
+                if(getResp.ok) { const getData = await getResp.json(); sha = getData.sha; }
                 const contentStr = JSON.stringify(newRecipesArray, null, 2);
                 const contentBase64 = window.btoa(unescape(encodeURIComponent(contentStr)));
-
                 const putResp = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/recipes.json`, {
                     method: 'PUT',
                     headers: { 'Authorization': `token ${adminToken}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: "Update recipes", content: contentBase64, sha: sha ? sha : undefined })
+                    body: JSON.stringify({ message: "Update recipes", content: contentBase64, sha: sha || undefined })
                 });
-
-                if(putResp.ok) {
-                    alert("המאגר עודכן בהצלחה בגיטהאב!");
-                    baseRecipes = newRecipesArray;
-                } else {
-                    alert("שגיאה בעדכון גיטהאב. בדוק שהטוקן תקין ויש לו הרשאות Repo.");
-                }
-            } catch(e) { alert("שגיאת תקשורת: " + e.message); }
+                if(putResp.ok) { alert("עודכן בגיטהאב!"); baseRecipes = newRecipesArray; }
+            } catch(e) { alert("שגיאת תקשורת"); }
             document.getElementById('loadingOverlay').style.display = 'none';
             renderCurrentView();
         }
 
-        // --- DATA HELPERS ---
         function getAllMeals() {
             let all = [];
-            const safeBase = Array.isArray(baseRecipes) ? baseRecipes : fallbackRecipes;
-            const safeAdmin = Array.isArray(adminRecipes) ? adminRecipes : [];
-            const safeUser = Array.isArray(userMeals) ? userMeals : [];
-            
-            safeBase.forEach((m, i) => all.push({...m, source: 'base', originalIndex: i}));
-            safeAdmin.forEach((m, i) => all.push({...m, source: 'admin', originalIndex: i}));
-            safeUser.forEach((m, i) => all.push({...m, source: 'user', originalIndex: i}));
+            baseRecipes.forEach((m, i) => all.push({...m, source: 'base', originalIndex: i}));
+            adminRecipes.forEach((m, i) => all.push({...m, source: 'admin', originalIndex: i}));
+            userMeals.forEach((m, i) => all.push({...m, source: 'user', originalIndex: i}));
             return all;
         }
 
         function getStorageKey(date) { return date.toISOString().split('T')[0]; }
         function saveAll() {
-            try {
-                localStorage.setItem('myTrackerData', JSON.stringify(trackerData));
-                localStorage.setItem('myTrackerTemplates', JSON.stringify(templates));
-                localStorage.setItem('myTrackerMeals', JSON.stringify(userMeals));
-                localStorage.setItem('myTrackerAdminMeals', JSON.stringify(adminRecipes)); 
-                localStorage.setItem('myTrackerMenu', JSON.stringify(weeklyMenu));
-            } catch(e) { console.error("Save failed", e); alert("שגיאה בשמירת נתונים - הזיכרון מלא?"); }
+            localStorage.setItem('myTrackerData', JSON.stringify(trackerData));
+            localStorage.setItem('myTrackerTemplates', JSON.stringify(templates));
+            localStorage.setItem('myTrackerMeals', JSON.stringify(userMeals));
+            localStorage.setItem('myTrackerAdminMeals', JSON.stringify(adminRecipes)); 
+            localStorage.setItem('myTrackerMenu', JSON.stringify(weeklyMenu));
             renderCurrentView();
         }
 
-        // --- RENDERERS ---
         function renderCurrentView() {
-            if(isAdminMode) document.getElementById('adminBtn').classList.add('active');
-            else document.getElementById('adminBtn').classList.remove('active');
-
-            if(currentView === 'daily') renderDay(0);
+            document.getElementById('adminBtn').classList.toggle('active', isAdminMode);
+            if(currentView === 'daily') renderDay();
             else if(currentView === 'meals') renderMeals();
             else if(currentView === 'menu') renderMenu();
             else renderStats();
@@ -625,574 +487,186 @@
 
         function switchView(viewName, btn) {
             currentView = viewName;
-            if (viewName === 'daily') currentDate = new Date();
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.getElementById('view-' + viewName).classList.add('active');
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             if(btn) btn.classList.add('active');
-            const fabContainer = document.querySelector('.fabs-container');
-            if(viewName === 'stats' || viewName === 'menu') fabContainer.style.display = 'none';
-            else fabContainer.style.display = 'flex';
+            document.querySelector('.fabs-container').style.display = (viewName === 'stats' || viewName === 'menu') ? 'none' : 'flex';
             renderCurrentView();
         }
 
-        // --- CROWN SVG ---
         function getCrownSVG(score) {
-            if (score === 0) return ''; 
-            let defs = '', bodyFill = '', strokeColor = '#000', gemsHTML = '';
-            if (score < 20) { defs = `<linearGradient id="bronzeGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#CD7F32"/><stop offset="50%" stop-color="#A0522D"/><stop offset="100%" stop-color="#8B4513"/></linearGradient>`; bodyFill = "url(#bronzeGrad)"; strokeColor = "#5D4037"; } 
-            else if (score < 40) { defs = `<linearGradient id="silverGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ECF0F1"/><stop offset="50%" stop-color="#BDC3C7"/><stop offset="100%" stop-color="#95A5A6"/></linearGradient>`; bodyFill = "url(#silverGrad)"; strokeColor = "#7F8C8D"; } 
-            else { defs = `<linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F1C40F"/><stop offset="30%" stop-color="#F39C12"/><stop offset="70%" stop-color="#F1C40F"/><stop offset="100%" stop-color="#D35400"/></linearGradient>`; bodyFill = "url(#goldGrad)"; strokeColor = "#E67E22"; }
-            if (score >= 60 && score < 80) { defs += `<radialGradient id="rubyDiamondGrad" cx="30%" cy="30%" r="70%"><stop offset="0%" stop-color="#ff7675"/><stop offset="100%" stop-color="#d63031"/></radialGradient>`; gemsHTML = `<path d="M20,52 L25,58 L20,64 L15,58 Z" fill="url(#rubyDiamondGrad)" stroke="#c0392b" stroke-width="0.5"/><path d="M50,40 L57,48 L50,56 L43,48 Z" fill="url(#rubyDiamondGrad)" stroke="#c0392b" stroke-width="0.5"/><path d="M80,52 L85,58 L80,64 L75,58 Z" fill="url(#rubyDiamondGrad)" stroke="#c0392b" stroke-width="0.5"/>`; } 
-            else if (score >= 80) { defs += `<radialGradient id="diamondGrad" cx="30%" cy="30%" r="70%"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#74b9ff"/></radialGradient>`; gemsHTML = `<path d="M20,52 L25,58 L20,64 L15,58 Z" fill="url(#diamondGrad)" stroke="#0984e3" stroke-width="0.5"/><path d="M50,40 L57,48 L50,56 L43,48 Z" fill="url(#diamondGrad)" stroke="#0984e3" stroke-width="0.5"/><path d="M80,52 L85,58 L80,64 L75,58 Z" fill="url(#diamondGrad)" stroke="#0984e3" stroke-width="0.5"/>`; }
-            return `<svg class="crown-svg crown-animate" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg"><defs>${defs}</defs><path d="M 15,75 L 85,75 L 80,50 L 50,60 L 20,50 Z" fill="${bodyFill}" stroke="${strokeColor}" stroke-width="1"/><path d="M 20,50 L 10,15 L 35,55 L 50,5 L 65,55 L 90,15 L 80,50 L 50,60 Z" fill="${bodyFill}" stroke="${strokeColor}" stroke-width="1"/>${gemsHTML}</svg>`;
+            if (score === 0) return '';
+            let color = score < 20 ? '#CD7F32' : score < 40 ? '#BDC3C7' : '#F1C40F';
+            return `<svg class="crown-svg crown-animate" viewBox="0 0 100 80"><path d="M 15,75 L 85,75 L 80,50 L 50,60 L 20,50 Z" fill="${color}"/><path d="M 20,50 L 10,15 L 35,55 L 50,5 L 65,55 L 90,15 L 80,50 L 50,60 Z" fill="${color}"/></svg>`;
         }
 
-        // --- UPDATE CROWN ---
         function updateScoreBubble(score) {
             const bubble = document.getElementById('scoreBubble');
             if (score > 0 && currentView === 'daily') {
                 document.getElementById('bubbleCrown').innerHTML = getCrownSVG(score);
                 bubble.classList.add('visible');
-            } else {
-                bubble.classList.remove('visible');
-            }
+            } else { bubble.classList.remove('visible'); }
         }
 
-        // --- ADMIN LOGIN ---
         function openAdminLogin() {
-            if(isAdminMode) {
-                if(confirm("האם לצאת ממצב מנהל? (המפתח יימחק מהזיכרון)")) {
-                    localStorage.removeItem('adminToken'); adminToken = null; isAdminMode = false; renderCurrentView();
-                }
-            } else { openModal('adminModal'); }
+            if(isAdminMode) { if(confirm("לצאת ממצב מנהל?")) { localStorage.removeItem('adminToken'); adminToken = null; isAdminMode = false; renderCurrentView(); } } 
+            else { openModal('adminModal'); }
         }
 
         function loginAdmin() {
             const token = document.getElementById('adminToken').value.trim();
-            if(token.length > 10) {
-                adminToken = token; localStorage.setItem('adminToken', token); isAdminMode = true; closeModal('adminModal');
-                alert("נכנסת למצב מנהל."); renderCurrentView();
-            } else { alert("מפתח לא תקין"); }
+            if(token.length > 10) { adminToken = token; localStorage.setItem('adminToken', token); isAdminMode = true; closeModal('adminModal'); renderCurrentView(); }
         }
 
-        // --- MEALS LOGIC ---
         function renderMeals(filter = 'all') {
-            document.getElementById('mainHeader').style.display = 'none';
-            updateScoreBubble(0);
-            const container = document.getElementById('mealsList');
-            container.innerHTML = '';
-            
+            document.getElementById('mainHeader').style.display = 'none'; updateScoreBubble(0);
+            const container = document.getElementById('mealsList'); container.innerHTML = '';
             const allMeals = getAllMeals();
-            const filteredMeals = allMeals.filter(m => filter === 'all' || m.type === filter);
-
-            if (filteredMeals.length === 0) { container.innerHTML = '<div style="text-align:center; color:#B2BEC3; margin-top:40px;">אין מתכונים</div>'; return; }
-            
-            filteredMeals.forEach((meal) => {
-                const wrapper = document.createElement('div');
-                wrapper.className = 'meal-swipe-wrapper';
-                let tagClass = '', tagText = '';
-                if(meal.type === 'meat') { tagClass = 'tag-meat'; tagText = 'בשרי'; }
-                else if(meal.type === 'dairy') { tagClass = 'tag-dairy'; tagText = 'חלבי'; }
-                else { tagClass = 'tag-parve'; tagText = 'פרווה'; }
-                const displayImg = meal.img || 'https://via.placeholder.com/400x200?text=No+Image';
-                
-                const isBase = meal.source === 'base';
-                const isLocked = isBase && !isAdminMode;
-                const showLock = isLocked ? '<div class="locked-icon">🔒</div>' : '';
-                
-                let swipeContent = '';
-                if(!isLocked) {
-                    swipeContent = `
-                    <div class="task-action-bg">
-                        <div class="action-btn edit" onclick="editMeal('${meal.source}', ${meal.originalIndex})"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></div>
-                        <div class="action-btn delete" onclick="deleteMeal('${meal.source}', ${meal.originalIndex})"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></div>
-                    </div>`;
-                }
-
+            const filtered = allMeals.filter(m => filter === 'all' || m.type === filter);
+            filtered.forEach((meal) => {
+                const wrapper = document.createElement('div'); wrapper.className = 'meal-swipe-wrapper';
+                const isLocked = meal.source === 'base' && !isAdminMode;
                 wrapper.innerHTML = `
-                    ${swipeContent}
-                    <div class="meal-card-content" onclick="handleSmartClick(${meal.source === 'base' ? meal.originalIndex : (meal.source === 'admin' ? 1000 + meal.originalIndex : 2000 + meal.originalIndex)}, '${meal.source}')">
-                        ${showLock}
-                        <img src="${displayImg}" class="meal-img" alt="${meal.title}">
-                        <div class="meal-info-box">
-                            <div class="meal-title">${meal.title}</div>
-                            <div class="meal-details"><div class="meal-time">⏱ ${meal.time}</div><div class="meal-tag ${tagClass}">${tagText}</div></div>
-                        </div>
+                    <div class="task-action-bg" style="justify-content: flex-start;">
+                        ${!isLocked ? `<div class="action-btn edit" onclick="editMeal('${meal.source}', ${meal.originalIndex})"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></div>
+                        <div class="action-btn delete" onclick="deleteMeal('${meal.source}', ${meal.originalIndex})"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></div>` : ''}
                     </div>
-                `;
-                container.appendChild(wrapper);
-                if(!isLocked) setupSwipe(wrapper.querySelector('.meal-card-content'));
+                    <div class="task-card-content" onclick="handleSmartClick(${meal.source==='base'?meal.originalIndex:(meal.source==='admin'?1000+meal.originalIndex:2000+meal.originalIndex)},'${meal.source}')">
+                        <img src="${meal.img || ''}" class="task-meal-img" style="width:100%;height:130px;border-radius:0;">
+                        <div style="padding:10px;"><b>${meal.title}</b></div>
+                    </div>`;
+                container.appendChild(wrapper); setupSwipe(wrapper.querySelector('.task-card-content'));
             });
         }
 
-        // Universal Click Handler
         function handleSmartClick(index, source) {
-            let realIndex = index;
-            if(source === 'admin') realIndex -= 1000;
-            if(source === 'user') realIndex -= 2000;
-
-            let meal;
-            if(source === 'base') meal = baseRecipes[realIndex];
-            else if(source === 'admin') meal = adminRecipes[realIndex];
-            else meal = userMeals[realIndex];
-
-            if (meal.desc && meal.desc.trim().length > 0) {
-                document.getElementById('recipeViewTitle').innerText = meal.title;
-                document.getElementById('recipeViewImg').src = meal.img || '';
-                document.getElementById('recipeViewBody').innerText = meal.desc;
-                const linkBtn = document.getElementById('recipeViewLinkBtn');
-                if(meal.link) {
-                    linkBtn.style.display = 'block';
-                    linkBtn.onclick = () => window.open(meal.link, '_blank');
-                } else {
-                    linkBtn.style.display = 'none';
-                }
-                openModal('recipeViewModal');
-            } else if (meal.link) {
-                window.open(meal.link, '_blank');
-            }
-        }
-
-        function handleFabPlus() { 
-            if (currentView === 'meals') {
-                editingMealData = null;
-                document.getElementById('mealModalTitle').innerText = 'מתכון חדש';
-                document.getElementById('mealSaveBtn').innerText = 'שמור מתכון';
-                document.getElementById('mealTitle').value = '';
-                document.getElementById('mealTime').value = '';
-                document.getElementById('mealImgUrl').value = '';
-                document.getElementById('mealLinkUrl').value = '';
-                document.getElementById('mealDesc').value = ''; 
-                setMealType('meat');
-                openModal('mealModal');
-            } else { openAddModal(); }
+            let realIndex = index; if(source==='admin') realIndex-=1000; if(source==='user') realIndex-=2000;
+            let meal = source==='base' ? baseRecipes[realIndex] : source==='admin' ? adminRecipes[realIndex] : userMeals[realIndex];
+            if (meal.desc) { document.getElementById('recipeViewTitle').innerText = meal.title; document.getElementById('recipeViewImg').src = meal.img || ''; document.getElementById('recipeViewBody').innerText = meal.desc; document.getElementById('recipeViewLinkBtn').style.display = meal.link ? 'block' : 'none'; document.getElementById('recipeViewLinkBtn').onclick = () => window.open(meal.link, '_blank'); openModal('recipeViewModal'); } 
+            else if (meal.link) window.open(meal.link, '_blank');
         }
 
         function saveTask() {
             const name = document.getElementById('newTaskName').value;
-            // Removed weight logic
-            if(!name) return alert('חובה להזין שם משימה');
-            
+            if(!name) return alert('שם משימה?');
             if (currentTaskType === 'once') {
-                const dateKey = getStorageKey(currentDate);
-                if (!trackerData[dateKey]) trackerData[dateKey] = { tasks: [], score: 0 };
-                if (!trackerData[dateKey].tasks) trackerData[dateKey].tasks = [];
-                
-                trackerData[dateKey].tasks.push({
-                    name: name,
-                    status: null,
-                    fromTemplate: false
-                });
-                saveAll();
+                const dateKey = getStorageKey(currentDate); if (!trackerData[dateKey]) trackerData[dateKey] = { tasks: [], score: 0 };
+                trackerData[dateKey].tasks.push({ name: name, status: null, fromTemplate: false });
             } else {
-                if (selectedDays.length === 0) return alert('אנא בחר ימים לחזרה');
-                const newTpl = {
-                    id: Date.now(),
-                    name: name,
-                    days: selectedDays
-                };
-                templates.push(newTpl);
-                saveAll();
+                if (selectedDays.length === 0) return alert('בחר ימים');
+                templates.push({ id: Date.now(), name: name, days: selectedDays });
             }
-            closeModal('taskModal');
+            saveAll(); closeModal('taskModal');
         }
 
-        function editMeal(source, index) {
-            const contents = document.querySelectorAll('.meal-card-content');
-            contents.forEach(c => c.style.transform = 'translateX(0)');
-            editingMealData = { source, index };
-            let meal;
-            if(source === 'base') meal = baseRecipes[index];
-            else if(source === 'admin') meal = adminRecipes[index];
-            else meal = userMeals[index];
-            
-            if(!meal) return;
-            document.getElementById('mealModalTitle').innerText = 'עריכת מתכון';
-            document.getElementById('mealSaveBtn').innerText = 'עדכן מתכון';
-            document.getElementById('mealTitle').value = meal.title;
-            document.getElementById('mealTime').value = meal.time;
-            document.getElementById('mealImgUrl').value = meal.img;
-            document.getElementById('mealLinkUrl').value = meal.link;
-            document.getElementById('mealDesc').value = meal.desc || ''; 
-            setMealType(meal.type);
-            openModal('mealModal');
-        }
-
-        async function saveMeal() {
-            const title = document.getElementById('mealTitle').value; const time = document.getElementById('mealTime').value; const img = document.getElementById('mealImgUrl').value; const link = document.getElementById('mealLinkUrl').value;
-            const desc = document.getElementById('mealDesc').value; 
-            
-            if(!title) return alert('נא להזין שם מנה');
-            const mealObj = { title, time, img, link, type: currentMealType, desc: desc };
-            
-            if (editingMealData) {
-                if (editingMealData.source === 'base') {
-                    baseRecipes[editingMealData.index] = mealObj; await saveToGitHub(baseRecipes);
-                } else if (editingMealData.source === 'admin') {
-                    adminRecipes[editingMealData.index] = mealObj; saveAll();
-                } else {
-                    userMeals[editingMealData.index] = mealObj; saveAll();
-                }
-            } else {
-                if(isAdminMode) {
-                    if(confirm("האם להוסיף למאגר הכללי (גיטהאב)?")) {
-                        baseRecipes.push(mealObj); await saveToGitHub(baseRecipes);
-                    } else {
-                        userMeals.push(mealObj); saveAll();
-                    }
-                } else {
-                    userMeals.push(mealObj); saveAll();
-                }
-            }
-            closeModal('mealModal'); if(currentView === 'meals') renderMeals();
-        }
-
-        async function deleteMeal(source, index) { 
-            if(confirm('למחוק את המתכון?')) { 
-                if(source === 'base') {
-                    baseRecipes.splice(index, 1); await saveToGitHub(baseRecipes);
-                } else if(source === 'admin') {
-                    adminRecipes.splice(index, 1); saveAll();
-                } else {
-                    userMeals.splice(index, 1); saveAll(); 
-                }
-                renderMeals(); 
-            } 
-        }
-
-        // --- MENU LOGIC (MULTI-SELECT) ---
-        function renderMenu() {
-            document.getElementById('mainHeader').style.display = 'none'; updateScoreBubble(0);
-            const container = document.getElementById('menuList'); container.innerHTML = '';
-            const allMeals = getAllMeals();
-            
-            dayNames.forEach((dayName, dayIdx) => {
-                if(!weeklyMenu[dayIdx]) weeklyMenu[dayIdx] = { breakfast: [], lunch: [], dinner: [] };
-                const dayCard = document.createElement('div'); dayCard.className = 'menu-day-card';
-                
-                const getSlotContentHTML = (val) => {
-                    let indices = [];
-                    if (Array.isArray(val)) indices = val;
-                    else if (val !== '' && val !== null) indices = [val];
-                    
-                    if (indices.length === 0) return `<div class="slot-placeholder">בחר מנה...</div>`;
-                    
-                    let html = `<div class="slot-content-wrapper">`;
-                    indices.forEach(idx => {
-                        const meal = allMeals[idx];
-                        if (meal) {
-                            html += `<div class="slot-badge">${meal.title}</div>`;
-                        }
-                    });
-                    html += `</div>`;
-                    return html;
-                };
-
-                const valB = weeklyMenu[dayIdx].breakfast; 
-                const valL = weeklyMenu[dayIdx].lunch; 
-                const valD = weeklyMenu[dayIdx].dinner;
-                
-                dayCard.innerHTML = `
-                    <div class="menu-day-title">${dayName}</div>
-                    <div class="menu-slot">
-                        <div class="slot-label">בוקר</div>
-                        <div class="slot-btn ${valB!=='' && (Array.isArray(valB)?valB.length>0:true) ?'filled':''}" onclick="openMealSelector(${dayIdx}, 'breakfast')">
-                            ${getSlotContentHTML(valB)}
-                            <div class="slot-arrow">✎</div>
-                        </div>
-                    </div>
-                    <div class="menu-slot">
-                        <div class="slot-label">צהריים</div>
-                        <div class="slot-btn ${valL!=='' && (Array.isArray(valL)?valL.length>0:true) ?'filled':''}" onclick="openMealSelector(${dayIdx}, 'lunch')">
-                            ${getSlotContentHTML(valL)}
-                            <div class="slot-arrow">✎</div>
-                        </div>
-                    </div>
-                    <div class="menu-slot">
-                        <div class="slot-label">ערב</div>
-                        <div class="slot-btn ${valD!=='' && (Array.isArray(valD)?valD.length>0:true) ?'filled':''}" onclick="openMealSelector(${dayIdx}, 'dinner')">
-                            ${getSlotContentHTML(valD)}
-                            <div class="slot-arrow">✎</div>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(dayCard);
-            });
-        }
-
-        function openMealSelector(dayIdx, slot) { 
-            selectionContext = { day: dayIdx, slot: slot }; 
-            currentSelectorFilter = 'all'; 
-            document.getElementById('selectorSearch').value = ''; 
-            
-            let raw = weeklyMenu[dayIdx][slot];
-            if (Array.isArray(raw)) {
-                tempSelectedMeals = raw.map(x => parseInt(x)).filter(x => !isNaN(x));
-            } else if (raw !== '' && raw !== null && raw !== undefined) {
-                tempSelectedMeals = [parseInt(raw)];
-            } else {
-                tempSelectedMeals = [];
-            }
-
-            document.querySelectorAll('#mealSelectorModal .filter-btn').forEach(b => b.classList.remove('active')); 
-            document.querySelector('#mealSelectorModal .filter-btn').classList.add('active'); 
-            renderSelectorList(); 
-            openModal('mealSelectorModal'); 
-        }
-
-        function filterSelector(type, btn) { 
-            currentSelectorFilter = type; 
-            document.querySelectorAll('#mealSelectorModal .filter-btn').forEach(b => b.classList.remove('active')); 
-            btn.classList.add('active'); 
-            renderSelectorList(); 
-        }
-
-        function renderSelectorList() {
-            const query = document.getElementById('selectorSearch').value.toLowerCase(); 
-            const listEl = document.getElementById('selectorList'); 
-            listEl.innerHTML = '';
-            
-            const allMeals = getAllMeals();
-            const filtered = allMeals.map((m, idx) => ({...m, globalIdx: idx})).filter(m => { 
-                const matchesType = currentSelectorFilter === 'all' || m.type === currentSelectorFilter; 
-                const matchesSearch = m.title.toLowerCase().includes(query); 
-                return matchesType && matchesSearch; 
-            });
-            
-            if (filtered.length === 0) { listEl.innerHTML = '<div style="text-align:center; padding:20px; color:#ccc;">לא נמצאו תוצאות</div>'; return; }
-            
-            filtered.forEach(m => { 
-                let typeColor = m.type === 'meat' ? 'var(--meat)' : m.type === 'dairy' ? 'var(--dairy)' : 'var(--parve)'; 
-                let typeName = m.type === 'meat' ? 'בשרי' : m.type === 'dairy' ? 'חלבי' : 'פרווה'; 
-                const displayImg = m.img || 'https://via.placeholder.com/50?text=Meal'; 
-                const item = document.createElement('div'); 
-                item.className = 'selector-item'; 
-                
-                if (tempSelectedMeals.includes(m.globalIdx)) { item.classList.add('selected'); }
-                
-                item.onclick = () => toggleMealSelection(m.globalIdx, item); 
-                item.innerHTML = `<img src="${displayImg}" class="selector-img"><div style="margin-left:10px; flex:1;"><div class="selector-text">${m.title}</div></div><div class="selector-type" style="background:${typeColor}">${typeName}</div><div class="check-icon">✓</div>`; 
-                listEl.appendChild(item); 
-            });
-        }
-
-        function toggleMealSelection(globalIdx, itemElement) {
-            const idx = tempSelectedMeals.indexOf(globalIdx);
-            if (idx > -1) { tempSelectedMeals.splice(idx, 1); itemElement.classList.remove('selected'); } 
-            else { tempSelectedMeals.push(globalIdx); itemElement.classList.add('selected'); }
-        }
-
-        function saveSelection() {
-            if(!weeklyMenu[selectionContext.day]) weeklyMenu[selectionContext.day] = {}; 
-            weeklyMenu[selectionContext.day][selectionContext.slot] = [...tempSelectedMeals];
-            saveAll(); closeModal('mealSelectorModal'); 
-        }
-        
-        function clearSelection() {
-            tempSelectedMeals = [];
-            renderSelectorList();
-        }
-
-        // --- STATS LOGIC ---
-        function changeStatsYear(dir) {
-            const nowYear = new Date().getFullYear();
-            const newYear = currentStatsYear + dir;
-            if(newYear < 2020) return; 
-            if(newYear > 2100) return;
-            currentStatsYear = newYear;
-            renderStats();
-        }
-
-        function renderStats() {
-            document.getElementById('mainHeader').style.display = 'none'; 
-            updateScoreBubble(0);
-            
-            if (!currentStatsYear) currentStatsYear = new Date().getFullYear();
-            document.getElementById('statsYearDisplay').innerText = currentStatsYear;
-            const grid = document.getElementById('monthsGrid');
-            if(!grid) return;
-            grid.innerHTML = '';
-
-            let monthlySums = new Array(12).fill(0);
-            let monthlyCounts = new Array(12).fill(0);
-
-            try {
-                Object.keys(trackerData).forEach(dateKey => {
-                    if(dateKey.includes('-')) { 
-                       const d = new Date(dateKey);
-                       if(!isNaN(d.getTime()) && d.getFullYear() === currentStatsYear) {
-                           const dayData = trackerData[dateKey];
-                           if(dayData && typeof dayData.score === 'number' && dayData.score > 0) {
-                               monthlySums[d.getMonth()] += dayData.score;
-                               monthlyCounts[d.getMonth()]++;
-                           }
-                       }
-                   }
-                });
-            } catch(e) { console.error("Stats Calc Error", e); }
-
-            const mNames = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
-
-            for(let i=0; i<12; i++) {
-                const avg = monthlyCounts[i] > 0 ? Math.round(monthlySums[i] / monthlyCounts[i]) : 0;
-                const card = document.createElement('div');
-                card.className = avg > 0 ? 'month-card' : 'month-card empty';
-                
-                let crownHtml = '<div class="month-crown" style="height:30px;"></div>';
-                if(avg > 0) {
-                    crownHtml = `<div class="month-crown">${getCrownSVG(avg)}</div>`;
-                }
-
-                card.innerHTML = `
-                    <div class="month-name">${mNames[i]}</div>
-                    <div class="month-score">${avg > 0 ? avg + '%' : '-'}</div>
-                    ${crownHtml}
-                `;
-                grid.appendChild(card);
-            }
-        }
-
-        // --- DAILY VIEW LOGIC (UPDATED SWIPE) ---
-        function changeDate(direction) { currentDate.setDate(currentDate.getDate() + direction); renderDay(direction); }
-        function renderDay(animateDirection = 0) {
-            const dateKey = getStorageKey(currentDate); const dateStr = currentDate.toLocaleDateString('he-IL', { weekday: 'long', day: 'numeric', month: 'numeric' });
-            const container = document.getElementById('dateContainer'); const newText = document.createElement('div'); newText.className = 'date-text'; newText.innerText = dateStr;
-            if (animateDirection === 0) { container.innerHTML = ''; container.appendChild(newText); } else { newText.style.transform = animateDirection===1 ? 'translateX(-100%)' : 'translateX(100%)'; newText.style.opacity = '0'; container.appendChild(newText); const existing = container.querySelectorAll('.date-text'); existing.forEach(old => { if(old!==newText) { old.style.transform = animateDirection===1 ? 'translateX(100%)' : 'translateX(-100%)'; old.style.opacity = '0'; }}); requestAnimationFrame(() => { newText.style.transform = 'translateX(0)'; newText.style.opacity = '1'; }); setTimeout(() => { existing.forEach(old => { if(old!==newText) old.remove(); }); }, 300); }
+        function renderDay() {
+            const dateKey = getStorageKey(currentDate); 
+            document.getElementById('dateContainer').innerHTML = `<div class="date-text">${currentDate.toLocaleDateString('he-IL', { weekday: 'long', day: 'numeric', month: 'numeric' })}</div>`;
             document.getElementById('mainHeader').style.display = 'flex';
             if (!trackerData[dateKey]) trackerData[dateKey] = { tasks: [], score: 0, deletedTemplateIds: [], deletedMealSlots: [], mealStatuses: {} };
-            if (!trackerData[dateKey].deletedTemplateIds) trackerData[dateKey].deletedTemplateIds = [];
-            if (!trackerData[dateKey].deletedMealSlots) trackerData[dateKey].deletedMealSlots = [];
-            if (!trackerData[dateKey].mealStatuses) trackerData[dateKey].mealStatuses = {};
             
-            const dayOfWeek = currentDate.getDay(); 
-            const allMeals = getAllMeals(); 
-            let displayTasks = [];
-            
+            const dayOfWeek = currentDate.getDay(); const allMeals = getAllMeals(); let displayTasks = [];
             const mealSlots = [{ key: 'breakfast', label: 'ארוחת בוקר' }, { key: 'lunch', label: 'ארוחת צהריים' }, { key: 'dinner', label: 'ארוחת ערב' }];
-            const menuForToday = weeklyMenu[dayOfWeek] || { breakfast: '', lunch: '', dinner: '' };
+            const menuForToday = weeklyMenu[dayOfWeek] || {};
             
             mealSlots.forEach(slot => {
                 if(trackerData[dateKey].deletedMealSlots.includes(slot.key)) return;
-                const rawVal = menuForToday[slot.key];
-                let indices = [];
-                if (Array.isArray(rawVal)) indices = rawVal;
-                else if (rawVal !== '' && rawVal !== null) indices = [parseInt(rawVal)];
+                let indices = Array.isArray(menuForToday[slot.key]) ? menuForToday[slot.key] : [];
+                let names = indices.map(idx => allMeals[idx] ? allMeals[idx].title : '').filter(n => n).join(', ') || 'לא נבחר';
+                displayTasks.push({ type: 'meal', slotKey: slot.key, name: slot.label, meta: names, indices: indices });
+            });
 
-                if (indices.length === 0) {
-                    displayTasks.push({ type: 'meal', slotKey: slot.key, name: slot.label, meta: 'לא נבחר מתכון', indices: [] });
-                } else {
-                    let combinedTitle = "";
-                    indices.forEach((idx, i) => { const m = allMeals[idx]; if (m) combinedTitle += (i>0 ? ", " : "") + m.title; });
-                    displayTasks.push({ type: 'meal', slotKey: slot.key, name: slot.label, meta: combinedTitle, indices: indices });
+            templates.filter(t => t.days.includes(dayOfWeek)).forEach(tpl => {
+                if (!trackerData[dateKey].tasks.some(t => t.templateId === tpl.id) && !trackerData[dateKey].deletedTemplateIds.includes(tpl.id)) 
+                    trackerData[dateKey].tasks.push({ name: tpl.name, status: null, fromTemplate: true, templateId: tpl.id });
+            });
+
+            const combined = [...displayTasks, ...trackerData[dateKey].tasks]; 
+            const listEl = document.getElementById('taskList'); listEl.innerHTML = '';
+            let total = 0, done = 0;
+
+            combined.forEach((item, index) => {
+                total++; let status = item.type === 'meal' ? trackerData[dateKey].mealStatuses[item.slotKey] : item.status;
+                if (status === 'done') done++;
+                const wrapper = document.createElement('div'); wrapper.className = 'task-card-wrapper';
+                const isMeal = item.type === 'meal';
+                let visualHTML = '';
+                if(isMeal && item.indices.length > 0) {
+                    visualHTML = `<div class="meal-stack-container" onclick="${item.indices.length > 1 ? `openStackModal('${item.slotKey}')` : `handleSmartClick(${item.indices[0]}, 'base')`}">`;
+                    item.indices.slice(0, 3).forEach((idx, i) => { visualHTML += `<img src="${allMeals[idx]?.img || ''}" class="stack-img layer-${i+1} task-meal-img">`; });
+                    visualHTML += `</div>`;
                 }
+
+                wrapper.innerHTML = `
+                    <div class="task-action-bg"><div class="action-btn delete" onclick="handleDeleteSwipe(${isMeal}, ${isMeal ? `'${item.slotKey}'` : index-displayTasks.length}, ${index})"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></div></div>
+                    <div class="task-card-content" id="content-${index}">
+                        <div class="task-info"><b>${item.name}</b><div class="task-meta">${item.meta || ''}</div></div>
+                        <div class="meal-action-group">${visualHTML}<div class="status-btn ${status==='done'?'success':status==='fail'?'fail':''}" onclick="${isMeal ? `toggleMealStatus('${item.slotKey}', event)` : `toggleStatus(${index}, event)`}">${status==='done'?'✓':status==='fail'?'✕':''}</div></div>
+                    </div>`;
+                listEl.appendChild(wrapper); setupSwipe(wrapper.querySelector('.task-card-content'));
             });
-
-            const relevantTemplates = templates.filter(t => t.days.includes(dayOfWeek));
-            relevantTemplates.forEach(tpl => {
-                const alreadyExists = trackerData[dateKey].tasks.some(t => t.templateId === tpl.id);
-                const wasDeleted = trackerData[dateKey].deletedTemplateIds.includes(tpl.id);
-                if (!alreadyExists && !wasDeleted) { trackerData[dateKey].tasks.push({ name: tpl.name, status: null, fromTemplate: true, templateId: tpl.id }); }
-            });
-            const combinedList = [...displayTasks, ...trackerData[dateKey].tasks]; const taskListEl = document.getElementById('taskList'); taskListEl.innerHTML = '';
-            
-            let totalItems = 0; 
-            let completedItems = 0;
-
-            if (combinedList.length === 0) taskListEl.innerHTML = '<div style="text-align:center; color:#B2BEC3; margin-top:40px;">אין משימות להיום</div>';
-            
-            combinedList.forEach((item, index) => {
-                totalItems++;
-                let itemStatus = null; 
-                if(item.type === 'meal') itemStatus = trackerData[dateKey].mealStatuses[item.slotKey]; 
-                else itemStatus = item.status;
-                if (itemStatus === 'done') completedItems++;
-
-                const wrapper = document.createElement('div'); wrapper.className = 'task-card-wrapper'; let contentHTML = '';
-                
-                if(item.type === 'meal') {
-                    const mStatus = trackerData[dateKey].mealStatuses[item.slotKey];
-                    let mStatusClass = '', mStatusIcon = ''; if (mStatus === 'done') { mStatusIcon = '✓'; mStatusClass = 'success'; } else if (mStatus === 'fail') { mStatusIcon = '✕'; mStatusClass = 'fail'; }
-                    const metaString = item.meta; 
-                    
-                    let visualHTML = '';
-                    if (item.indices.length > 1) {
-                        visualHTML = `<div class="meal-stack-container" onclick="openStackModal('${item.slotKey}')">`;
-                        item.indices.slice(0, 3).forEach((idx, i) => {
-                            const m = allMeals[idx];
-                            const img = m ? (m.img || 'https://via.placeholder.com/50') : '';
-                            visualHTML += `<img src="${img}" class="stack-img layer-${i+1} task-meal-img">`;
-                        });
-                        visualHTML += `</div>`;
-                    } else if (item.indices.length === 1) {
-                        const m = allMeals[item.indices[0]];
-                        const img = m ? (m.img || 'https://via.placeholder.com/50') : '';
-                        const src = m ? (m.source === 'base' ? m.originalIndex : (m.source === 'admin' ? 1000 + m.originalIndex : 2000 + m.originalIndex)) : -1;
-                        const sType = m ? m.source : '';
-                        visualHTML = `<img src="${img}" class="task-meal-img" onclick="handleSmartClick(${src}, '${sType}')">`;
-                    } else {
-                        visualHTML = `<div style="width:45px;height:45px;background:#eee;border-radius:10px;"></div>`;
-                    }
-
-                    contentHTML = `<div class="task-info"><div class="task-name">${item.name}</div><div class="task-meta">${metaString}</div></div><div class="meal-action-group">${visualHTML}<div class="status-btn ${mStatusClass}" onclick="toggleMealStatus('${item.slotKey}', event)">${mStatusIcon}</div></div>`;
-                } else {
-                    let statusClass = '', statusIcon = ''; if (item.status === 'done') { statusIcon = '✓'; statusClass = 'success'; } else if (item.status === 'fail') { statusIcon = '✕'; statusClass = 'fail'; }
-                    let typeStr = 'חד פעמי'; if (item.fromTemplate && item.templateId) { const tpl = templates.find(t => t.id === item.templateId); if (tpl) { if (tpl.days.length === 7) typeStr = 'כל יום'; else typeStr = 'ימים ' + tpl.days.map(d => dayShortNames[d]).join(', '); } else { typeStr = 'קבוע'; } }
-                    const metaString = typeStr; 
-                    contentHTML = `<div class="task-info"><div class="task-name">${item.name}</div><div class="task-meta">${metaString}</div></div><div class="status-btn ${statusClass}" onclick="toggleStatus(${index}, '${item.type}', event)">${statusIcon}</div>`;
-                }
-                const isMeal = item.type === 'meal'; const deleteParam = isMeal ? `'${item.slotKey}'` : index - displayTasks.length; 
-                
-                // --- SWIPE LOGIC BUTTONS ---
-                wrapper.innerHTML = `<div class="task-action-bg"><div class="action-btn delete" onclick="handleDeleteSwipe(${isMeal}, ${deleteParam}, ${index})"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></div></div><div class="task-card-content" id="content-${index}">${contentHTML}</div>`;
-                taskListEl.appendChild(wrapper); setupSwipe(wrapper.querySelector('.task-card-content'));
-            });
-            
-            let finalScore = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0; 
-            trackerData[dateKey].score = finalScore; 
-            updateScoreBubble(finalScore); 
-            localStorage.setItem('myTrackerData', JSON.stringify(trackerData));
+            let score = total > 0 ? Math.round((done / total) * 100) : 0; trackerData[dateKey].score = score; updateScoreBubble(score);
         }
 
-        // --- NEW SWIPE LOGIC ---
         function setupSwipe(content) {
             let startX, currentX;
-            content.addEventListener('touchstart', (e) => { document.querySelectorAll('.task-card-content, .meal-card-content').forEach(el => { if(el!==content) el.style.transform = 'translateX(0)'; }); startX = e.touches[0].clientX; content.style.transition = 'none'; }, {passive: true});
-            content.addEventListener('touchmove', (e) => { currentX = e.touches[0].clientX; let diff = currentX - startX; if (diff < 0 && diff > -160) content.style.transform = `translateX(${diff}px)`; }, {passive: true});
-            content.addEventListener('touchend', (e) => { 
-                content.style.transition = 'transform 0.2s ease-out'; 
-                // CHECK IF HAS EDIT BUTTON BEHIND
-                const wrapper = content.parentElement;
-                const hasEdit = wrapper.querySelector('.action-btn.edit');
-                const swipeDepth = hasEdit ? -140 : -70;
+            content.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; content.style.transition = 'none'; });
+            content.addEventListener('touchmove', (e) => { currentX = e.touches[0].clientX; let diff = currentX - startX; if (diff < 0 && diff > -80) content.style.transform = `translateX(${diff}px)`; });
+            content.addEventListener('touchend', () => { content.style.transition = 'transform 0.2s'; content.style.transform = (currentX - startX < -40) ? 'translateX(-70px)' : 'translateX(0)'; });
+        }
 
-                if ((currentX - startX) < -50) content.style.transform = `translateX(${swipeDepth}px)`; 
-                else content.style.transform = 'translateX(0)'; 
+        function toggleStatus(idx, e) { e.stopPropagation(); const dateKey = getStorageKey(currentDate); let meals = document.querySelectorAll('[id^="content-"]').length - trackerData[dateKey].tasks.length; let task = trackerData[dateKey].tasks[idx - meals]; task.status = !task.status ? 'done' : task.status === 'done' ? 'fail' : null; saveAll(); }
+        function toggleMealStatus(key, e) { e.stopPropagation(); const dateKey = getStorageKey(currentDate); trackerData[dateKey].mealStatuses[key] = !trackerData[dateKey].mealStatuses[key] ? 'done' : trackerData[dateKey].mealStatuses[key] === 'done' ? 'fail' : null; saveAll(); }
+        function handleDeleteSwipe(isMeal, id, vIdx) { document.getElementById(`content-${vIdx}`).style.transform = 'translateX(0)'; if(isMeal) { trackerData[getStorageKey(currentDate)].deletedMealSlots.push(id); saveAll(); } else { taskToDeleteIndex = id; openModal('deleteModal'); } }
+
+        function renderStats() {
+            document.getElementById('mainHeader').style.display = 'none'; updateScoreBubble(0);
+            document.getElementById('statsYearDisplay').innerText = currentStatsYear;
+            const grid = document.getElementById('monthsGrid'); grid.innerHTML = '';
+            let totals = new Array(12).fill(0), counts = new Array(12).fill(0);
+            Object.keys(trackerData).forEach(k => { const d = new Date(k); if(d.getFullYear() === currentStatsYear && trackerData[k].score > 0) { totals[d.getMonth()] += trackerData[k].score; counts[d.getMonth()]++; } });
+            ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'].forEach((n, i) => {
+                const avg = counts[i] > 0 ? Math.round(totals[i]/counts[i]) : 0;
+                grid.innerHTML += `<div class="month-card ${avg? '' : 'empty'}"><div>${n}</div><b>${avg?avg+'%':'-'}</b><div style="height:30px;">${avg?getCrownSVG(avg):''}</div></div>`;
             });
         }
 
-        function toggleStatus(visualIndex, type, event) { if(type === 'meal') return; const content = document.getElementById(`content-${visualIndex}`); if (content.style.transform.includes('-')) return; event.stopPropagation(); const dateKey = getStorageKey(currentDate); const dayOfWeek = currentDate.getDay(); let mealCount = 0; ['breakfast', 'lunch', 'dinner'].forEach(k => { if(!trackerData[dateKey].deletedMealSlots.includes(k)) mealCount++; }); const taskIndex = visualIndex - mealCount; const task = trackerData[dateKey].tasks[taskIndex]; if (!task.status) task.status = 'done'; else if (task.status === 'done') task.status = 'fail'; else task.status = null; saveAll(); }
-        function toggleMealStatus(slotKey, event) { event.stopPropagation(); const dateKey = getStorageKey(currentDate); if(!trackerData[dateKey].mealStatuses) trackerData[dateKey].mealStatuses = {}; const current = trackerData[dateKey].mealStatuses[slotKey]; if (!current) trackerData[dateKey].mealStatuses[slotKey] = 'done'; else if (current === 'done') trackerData[dateKey].mealStatuses[slotKey] = 'fail'; else trackerData[dateKey].mealStatuses[slotKey] = null; saveAll(); }
-        function handleDeleteSwipe(isMeal, idOrIndex, visualIndex) { const el = document.getElementById(`content-${visualIndex}`); if(el) el.style.transform = 'translateX(0)'; const dateKey = getStorageKey(currentDate); if(isMeal) { if(!trackerData[dateKey].deletedMealSlots) trackerData[dateKey].deletedMealSlots = []; trackerData[dateKey].deletedMealSlots.push(idOrIndex); saveAll(); } else { taskToDeleteIndex = idOrIndex; openModal('deleteModal'); } }
-        function filterMeals(type, btn) { document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderMeals(type); }
-        function setMealType(type) { currentMealType = type; document.getElementById('opt-meat').className = type === 'meat' ? 'toggle-opt selected' : 'toggle-opt'; document.getElementById('opt-dairy').className = type === 'dairy' ? 'toggle-opt selected' : 'toggle-opt'; document.getElementById('opt-parve').className = type === 'parve' ? 'toggle-opt selected' : 'toggle-opt'; }
-        
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function openAddModal() { document.getElementById('taskModal').style.display = 'flex'; setTaskType('once'); }
-        function setTaskType(type) { currentTaskType = type; document.getElementById('opt-once').className = type === 'once' ? 'toggle-opt selected' : 'toggle-opt'; document.getElementById('opt-recurring').className = type === 'recurring' ? 'toggle-opt selected' : 'toggle-opt'; document.getElementById('recurring-options').style.display = type === 'recurring' ? 'block' : 'none'; if(type === 'recurring') { selectedDays = []; updateDaysUI(); } }
-        function toggleDay(d) { const idx = selectedDays.indexOf(d); if (idx > -1) selectedDays.splice(idx, 1); else selectedDays.push(d); updateDaysUI(); }
-        function toggleAllDays() { selectedDays = selectedDays.length === 7 ? [] : [0,1,2,3,4,5,6]; updateDaysUI(); }
-        function updateDaysUI() { document.querySelectorAll('.day-circle').forEach(el => { const d = parseInt(el.getAttribute('data-day')); if (selectedDays.includes(d)) el.classList.add('active'); else el.classList.remove('active'); }); }
+        function renderMenu() {
+            document.getElementById('mainHeader').style.display = 'none';
+            const container = document.getElementById('menuList'); container.innerHTML = '';
+            const allMeals = getAllMeals();
+            dayNames.forEach((name, idx) => {
+                const day = weeklyMenu[idx] || { breakfast:[], lunch:[], dinner:[] };
+                container.innerHTML += `<div class="menu-day-card"><div class="menu-day-title">${name}</div>
+                    ${['breakfast','lunch','dinner'].map(s => `<div class="menu-slot"><div class="slot-label">${s==='breakfast'?'בוקר':s==='lunch'?'צהריים':'ערב'}</div>
+                    <div class="slot-btn ${day[s].length?'filled':''}" onclick="openMealSelector(${idx},'${s}')"><div class="slot-content-wrapper">${day[s].map(i => `<span class="slot-badge">${allMeals[i]?.title}</span>`).join('') || 'בחר...'}</div><span>✎</span></div></div>`).join('')}</div>`;
+            });
+        }
+
+        function openMealSelector(d, s) { selectionContext = { day: d, slot: s }; tempSelectedMeals = [...(weeklyMenu[d][s] || [])]; renderSelectorList(); openModal('mealSelectorModal'); }
+        function renderSelectorList() {
+            const list = document.getElementById('selectorList'); list.innerHTML = '';
+            getAllMeals().forEach((m, idx) => {
+                const isSelected = tempSelectedMeals.includes(idx);
+                list.innerHTML += `<div class="selector-item ${isSelected?'selected':''}" onclick="toggleMealSelection(${idx}, this)">
+                    <img src="${m.img||''}" class="selector-img"><div class="selector-text">${m.title}</div><div class="check-icon">✓</div></div>`;
+            });
+        }
+        function toggleMealSelection(idx, el) { const i = tempSelectedMeals.indexOf(idx); if(i>-1) tempSelectedMeals.splice(i,1); else tempSelectedMeals.push(idx); el.classList.toggle('selected'); }
+        function saveSelection() { weeklyMenu[selectionContext.day][selectionContext.slot] = [...tempSelectedMeals]; saveAll(); closeModal('mealSelectorModal'); }
+        function clearSelection() { tempSelectedMeals = []; renderSelectorList(); }
+
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeDeleteModal() { closeModal('deleteModal'); taskToDeleteIndex = null; }
-        function confirmDeleteToday() { if (taskToDeleteIndex === null) return; const dateKey = getStorageKey(currentDate); const task = trackerData[dateKey].tasks[taskToDeleteIndex]; if (task.fromTemplate) { if(!trackerData[dateKey].deletedTemplateIds) trackerData[dateKey].deletedTemplateIds = []; trackerData[dateKey].deletedTemplateIds.push(task.templateId); } trackerData[dateKey].tasks.splice(taskToDeleteIndex, 1); saveAll(); closeDeleteModal(); }
-        function confirmDeleteForever() { if (taskToDeleteIndex === null) return; const dateKey = getStorageKey(currentDate); const task = trackerData[dateKey].tasks[taskToDeleteIndex]; if (task.fromTemplate) { const tplIndex = templates.findIndex(t => t.id === task.templateId); if (tplIndex > -1) templates.splice(tplIndex, 1); Object.keys(trackerData).forEach(dayKey => { if (trackerData[dayKey].tasks) { trackerData[dayKey].tasks = trackerData[dayKey].tasks.filter(t => t.templateId !== task.templateId); } }); } else { trackerData[dateKey].tasks.splice(taskToDeleteIndex, 1); } saveAll(); closeDeleteModal(); }
-        
-        // Start
-        cleanMenuData(); 
-        renderCurrentView(); 
-        loadRemoteRecipes(); 
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function handleFabPlus() { if(currentView==='meals') openModal('mealModal'); else openModal('taskModal'); }
+        function changeDate(d) { currentDate.setDate(currentDate.getDate()+d); renderDay(); }
+        function changeStatsYear(d) { currentStatsYear+=d; renderStats(); }
+        function setTaskType(t) { currentTaskType = t; document.getElementById('opt-once').classList.toggle('selected', t==='once'); document.getElementById('opt-recurring').classList.toggle('selected', t==='recurring'); document.getElementById('recurring-options').style.display = t==='recurring'?'block':'none'; }
+        function toggleDay(d) { const i = selectedDays.indexOf(d); if(i>-1) selectedDays.splice(i,1); else selectedDays.push(d); document.querySelectorAll('.day-circle')[d].classList.toggle('active'); }
+        function toggleAllDays() { selectedDays = selectedDays.length === 7 ? [] : [0,1,2,3,4,5,6]; document.querySelectorAll('.day-circle').forEach((el, i) => el.classList.toggle('active', selectedDays.includes(i))); }
+
+        cleanMenuData(); loadRemoteRecipes();
     </script>
 </body>
 </html>
-
