@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#FF6B6B">
+    <title>המעקב שלי</title>
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --gradient: linear-gradient(135deg, #FF6B6B 0%, #FF9F43 100%);
+            --gold-gradient: linear-gradient(135deg, #F1C40F 0%, #F39C12 100%);
+            --bg: #FAFAFC;
+            --card: #FFFFFF;
+            --text: #2D3436;
+            --gray: #A4B0BE;
+            --success: #1DD1A1;
+            --danger: #FF4757;
+            --nav-height: 75px;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg); color: var(--text); margin: 0; padding: 0;
+            display: flex; flex-direction: column; height: 100dvh; overflow: hidden;
+            overscroll-behavior-y: none; user-select: none;
+        }
+
+        .view-section { display: none; flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 160px; }
+        .view-section.active { display: block; }
+
+        /* Header */
+        header {
+            background: var(--gradient);
+            padding: 15px; padding-top: max(15px, env(safe-area-inset-top));
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            z-index: 10; color: white; height: 80px;
+        }
+        header button { 
+            background: none; border: none; font-size: 2rem; color: white; 
+            padding: 0 20px; cursor: pointer; display: flex; align-items: center; 
+            opacity: 0.8; transition: 0.2s; z-index: 2;
+        }
+        header button:active { opacity: 1; transform: scale(1.1); }
+        
+        .date-wrapper {
+            position: relative; height: 30px; width: 200px; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .date-text {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s;
+            white-space: nowrap; backface-visibility: hidden;
+        }
+
+        /* Bubble */
+        .score-bubble-container {
+            position: fixed; bottom: 25px; 
+            left: 50%; transform: translateX(-50%) translateY(60px) scale(0.9);
+            background: white; width: 120px; height: 120px; border-radius: 50%;
+            box-shadow: 0 -8px 25px rgba(0,0,0,0.08);
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+            padding-top: 15px; z-index: 21;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); opacity: 0; pointer-events: none;
+        }
+        .score-bubble-container.visible { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0) scale(1); }
+        .bubble-crown svg { width: 60px; height: 50px; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.15)); }
+        .bubble-label-text { font-size: 0.75rem; color: var(--gray); font-weight: 700; margin-top: 4px; }
+
+        /* Task List Items - FIXED RIGHT ALIGNMENT */
+        .task-card {
+            background-color: var(--card); border-radius: 16px; padding: 18px; margin-bottom: 12px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.02);
+            position: relative; overflow: hidden; transition: 0.3s;
+            
+            /* -- התיקון כאן -- */
+            width: 90%; 
+            margin-right: 15px; /* מצמיד לימין עם רווח קטן */
+            margin-left: auto; /* דוחף את כל השאר לשמאל */
+        }
+        
+        .task-info { flex: 1; }
+        .task-name { font-weight: 600; font-size: 1.15rem; margin-bottom: 4px; color: var(--text); }
+        .task-meta { font-size: 0.85rem; color: var(--gray); font-weight: 500; display: flex; align-items: center; gap: 5px; }
+
+        /* Delete Mode Styles */
+        .delete-wrapper {
+            width: 0; opacity: 0; overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex; align-items: center;
+        }
+        .delete-mode .delete-wrapper { width: 40px; opacity: 1; margin-left: 10px; }
+        .btn-trash-icon { color: #FF4757; font-size: 1.4rem; cursor: pointer; padding: 5px; }
+
+        .status-btn {
+            width: 48px; height: 48px; border-radius: 50%; border: 2px solid #F1F2F6;
+            display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+            background: #fff; transition: 0.2s; color: #DFE4EA; flex-shrink: 0;
+        }
+        .status-btn.success { background-color: var(--success); border-color: var(--success); color: white; }
+        .status-btn.fail { background-color: var(--danger); border-color: var(--danger); color: white; }
+        .delete-mode .status-btn { opacity: 0.2; pointer-events: none; filter: grayscale(100%); }
+
+        /* Floating Buttons */
+        .fabs-container {
+            position: fixed; bottom: 110px; left: 25px;
+            display: flex; flex-direction: column; gap: 15px; z-index: 30;
+            align-items: center;
+        }
+        .fab {
+            width: 56px; height: 56px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; 
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .fab:active { transform: scale(0.9); }
+        
+        .fab-minus { background: white; color: #FF4757; width: 45px; height: 45px; border: 1px solid rgba(0,0,0,0.05); }
+        .fab-minus svg { width: 24px; height: 24px; fill: currentColor; display: block; }
+        .fab-minus.active { background: #FF4757; color: white; box-shadow: 0 8px 20px rgba(255, 71, 87, 0.4); }
+        
+        .fab-plus { background: var(--gold-gradient); color: white; }
+        .fab-plus svg { width: 24px; height: 24px; fill: currentColor; }
+
+        /* Nav Bar */
+        .nav-bar {
+            position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-height);
+            background: var(--gradient); border-top: none; display: flex;
+            padding: 5px; padding-bottom: max(5px, env(safe-area-inset-bottom)); 
+            z-index: 20; box-shadow: 0 -5px 20px rgba(255, 107, 107, 0.2);
+            align-items: flex-end;
+        }
+        .nav-item { 
+            text-align: center; color: rgba(255, 255, 255, 0.5); font-size: 0.75rem; flex: 1; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            transition: 0.3s; font-weight: 500; height: 100%; z-index: 22;
+        }
+        .nav-item.active { color: white; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .nav-icon { display: block; margin-bottom: 4px; }
+        .nav-icon svg { width: 26px; height: 26px; fill: currentColor; transition: 0.3s; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.05)); }
+        .nav-item.active .nav-icon svg { transform: scale(1.1); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+
+        /* Stats Cards */
+        .stat-card-container { display: flex; gap: 15px; margin-top: 20px; }
+        .stat-card { flex: 1; background: white; padding: 20px; border-radius: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; align-items: center; }
+        .stat-crown svg { width: 50px; height: 40px; margin-bottom: 10px; }
+        .stat-label { font-size: 0.8rem; color: var(--gray); font-weight: 600; margin-top: 5px; }
+
+        /* Modals */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(45, 52, 54, 0.6); backdrop-filter: blur(4px);
+            align-items: flex-end; justify-content: center; z-index: 1000;
+        }
+        .modal-content {
+            background: #ffffff; padding: 30px;
+            border-top-left-radius: 25px; border-top-right-radius: 25px;
+            width: 100%; max-width: 600px; animation: slideUp 0.3s;
+        }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .modal-content input { width: 100%; padding: 16px; margin-bottom: 20px; border: 2px solid #F1F2F6; border-radius: 12px; font-size: 1.1rem; }
+        .toggle-container { background: #F1F2F6; padding: 4px; border-radius: 12px; display: flex; margin-bottom: 25px; }
+        .toggle-opt { flex: 1; text-align: center; padding: 10px; border-radius: 10px; color: var(--gray); }
+        .toggle-opt.selected { background: white; font-weight: 700; color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .recurring-options { display: none; margin-bottom: 20px; }
+        .days-grid { display: flex; justify-content: space-between; margin-bottom: 12px; }
+        .day-circle { width: 42px; height: 42px; border-radius: 50%; background: #F1F2F6; display: flex; align-items: center; justify-content: center; }
+        .day-circle.active { background: var(--gradient); color: white; }
+        .full-width-btn { width: 100%; padding: 12px; background: #F1F2F6; border: none; border-radius: 10px; font-weight: 600; margin-bottom: 15px; }
+        .btn-save { width: 100%; padding: 16px; background: var(--gradient); color: white; border:none; border-radius: 14px; font-size: 1.1rem; font-weight: 700; }
+
+        /* Delete Modal */
+        .delete-btn-group { display: flex; flex-direction: column; gap: 10px; }
+        .btn-delete-today { width: 100%; padding: 15px; background: #F1F2F6; color: var(--text); border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; }
+        .btn-delete-forever { width: 100%; padding: 15px; background: #FF4757; color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; }
+        .btn-cancel { width: 100%; padding: 15px; background: transparent; color: var(--gray); border: none; font-size: 1rem; font-weight: 500; }
+
+        @keyframes popCrown { 0% { transform: scale(0.5); opacity: 0; } 60% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
+        .crown-animate { animation: popCrown 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+    </style>
+</head>
+<body>
+
+    <header id="mainHeader">
+        <button onclick="changeDate(-1)">&#10094;</button> 
+        <div class="date-wrapper" id="dateContainer"></div>
+        <button onclick="changeDate(1)">&#10095;</button> 
+    </header>
+
+    <div id="view-daily" class="view-section active">
+        <div id="taskList"></div>
+    </div>
+
+    <div id="view-stats" class="view-section">
+        <h2 style="margin-top:0; padding-right: 10px; color: var(--text);">סטטיסטיקות</h2>
+        <div class="stat-card-container">
+            <div class="stat-card">
+                <div class="stat-crown" id="monthlyCrown"></div>
+                <div class="stat-label">ממוצע חודשי</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-crown" id="yearlyCrown"></div>
+                <div class="stat-label">ממוצע שנתי</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="scoreBubble" class="score-bubble-container">
+        <div class="bubble-crown" id="bubbleCrown"></div>
+        <span class="bubble-label-text">ציון יומי</span>
+    </div>
+
+    <div class="fabs-container">
+        <div class="fab fab-minus" id="minusBtn" onclick="toggleDeleteMode()">
+            <svg viewBox="0 0 24 24"><rect x="6" y="11" width="12" height="2" rx="1"/></svg>
+        </div>
+        <div class="fab fab-plus" onclick="openAddModal()">
+            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+        </div>
+    </div>
+
+    <div class="nav-bar">
+        <div class="nav-item active" onclick="switchView('daily', this)">
+            <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19,4H18V2H16V4H8V2H6V4H5A2,2 0 0,0 3,6V20A2,2 0 0,0 5,22H19A2,2 0 0,0 21,20V6A2,2 0 0,0 19,4M19,20H5V10H19V20M19,8H5V6H19V8M9,14L7,12L5.5,13.5L9,17L15,11L13.5,9.5L9,14Z" /></svg></span> 
+            היום
+        </div>
+        <div style="flex: 0.8;"></div> 
+        <div class="nav-item" onclick="switchView('stats', this)">
+            <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z" /></svg></span>
+            דוח
+        </div>
+    </div>
+
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <h3 style="margin-top:0; text-align:center; margin-bottom:25px;">משימה חדשה</h3>
+            <input type="text" id="newTaskName" placeholder="שם המשימה">
+            <div class="toggle-container">
+                <div class="toggle-opt selected" id="opt-once" onclick="setTaskType('once')">חד פעמי</div>
+                <div class="toggle-opt" id="opt-recurring" onclick="setTaskType('recurring')">קבוע</div>
+            </div>
+            <div id="recurring-options" class="recurring-options">
+                <button class="full-width-btn" onclick="toggleAllDays()">בחר הכל</button>
+                <div class="days-grid">
+                    <div class="day-circle" onclick="toggleDay(0)" data-day="0">א</div>
+                    <div class="day-circle" onclick="toggleDay(1)" data-day="1">ב</div>
+                    <div class="day-circle" onclick="toggleDay(2)" data-day="2">ג</div>
+                    <div class="day-circle" onclick="toggleDay(3)" data-day="3">ד</div>
+                    <div class="day-circle" onclick="toggleDay(4)" data-day="4">ה</div>
+                    <div class="day-circle" onclick="toggleDay(5)" data-day="5">ו</div>
+                    <div class="day-circle" onclick="toggleDay(6)" data-day="6">ש</div>
+                </div>
+            </div>
+            <input type="number" id="newTaskWeight" placeholder="חשיבות (1-100)" inputmode="numeric" pattern="[0-9]*">
+            <button class="btn-save" onclick="saveTask()">שמור משימה</button>
+            <div style="text-align:center; margin-top:20px;">
+                <span onclick="closeModal()" style="color:var(--gray); font-weight:600; cursor:pointer;">ביטול</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h3 style="margin-top:0; text-align:center; margin-bottom:10px;">מחיקת משימה</h3>
+            <p style="text-align:center; color:var(--gray); margin-bottom:25px;">בחר את סוג המחיקה למשימה זו</p>
+            <div class="delete-btn-group">
+                <button class="btn-delete-today" onclick="confirmDeleteToday()">מחק להיום בלבד</button>
+                <button class="btn-delete-forever" onclick="confirmDeleteForever()">מחק לצמיתות (הכל)</button>
+                <button class="btn-cancel" onclick="closeDeleteModal()">ביטול</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function getCrownSVG(score) {
+            if (score === 0) return ''; 
+            let defs = '', bodyFill = '', strokeColor = '#000', gemsHTML = '';
+            if (score < 20) { 
+                defs = `<linearGradient id="bronzeGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#CD7F32"/><stop offset="50%" stop-color="#A0522D"/><stop offset="100%" stop-color="#8B4513"/></linearGradient>`;
+                bodyFill = "url(#bronzeGrad)"; strokeColor = "#5D4037";
+            } else if (score < 40) { 
+                defs = `<linearGradient id="silverGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ECF0F1"/><stop offset="50%" stop-color="#BDC3C7"/><stop offset="100%" stop-color="#95A5A6"/></linearGradient>`;
+                bodyFill = "url(#silverGrad)"; strokeColor = "#7F8C8D";
+            } else { 
+                defs = `<linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F1C40F"/><stop offset="30%" stop-color="#F39C12"/><stop offset="70%" stop-color="#F1C40F"/><stop offset="100%" stop-color="#D35400"/></linearGradient>`;
+                bodyFill = "url(#goldGrad)"; strokeColor = "#E67E22";
+            }
+            if (score >= 60 && score < 80) {
+                defs += `<radialGradient id="rubyDiamondGrad" cx="30%" cy="30%" r="70%"><stop offset="0%" stop-color="#ff7675"/><stop offset="100%" stop-color="#d63031"/></radialGradient>`;
+                gemsHTML = `<path d="M20,52 L25,58 L20,64 L15,58 Z" fill="url(#rubyDiamondGrad)" stroke="#c0392b" stroke-width="0.5"/><path d="M50,40 L57,48 L50,56 L43,48 Z" fill="url(#rubyDiamondGrad)" stroke="#c0392b" stroke-width="0.5"/><path d="M80,52 L85,58 L80,64 L75,58 Z" fill="url(#rubyDiamondGrad)" stroke="#c0392b" stroke-width="0.5"/>`;
+            } else if (score >= 80) {
+                defs += `<radialGradient id="diamondGrad" cx="30%" cy="30%" r="70%"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#74b9ff"/></radialGradient>`;
+                gemsHTML = `<path d="M20,52 L25,58 L20,64 L15,58 Z" fill="url(#diamondGrad)" stroke="#0984e3" stroke-width="0.5"/><path d="M50,40 L57,48 L50,56 L43,48 Z" fill="url(#diamondGrad)" stroke="#0984e3" stroke-width="0.5"/><path d="M80,52 L85,58 L80,64 L75,58 Z" fill="url(#diamondGrad)" stroke="#0984e3" stroke-width="0.5"/>`;
+            }
+            return `<svg class="crown-svg crown-animate" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg"><defs>${defs}</defs><path d="M 15,75 L 85,75 L 80,50 L 50,60 L 20,50 Z" fill="${bodyFill}" stroke="${strokeColor}" stroke-width="1"/><path d="M 20,50 L 10,15 L 35,55 L 50,5 L 65,55 L 90,15 L 80,50 L 50,60 Z" fill="${bodyFill}" stroke="${strokeColor}" stroke-width="1"/>${gemsHTML}</svg>`;
+        }
+
+        let currentDate = new Date();
+        let trackerData = JSON.parse(localStorage.getItem('myTrackerData')) || {};
+        let templates = JSON.parse(localStorage.getItem('myTrackerTemplates')) || [];
+        let currentTaskType = 'once';
+        let selectedDays = [];
+        let currentView = 'daily';
+        let taskToDeleteIndex = null;
+        let isDeleteMode = false;
+        const dayNames = ['א\'','ב\'','ג\'','ד\'','ה\'','ו\'','ש\''];
+
+        function getStorageKey(date) { return date.toISOString().split('T')[0]; }
+        function saveAll() {
+            localStorage.setItem('myTrackerData', JSON.stringify(trackerData));
+            localStorage.setItem('myTrackerTemplates', JSON.stringify(templates));
+            renderCurrentView();
+        }
+
+        function renderCurrentView() {
+            if(currentView === 'daily') renderDay(0);
+            else renderStats();
+        }
+
+        function updateScoreBubble(score) {
+            const bubble = document.getElementById('scoreBubble');
+            if (score > 0 && currentView === 'daily') {
+                document.getElementById('bubbleCrown').innerHTML = getCrownSVG(score);
+                bubble.classList.add('visible');
+            } else {
+                bubble.classList.remove('visible');
+            }
+        }
+
+        function toggleDeleteMode() {
+            isDeleteMode = !isDeleteMode;
+            const btn = document.getElementById('minusBtn');
+            const list = document.getElementById('taskList');
+            if(isDeleteMode) {
+                btn.classList.add('active');
+                list.classList.add('delete-mode');
+            } else {
+                btn.classList.remove('active');
+                list.classList.remove('delete-mode');
+            }
+        }
+
+        function renderDay(animateDirection = 0) {
+            const dateKey = getStorageKey(currentDate);
+            const dateStr = currentDate.toLocaleDateString('he-IL', { weekday: 'long', day: 'numeric', month: 'numeric' });
+            const container = document.getElementById('dateContainer');
+            const existingTexts = container.querySelectorAll('.date-text');
+            const newText = document.createElement('div');
+            newText.className = 'date-text';
+            newText.innerText = dateStr;
+
+            if (animateDirection === 0) {
+                container.innerHTML = ''; container.appendChild(newText);
+            } else {
+                if (animateDirection === 1) newText.style.transform = 'translateX(-100%)'; 
+                else newText.style.transform = 'translateX(100%)'; 
+                newText.style.opacity = '0';
+                container.appendChild(newText);
+                existingTexts.forEach(oldText => {
+                    oldText.style.transform = animateDirection === 1 ? 'translateX(100%)' : 'translateX(-100%)';
+                    oldText.style.opacity = '0';
+                });
+                requestAnimationFrame(() => { newText.style.transform = 'translateX(0)'; newText.style.opacity = '1'; });
+                setTimeout(() => { existingTexts.forEach(el => el.remove()); }, 300);
+            }
+            
+            document.getElementById('mainHeader').style.display = 'flex';
+            if (!trackerData[dateKey]) trackerData[dateKey] = { tasks: [], score: 0, deletedTemplateIds: [] };
+            if (!trackerData[dateKey].deletedTemplateIds) trackerData[dateKey].deletedTemplateIds = [];
+
+            const dayOfWeek = currentDate.getDay();
+            const relevantTemplates = templates.filter(t => t.days.includes(dayOfWeek));
+            relevantTemplates.forEach(tpl => {
+                const alreadyExists = trackerData[dateKey].tasks.some(t => t.templateId === tpl.id);
+                const wasDeleted = trackerData[dateKey].deletedTemplateIds.includes(tpl.id);
+                if (!alreadyExists && !wasDeleted) {
+                    trackerData[dateKey].tasks.push({ name: tpl.name, weight: tpl.weight, status: null, fromTemplate: true, templateId: tpl.id });
+                }
+            });
+
+            const taskListEl = document.getElementById('taskList');
+            if(isDeleteMode) taskListEl.classList.add('delete-mode'); else taskListEl.classList.remove('delete-mode');
+            taskListEl.innerHTML = '';
+            
+            const tasks = trackerData[dateKey].tasks;
+            let totalWeight = 0; let currentScore = 0;
+
+            if (tasks.length === 0) taskListEl.innerHTML = '<div style="text-align:center; color:#B2BEC3; margin-top:40px;">אין משימות להיום</div>';
+
+            tasks.forEach((task, index) => {
+                totalWeight += parseInt(task.weight);
+                if (task.status === 'done') currentScore += parseInt(task.weight);
+                
+                const taskCard = document.createElement('div');
+                taskCard.className = 'task-card';
+                let statusClass = '', statusIcon = '';
+                if (task.status === 'done') { statusIcon = '✓'; statusClass = 'success'; }
+                else if (task.status === 'fail') { statusIcon = '✕'; statusClass = 'fail'; }
+                
+                let typeStr = 'חד פעמי';
+                if (task.fromTemplate && task.templateId) {
+                    const tpl = templates.find(t => t.id === task.templateId);
+                    if (tpl) {
+                        if (tpl.days.length === 7) typeStr = 'כל יום';
+                        else typeStr = 'ימים ' + tpl.days.map(d => dayNames[d]).join(', ');
+                    } else {
+                        typeStr = 'קבוע';
+                    }
+                }
+                const metaString = `${task.weight}% | ${typeStr}`;
+
+                taskCard.innerHTML = `
+                    <div class="task-info">
+                        <div class="task-name">${task.name}</div>
+                        <div class="task-meta">${metaString}</div>
+                    </div>
+                    <div style="display:flex; align-items:center;">
+                        <div class="status-btn ${statusClass}" onclick="toggleStatus(${index})">${statusIcon}</div>
+                        <div class="delete-wrapper">
+                            <div class="btn-trash-icon" onclick="openDeleteModal(${index})">🗑</div>
+                        </div>
+                    </div>
+                `;
+                taskListEl.appendChild(taskCard);
+            });
+
+            let finalScore = totalWeight > 0 ? Math.round((currentScore / totalWeight) * 100) : 0;
+            trackerData[dateKey].score = finalScore;
+            updateScoreBubble(finalScore);
+            localStorage.setItem('myTrackerData', JSON.stringify(trackerData));
+        }
+
+        function renderStats() {
+            document.getElementById('mainHeader').style.display = 'none';
+            updateScoreBubble(0); 
+            const keys = Object.keys(trackerData);
+            let monthSum = 0, monthCount = 0, yearSum = 0, yearCount = 0;
+            const now = new Date();
+            keys.forEach(key => {
+                const date = new Date(key); const data = trackerData[key];
+                if (data.tasks && data.tasks.length > 0) {
+                    if (date.getFullYear() === now.getFullYear()) {
+                        yearSum += data.score; yearCount++;
+                        if (date.getMonth() === now.getMonth()) { monthSum += data.score; monthCount++; }
+                    }
+                }
+            });
+            const mAvg = monthCount ? Math.round(monthSum / monthCount) : 0;
+            const yAvg = yearCount ? Math.round(yearSum / yearCount) : 0;
+            document.getElementById('monthlyCrown').innerHTML = getCrownSVG(mAvg || 1);
+            document.getElementById('yearlyCrown').innerHTML = getCrownSVG(yAvg || 1);
+        }
+
+        function changeDate(direction) { currentDate.setDate(currentDate.getDate() + direction); renderDay(direction); }
+
+        function switchView(viewName, btn) {
+            currentView = viewName;
+            if (viewName === 'daily') currentDate = new Date();
+            isDeleteMode = false; document.getElementById('minusBtn').classList.remove('active');
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.getElementById('view-' + viewName).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            btn.classList.add('active');
+            const fabContainer = document.querySelector('.fabs-container');
+            if(viewName === 'stats') fabContainer.style.display = 'none'; else fabContainer.style.display = 'flex';
+            renderCurrentView();
+        }
+
+        function toggleStatus(index) {
+            if(isDeleteMode) return; 
+            const dateKey = getStorageKey(currentDate);
+            const task = trackerData[dateKey].tasks[index];
+            if (!task.status) task.status = 'done'; else if (task.status === 'done') task.status = 'fail'; else task.status = null;
+            saveAll();
+        }
+
+        function openDeleteModal(index) { taskToDeleteIndex = index; document.getElementById('deleteModal').style.display = 'flex'; }
+        function closeDeleteModal() { document.getElementById('deleteModal').style.display = 'none'; taskToDeleteIndex = null; }
+        function confirmDeleteToday() {
+            if (taskToDeleteIndex === null) return;
+            const dateKey = getStorageKey(currentDate); const task = trackerData[dateKey].tasks[taskToDeleteIndex];
+            if (task.fromTemplate) {
+                 if(!trackerData[dateKey].deletedTemplateIds) trackerData[dateKey].deletedTemplateIds = [];
+                 trackerData[dateKey].deletedTemplateIds.push(task.templateId);
+            }
+            trackerData[dateKey].tasks.splice(taskToDeleteIndex, 1);
+            saveAll(); closeDeleteModal();
+        }
+        function confirmDeleteForever() {
+            if (taskToDeleteIndex === null) return;
+            const dateKey = getStorageKey(currentDate); const task = trackerData[dateKey].tasks[taskToDeleteIndex];
+            if (task.fromTemplate) {
+                const tplIndex = templates.findIndex(t => t.id === task.templateId);
+                if (tplIndex > -1) templates.splice(tplIndex, 1);
+                Object.keys(trackerData).forEach(dayKey => {
+                    if (trackerData[dayKey].tasks) { trackerData[dayKey].tasks = trackerData[dayKey].tasks.filter(t => t.templateId !== task.templateId); }
+                });
+            } else { trackerData[dateKey].tasks.splice(taskToDeleteIndex, 1); }
+            saveAll(); closeDeleteModal();
+        }
+
+        function openAddModal() { document.getElementById('taskModal').style.display = 'flex'; setTaskType('once'); }
+        function closeModal() { document.getElementById('taskModal').style.display = 'none'; }
+        function setTaskType(type) {
+            currentTaskType = type;
+            document.getElementById('opt-once').className = type === 'once' ? 'toggle-opt selected' : 'toggle-opt';
+            document.getElementById('opt-recurring').className = type === 'recurring' ? 'toggle-opt selected' : 'toggle-opt';
+            document.getElementById('recurring-options').style.display = type === 'recurring' ? 'block' : 'none';
+            if(type === 'recurring') { selectedDays = []; updateDaysUI(); }
+        }
+        function toggleDay(d) {
+            const idx = selectedDays.indexOf(d);
+            if (idx > -1) selectedDays.splice(idx, 1); else selectedDays.push(d);
+            updateDaysUI();
+        }
+        function toggleAllDays() { selectedDays = selectedDays.length === 7 ? [] : [0,1,2,3,4,5,6]; updateDaysUI(); }
+        function updateDaysUI() {
+            document.querySelectorAll('.day-circle').forEach(el => {
+                const d = parseInt(el.getAttribute('data-day'));
+                if (selectedDays.includes(d)) el.classList.add('active'); else el.classList.remove('active');
+            });
+        }
+        function saveTask() {
+            const name = document.getElementById('newTaskName').value;
+            const weight = parseInt(document.getElementById('newTaskWeight').value);
+            if (!name || isNaN(weight)) return;
+            const templateId = Date.now();
+            if (currentTaskType === 'once') {
+                const dateKey = getStorageKey(currentDate);
+                if (!trackerData[dateKey]) trackerData[dateKey] = { tasks: [], score: 0, deletedTemplateIds: [] };
+                trackerData[dateKey].tasks.push({ name, weight, status: null, fromTemplate: false });
+            } else {
+                if (selectedDays.length === 0) return;
+                templates.push({ id: templateId, name, weight, days: [...selectedDays] });
+                const todayIdx = currentDate.getDay();
+                if (selectedDays.includes(todayIdx)) {
+                    const dateKey = getStorageKey(currentDate);
+                    if (!trackerData[dateKey]) trackerData[dateKey] = { tasks: [], score: 0, deletedTemplateIds: [] };
+                    trackerData[dateKey].tasks.push({ name, weight, status: null, fromTemplate: true, templateId: templateId });
+                }
+            }
+            saveAll(); closeModal(); renderDay(0);
+        }
+        
+        // Initial render
+        renderDay(0);
+    </script>
+</body>
+</html>
