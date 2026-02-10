@@ -46,26 +46,36 @@
         }
         
         .logo-container {
-            display: flex; align-items: center;
+            display: flex; 
+            flex-direction: column; /* שינוי: מסדר את הטקסט אחד מתחת לשני */
+            justify-content: center;
+            align-items: flex-start;
         }
+
         .brand-logo {
-            font-size: 1.8rem; 
+            font-size: 1.6rem; /* קצת הקטנתי כדי שיהיה מקום */
             font-weight: 900; 
             letter-spacing: -1px; 
             font-family: sans-serif; 
             color: transparent; 
-            -webkit-text-stroke: 1.5px white; /* The White Outline */
+            -webkit-text-stroke: 1.2px white; 
             background: white; 
             -webkit-background-clip: text;
-            -webkit-text-fill-color: white; /* Solid White Fill */
+            -webkit-text-fill-color: white; 
             filter: drop-shadow(0 2px 0 rgba(0,0,0,0.1));
             line-height: 1;
+            margin-bottom: -2px; /* מצמיד את הטקסט התחתון */
         }
 
-        header button { background: none; border: none; font-size: 1.5rem; color: white; padding: 0 15px; cursor: pointer; opacity: 0.9; transition: 0.2s; z-index: 2; }
-        header button:active { opacity: 1; transform: scale(1.1); }
-        .date-wrapper { position: relative; height: 30px; width: 150px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
-        .date-text { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,0.1); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s; white-space: nowrap; backface-visibility: hidden; }
+        .brand-subtitle {
+            font-family: sans-serif;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase; /* אותיות גדולות באנגלית נראה יותר כמו לוגו */
+            margin-left: 2px;
+        }
 
         .date-control-group {
             display: flex; align-items: center;
@@ -253,11 +263,12 @@
     <header id="mainHeader">
         <div class="logo-container">
             <div class="brand-logo">YomYom</div>
+            <div class="brand-subtitle">by Shalev Revah</div>
         </div>
         
         <div class="date-control-group">
             <button onclick="changeDate(-1)">&#10094;</button> 
-            <div class="date-wrapper" id="dateContainer"></div>
+            <div class="date-wrapper" id="dateContainer" style="width: 110px;"></div>
             <button onclick="changeDate(1)">&#10095;</button> 
         </div>
     </header>
@@ -1184,3 +1195,4 @@
     </script>
 </body>
 </html>
+
