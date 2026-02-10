@@ -19,11 +19,7 @@
             --gray: #A4B0BE;
             --success: #1DD1A1;
             --danger: #FF4757;
-            
-            --meat: #e17055;
-            --dairy: #74b9ff;
-            --parve: #00b894;
-            
+            --meat: #e17055; --dairy: #74b9ff; --parve: #00b894;
             --nav-height: 75px;
         }
 
@@ -47,66 +43,36 @@
             box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
             z-index: 10; color: white; height: 80px;
         }
-        header button { 
-            background: none; border: none; font-size: 2rem; color: white; 
-            padding: 0 20px; cursor: pointer; display: flex; align-items: center; 
-            opacity: 0.8; transition: 0.2s; z-index: 2;
-        }
+        header button { background: none; border: none; font-size: 2rem; color: white; padding: 0 20px; cursor: pointer; opacity: 0.8; transition: 0.2s; z-index: 2; }
         header button:active { opacity: 1; transform: scale(1.1); }
-        
         .date-wrapper { position: relative; height: 30px; width: 200px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
         .date-text { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,0.1); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s; white-space: nowrap; backface-visibility: hidden; }
 
         /* Bubble */
         .score-bubble-container {
-            position: fixed; bottom: var(--nav-height); left: 50%; 
-            width: 140px; height: 70px; border-radius: 100px 100px 0 0;
-            background: white; box-shadow: 0 -5px 15px rgba(0,0,0,0.08);
-            display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-            padding-bottom: 8px; z-index: 15;
-            transform: translateX(-50%) translateY(100%); 
-            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); opacity: 0; pointer-events: none;
+            position: fixed; bottom: var(--nav-height); left: 50%; width: 140px; height: 70px; border-radius: 100px 100px 0 0;
+            background: white; box-shadow: 0 -5px 15px rgba(0,0,0,0.08); display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+            padding-bottom: 8px; z-index: 15; transform: translateX(-50%) translateY(100%); transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); opacity: 0; pointer-events: none;
         }
         .score-bubble-container.visible { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
         .bubble-crown svg { width: 50px; height: 40px; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.15)); margin-bottom: 2px; }
         .bubble-label-text { font-size: 0.75rem; color: var(--gray); font-weight: 700; }
 
-        /* --- CARD STYLES --- */
-        .task-card-wrapper, .meal-swipe-wrapper {
-            position: relative; width: 98%; margin: 0 auto 12px auto; height: 85px;
-            border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
-        }
+        /* Card Styles */
+        .task-card-wrapper, .meal-swipe-wrapper { position: relative; width: 98%; margin: 0 auto 12px auto; height: 85px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
         .meal-swipe-wrapper { height: 200px; }
-
-        .task-action-bg {
-            position: absolute; top: 0; bottom: 0; right: 0; left: 0;
-            display: flex; justify-content: flex-start; /* Right side in RTL */
-            z-index: 1;
-        }
-        
-        .action-btn {
-            width: 70px; height: 100%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem; color: white; cursor: pointer;
-        }
+        .task-action-bg { position: absolute; top: 0; bottom: 0; right: 0; left: 0; display: flex; justify-content: flex-start; z-index: 1; }
+        .action-btn { width: 70px; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; cursor: pointer; }
         .action-btn.edit { background-color: var(--edit-btn); }
         .action-btn.delete { background-color: var(--danger); }
-
-        .task-card-content, .meal-card-content {
-            position: absolute; top: 0; bottom: 0; right: 0; left: 0; background-color: var(--card);
-            display: flex; justify-content: space-between; align-items: center; padding: 0 15px 0 20px;
-            border-radius: 16px; z-index: 2; transition: transform 0.2s ease-out; border: 1px solid rgba(0,0,0,0.02);
-        }
+        .task-card-content, .meal-card-content { position: absolute; top: 0; bottom: 0; right: 0; left: 0; background-color: var(--card); display: flex; justify-content: space-between; align-items: center; padding: 0 15px 0 20px; border-radius: 16px; z-index: 2; transition: transform 0.2s ease-out; border: 1px solid rgba(0,0,0,0.02); }
         .meal-card-content { display: flex; flex-direction: column; align-items: stretch; padding: 0; }
-        
         .task-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
         .task-name { font-weight: 600; font-size: 1.15rem; margin-bottom: 4px; color: var(--text); }
         .task-meta { font-size: 0.85rem; color: var(--gray); font-weight: 500; display: flex; align-items: center; gap: 5px; }
-        
         .meal-action-group { display: flex; align-items: center; gap: 12px; }
         .task-meal-img { width: 50px; height: 50px; border-radius: 12px; object-fit: cover; border: 2px solid #F1F2F6; flex-shrink: 0; cursor: pointer; transition: transform 0.2s; background: #eee; }
         .task-meal-img:active { transform: scale(0.9); }
-
         .status-btn { width: 48px; height: 48px; border-radius: 50%; border: 2px solid #F1F2F6; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; background: #fff; transition: 0.2s; color: #DFE4EA; flex-shrink: 0; cursor: pointer; }
         .status-btn.success { background-color: var(--success); border-color: var(--success); color: white; }
         .status-btn.fail { background-color: var(--danger); border-color: var(--danger); color: white; }
@@ -121,14 +87,12 @@
         .meal-details { display: flex; justify-content: space-between; align-items: center; }
         .meal-tag { font-size: 0.75rem; padding: 3px 8px; border-radius: 6px; color: white; font-weight: 600; }
         .tag-meat { background: var(--meat); } .tag-dairy { background: var(--dairy); } .tag-parve { background: var(--parve); }
-        
         .locked-icon { position: absolute; top: 10px; left: 10px; font-size: 1.2rem; color: rgba(0,0,0,0.3); z-index: 5; }
 
         /* Menu */
         .menu-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .admin-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray); transition: 0.3s; }
         .admin-btn.active { color: var(--primary); transform: scale(1.1); }
-        
         .menu-day-card { background: white; border-radius: 16px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
         .menu-day-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 10px; color: var(--primary); }
         .menu-slot { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
@@ -149,14 +113,12 @@
         .selector-text { font-size: 1rem; font-weight: 600; color: var(--text); }
         .selector-type { margin-right: auto; font-size: 0.75rem; padding: 3px 8px; border-radius: 6px; color: white; }
 
-        /* Fabs */
+        /* Nav & Fabs */
         .fabs-container { position: fixed; bottom: 110px; left: 25px; display: flex; flex-direction: column; gap: 15px; z-index: 30; align-items: center; }
         .fab { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); cursor: pointer; transition: transform 0.2s; }
         .fab:active { transform: scale(0.9); }
         .fab-plus { background: var(--gold-gradient); color: white; }
         .fab-plus svg { width: 24px; height: 24px; fill: currentColor; }
-
-        /* Nav Bar */
         .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-height); background: var(--gradient); border-top: none; display: flex; padding: 5px; padding-bottom: max(5px, env(safe-area-inset-bottom)); z-index: 20; box-shadow: 0 -5px 20px rgba(255, 107, 107, 0.2); align-items: flex-end; }
         .nav-item { text-align: center; color: rgba(255, 255, 255, 0.5); font-size: 0.65rem; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.3s; font-weight: 500; height: 100%; z-index: 22; }
         .nav-item.active { color: white; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.1); }
@@ -177,15 +139,10 @@
         .day-circle.active { background: var(--gradient); color: white; }
         .full-width-btn { width: 100%; padding: 12px; background: #F1F2F6; border: none; border-radius: 10px; font-weight: 600; margin-bottom: 15px; }
         .btn-save { width: 100%; padding: 16px; background: var(--gradient); color: white; border:none; border-radius: 14px; font-size: 1.1rem; font-weight: 700; }
-
         .delete-btn-group { display: flex; flex-direction: column; gap: 10px; }
         .btn-delete-today { width: 100%; padding: 15px; background: #F1F2F6; color: var(--text); border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; }
         .btn-delete-forever { width: 100%; padding: 15px; background: #FF4757; color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; }
         .btn-cancel { width: 100%; padding: 15px; background: transparent; color: var(--gray); border: none; font-size: 1rem; font-weight: 500; }
-
-        @keyframes popCrown { 0% { transform: scale(0.5); opacity: 0; } 60% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
-        .crown-animate { animation: popCrown 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
-
     </style>
 </head>
 <body>
@@ -196,9 +153,7 @@
         <button onclick="changeDate(1)">&#10095;</button> 
     </header>
 
-    <div id="view-daily" class="view-section active">
-        <div id="taskList"></div>
-    </div>
+    <div id="view-daily" class="view-section active"><div id="taskList"></div></div>
 
     <div id="view-meals" class="view-section">
         <h2 style="margin-top:0; padding-right: 10px; color: var(--text);">מאגר מתכונים</h2>
@@ -222,21 +177,12 @@
     <div id="view-stats" class="view-section">
         <h2 style="margin-top:0; padding-right: 10px; color: var(--text);">סטטיסטיקות</h2>
         <div class="stat-card-container">
-            <div class="stat-card">
-                <div class="stat-crown" id="monthlyCrown"></div>
-                <div class="stat-label">ממוצע חודשי</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-crown" id="yearlyCrown"></div>
-                <div class="stat-label">ממוצע שנתי</div>
-            </div>
+            <div class="stat-card"><div class="stat-crown" id="monthlyCrown"></div><div class="stat-label">ממוצע חודשי</div></div>
+            <div class="stat-card"><div class="stat-crown" id="yearlyCrown"></div><div class="stat-label">ממוצע שנתי</div></div>
         </div>
     </div>
 
-    <div id="scoreBubble" class="score-bubble-container">
-        <div class="bubble-crown" id="bubbleCrown"></div>
-        <span class="bubble-label-text">ציון יומי</span>
-    </div>
+    <div id="scoreBubble" class="score-bubble-container"><div class="bubble-crown" id="bubbleCrown"></div><span class="bubble-label-text">ציון יומי</span></div>
 
     <div class="fabs-container">
         <div class="fab fab-plus" onclick="handleFabPlus()">
@@ -245,22 +191,10 @@
     </div>
 
     <div class="nav-bar">
-        <div class="nav-item active" onclick="switchView('daily', this)">
-            <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19,4H18V2H16V4H8V2H6V4H5A2,2 0 0,0 3,6V20A2,2 0 0,0 5,22H19A2,2 0 0,0 21,20V6A2,2 0 0,0 19,4M19,20H5V10H19V20M19,8H5V6H19V8M9,14L7,12L5.5,13.5L9,17L15,11L13.5,9.5L9,14Z" /></svg></span> 
-            היום
-        </div>
-        <div class="nav-item" onclick="switchView('menu', this)">
-            <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/></svg></span>
-            תפריט
-        </div>
-        <div class="nav-item" onclick="switchView('meals', this)">
-            <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg></span>
-            ארוחות
-        </div>
-        <div class="nav-item" onclick="switchView('stats', this)">
-            <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z" /></svg></span>
-            דוח
-        </div>
+        <div class="nav-item active" onclick="switchView('daily', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19,4H18V2H16V4H8V2H6V4H5A2,2 0 0,0 3,6V20A2,2 0 0,0 5,22H19A2,2 0 0,0 21,20V6A2,2 0 0,0 19,4M19,20H5V10H19V20M19,8H5V6H19V8M9,14L7,12L5.5,13.5L9,17L15,11L13.5,9.5L9,14Z" /></svg></span>היום</div>
+        <div class="nav-item" onclick="switchView('menu', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/></svg></span>תפריט</div>
+        <div class="nav-item" onclick="switchView('meals', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg></span>ארוחות</div>
+        <div class="nav-item" onclick="switchView('stats', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z" /></svg></span>דוח</div>
     </div>
 
     <div id="taskModal" class="modal">
@@ -285,9 +219,7 @@
             </div>
             <input type="number" id="newTaskWeight" placeholder="חשיבות (1-100)" inputmode="numeric" pattern="[0-9]*">
             <button class="btn-save" onclick="saveTask()">שמור משימה</button>
-            <div style="text-align:center; margin-top:20px;">
-                <span onclick="closeModal('taskModal')" style="color:var(--gray); font-weight:600; cursor:pointer;">ביטול</span>
-            </div>
+            <div style="text-align:center; margin-top:20px;"><span onclick="closeModal('taskModal')" style="color:var(--gray); font-weight:600; cursor:pointer;">ביטול</span></div>
         </div>
     </div>
 
@@ -304,9 +236,7 @@
                 <div class="toggle-opt" id="opt-parve" onclick="setMealType('parve')">פרווה</div>
             </div>
             <button class="btn-save" id="mealSaveBtn" onclick="saveMeal()">שמור מתכון</button>
-            <div style="text-align:center; margin-top:20px;">
-                <span onclick="closeModal('mealModal')" style="color:var(--gray); font-weight:600; cursor:pointer;">ביטול</span>
-            </div>
+            <div style="text-align:center; margin-top:20px;"><span onclick="closeModal('mealModal')" style="color:var(--gray); font-weight:600; cursor:pointer;">ביטול</span></div>
         </div>
     </div>
 
@@ -335,9 +265,7 @@
             <h3 style="margin-top:0; text-align:center;">כניסת מנהל</h3>
             <input type="password" id="adminPassword" placeholder="סיסמה" inputmode="numeric">
             <button class="btn-save" onclick="checkAdminPassword()">כניסה</button>
-            <div style="text-align:center; margin-top:20px;">
-                <span onclick="closeModal('adminModal')" style="color:var(--gray); cursor:pointer;">ביטול</span>
-            </div>
+            <div style="text-align:center; margin-top:20px;"><span onclick="closeModal('adminModal')" style="color:var(--gray); cursor:pointer;">ביטול</span></div>
         </div>
     </div>
 
@@ -346,9 +274,7 @@
             <h3 style="margin-top:0; text-align:center;">עריכת חשיבות</h3>
             <input type="number" id="editWeightInput" placeholder="חשיבות באחוזים" inputmode="numeric">
             <button class="btn-save" onclick="saveWeightEdit()">שמור</button>
-            <div style="text-align:center; margin-top:20px;">
-                <span onclick="closeModal('weightModal')" style="color:var(--gray); cursor:pointer;">ביטול</span>
-            </div>
+            <div style="text-align:center; margin-top:20px;"><span onclick="closeModal('weightModal')" style="color:var(--gray); cursor:pointer;">ביטול</span></div>
         </div>
     </div>
 
@@ -368,43 +294,37 @@
         function getCrownSVG(score) {
             if (score === 0) return ''; 
             let defs = '', bodyFill = '', strokeColor = '#000', gemsHTML = '';
-            if (score < 20) { 
-                defs = `<linearGradient id="bronzeGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#CD7F32"/><stop offset="50%" stop-color="#A0522D"/><stop offset="100%" stop-color="#8B4513"/></linearGradient>`;
-                bodyFill = "url(#bronzeGrad)"; strokeColor = "#5D4037";
-            } else if (score < 40) { 
-                defs = `<linearGradient id="silverGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ECF0F1"/><stop offset="50%" stop-color="#BDC3C7"/><stop offset="100%" stop-color="#95A5A6"/></linearGradient>`;
-                bodyFill = "url(#silverGrad)"; strokeColor = "#7F8C8D";
-            } else { 
-                defs = `<linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F1C40F"/><stop offset="30%" stop-color="#F39C12"/><stop offset="70%" stop-color="#F1C40F"/><stop offset="100%" stop-color="#D35400"/></linearGradient>`;
-                bodyFill = "url(#goldGrad)"; strokeColor = "#E67E22";
-            }
-            if (score >= 60 && score < 80) {
-                defs += `<radialGradient id="rubyDiamondGrad" cx="30%" cy="30%" r="70%"><stop offset="0%" stop-color="#ff7675"/><stop offset="100%" stop-color="#d63031"/></radialGradient>`;
-                gemsHTML = `<path d="M20,52 L25,58 L20,64 L15,58 Z" fill="url(#rubyDiamondGrad)" stroke="#c0392b" stroke-width="0.5"/><path d="M50,40 L57,48 L50,56 L43,48 Z" fill="url(#rubyDiamondGrad)" stroke="#c0392b" stroke-width="0.5"/><path d="M80,52 L85,58 L80,64 L75,58 Z" fill="url(#rubyDiamondGrad)" stroke="#c0392b" stroke-width="0.5"/>`;
-            } else if (score >= 80) {
-                defs += `<radialGradient id="diamondGrad" cx="30%" cy="30%" r="70%"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#74b9ff"/></radialGradient>`;
-                gemsHTML = `<path d="M20,52 L25,58 L20,64 L15,58 Z" fill="url(#diamondGrad)" stroke="#0984e3" stroke-width="0.5"/><path d="M50,40 L57,48 L50,56 L43,48 Z" fill="url(#diamondGrad)" stroke="#0984e3" stroke-width="0.5"/><path d="M80,52 L85,58 L80,64 L75,58 Z" fill="url(#diamondGrad)" stroke="#0984e3" stroke-width="0.5"/>`;
-            }
+            if (score < 20) { defs = `<linearGradient id="bronzeGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#CD7F32"/><stop offset="50%" stop-color="#A0522D"/><stop offset="100%" stop-color="#8B4513"/></linearGradient>`; bodyFill = "url(#bronzeGrad)"; strokeColor = "#5D4037"; } 
+            else if (score < 40) { defs = `<linearGradient id="silverGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ECF0F1"/><stop offset="50%" stop-color="#BDC3C7"/><stop offset="100%" stop-color="#95A5A6"/></linearGradient>`; bodyFill = "url(#silverGrad)"; strokeColor = "#7F8C8D"; } 
+            else { defs = `<linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F1C40F"/><stop offset="30%" stop-color="#F39C12"/><stop offset="70%" stop-color="#F1C40F"/><stop offset="100%" stop-color="#D35400"/></linearGradient>`; bodyFill = "url(#goldGrad)"; strokeColor = "#E67E22"; }
+            if (score >= 60 && score < 80) { defs += `<radialGradient id="rubyDiamondGrad" cx="30%" cy="30%" r="70%"><stop offset="0%" stop-color="#ff7675"/><stop offset="100%" stop-color="#d63031"/></radialGradient>`; gemsHTML = `<path d="M20,52 L25,58 L20,64 L15,58 Z" fill="url(#rubyDiamondGrad)" stroke="#c0392b" stroke-width="0.5"/><path d="M50,40 L57,48 L50,56 L43,48 Z" fill="url(#rubyDiamondGrad)" stroke="#c0392b" stroke-width="0.5"/><path d="M80,52 L85,58 L80,64 L75,58 Z" fill="url(#rubyDiamondGrad)" stroke="#c0392b" stroke-width="0.5"/>`; } 
+            else if (score >= 80) { defs += `<radialGradient id="diamondGrad" cx="30%" cy="30%" r="70%"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#74b9ff"/></radialGradient>`; gemsHTML = `<path d="M20,52 L25,58 L20,64 L15,58 Z" fill="url(#diamondGrad)" stroke="#0984e3" stroke-width="0.5"/><path d="M50,40 L57,48 L50,56 L43,48 Z" fill="url(#diamondGrad)" stroke="#0984e3" stroke-width="0.5"/><path d="M80,52 L85,58 L80,64 L75,58 Z" fill="url(#diamondGrad)" stroke="#0984e3" stroke-width="0.5"/>`; }
             return `<svg class="crown-svg crown-animate" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg"><defs>${defs}</defs><path d="M 15,75 L 85,75 L 80,50 L 50,60 L 20,50 Z" fill="${bodyFill}" stroke="${strokeColor}" stroke-width="1"/><path d="M 20,50 L 10,15 L 35,55 L 50,5 L 65,55 L 90,15 L 80,50 L 50,60 Z" fill="${bodyFill}" stroke="${strokeColor}" stroke-width="1"/>${gemsHTML}</svg>`;
         }
 
-        // --- HARDCODED BASE SYSTEM RECIPES ---
-        const baseRecipes = [
-            { title: "שקשוקה קלאסית", time: "20 דקות", type: "dairy", img: "https://images.unsplash.com/photo-1590412200988-a436970781fa?w=500&auto=format&fit=crop&q=60", link: "https://www.mako.co.il/food-cooking_magazine/flavors-shakshuka/Recipe-76d06631623bd21006.htm" },
-            { title: "שניצל ופירה", time: "40 דקות", type: "meat", img: "https://images.unsplash.com/photo-1599921841143-819065a55cc6?w=500&auto=format&fit=crop&q=60", link: "https://www.nikib.co.il/lunch/4624/" },
-            { title: "פסטה עגבניות", time: "15 דקות", type: "parve", img: "https://images.unsplash.com/photo-1626844131082-256783844137?w=500&auto=format&fit=crop&q=60", link: "https://www.foodisgood.co.il/recipe/pasta-tomato-sauce/" },
-            { title: "חזה עוף בתנור", time: "25 דקות", type: "meat", img: "https://images.unsplash.com/photo-1632778149955-e80f8ceca2e8?w=500&auto=format&fit=crop&q=60", link: "https://www.10dakot.co.il/recipe/%D7%97%D7%96%D7%94-%D7%A2%D7%95%D7%A3-%D7%91%D7%AA%D7%A0%D7%95%D7%A8/" },
-            { title: "סלט יווני", time: "10 דקות", type: "dairy", img: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=500&auto=format&fit=crop&q=60", link: "https://www.foodsdictionary.co.il/Recipes/3673" }
-        ];
+        // --- FETCH REMOTE RECIPES ---
+        let baseRecipes = [];
+        async function loadRemoteRecipes() {
+            try {
+                // IMPORTANT: Ensure you have a file named 'recipes.json' in your GitHub repo!
+                const response = await fetch('recipes.json?t=' + new Date().getTime());
+                if(response.ok) {
+                    baseRecipes = await response.json();
+                } else {
+                    console.log('No remote recipes found (or offline)');
+                }
+            } catch(e) {
+                console.log('Error loading remote recipes:', e);
+            }
+            renderCurrentView(); // Re-render once data is loaded
+        }
 
         let currentDate = new Date();
         let trackerData = JSON.parse(localStorage.getItem('myTrackerData')) || {};
         let templates = JSON.parse(localStorage.getItem('myTrackerTemplates')) || [];
         
-        // Split recipes: Admin (Protected) vs User (Public)
         let adminRecipes = JSON.parse(localStorage.getItem('myTrackerAdminMeals')) || [];
         let userMeals = JSON.parse(localStorage.getItem('myTrackerMeals')) || [];
-        
         let weeklyMenu = JSON.parse(localStorage.getItem('myTrackerMenu')) || {};
         
         let currentTaskType = 'once';
@@ -414,16 +334,14 @@
         
         let selectionContext = { day: 0, slot: '' };
         let currentSelectorFilter = 'all';
-        let editingMealData = null; // { source: 'user'|'admin', index: 0 }
+        let editingMealData = null; 
         let editingWeightSlot = null;
         let isAdminMode = false;
         
         const dayNames = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
         const dayShortNames = ['א\'','ב\'','ג\'','ד\'','ה\'','ו\'','ש\''];
 
-        // Helper to combine all meals for display
         function getAllMeals() {
-            // Returns array with objects containing { ...mealData, source: 'base'|'admin'|'user', originalIndex: i }
             let all = [];
             baseRecipes.forEach((m, i) => all.push({...m, source: 'base', originalIndex: i}));
             adminRecipes.forEach((m, i) => all.push({...m, source: 'admin', originalIndex: i}));
@@ -436,7 +354,7 @@
             localStorage.setItem('myTrackerData', JSON.stringify(trackerData));
             localStorage.setItem('myTrackerTemplates', JSON.stringify(templates));
             localStorage.setItem('myTrackerMeals', JSON.stringify(userMeals));
-            localStorage.setItem('myTrackerAdminMeals', JSON.stringify(adminRecipes)); // Save Admin meals separately
+            localStorage.setItem('myTrackerAdminMeals', JSON.stringify(adminRecipes)); 
             localStorage.setItem('myTrackerMenu', JSON.stringify(weeklyMenu));
             renderCurrentView();
         }
@@ -471,57 +389,36 @@
             renderCurrentView();
         }
 
-        // --- ADMIN LOGIC ---
+        // Admin
         function openAdminLogin() {
-            if(isAdminMode) {
-                // Logout
-                isAdminMode = false;
-                document.getElementById('adminBtn').classList.remove('active');
-                alert('יצאת ממצב מנהל');
-                renderCurrentView();
-            } else {
-                openModal('adminModal');
-            }
+            if(isAdminMode) { isAdminMode = false; document.getElementById('adminBtn').classList.remove('active'); alert('יצאת ממצב מנהל'); renderCurrentView(); }
+            else { openModal('adminModal'); }
         }
-
         function checkAdminPassword() {
             const pass = document.getElementById('adminPassword').value;
-            if(pass === '1234') {
-                isAdminMode = true;
-                document.getElementById('adminBtn').classList.add('active');
-                closeModal('adminModal');
-                alert('נכנסת למצב מנהל בהצלחה');
-                renderCurrentView(); // Re-render to show edit buttons for protected meals
-            } else {
-                alert('סיסמה שגויה');
-            }
+            if(pass === '1234') { isAdminMode = true; document.getElementById('adminBtn').classList.add('active'); closeModal('adminModal'); alert('נכנסת למצב מנהל בהצלחה'); renderCurrentView(); }
+            else { alert('סיסמה שגויה'); }
             document.getElementById('adminPassword').value = '';
         }
 
-        // --- MENU LOGIC ---
+        // Menu
         function renderMenu() {
             document.getElementById('mainHeader').style.display = 'none';
             updateScoreBubble(0);
             const container = document.getElementById('menuList');
             container.innerHTML = '';
-            
             const allMeals = getAllMeals();
-
             dayNames.forEach((dayName, dayIdx) => {
                 if(!weeklyMenu[dayIdx]) weeklyMenu[dayIdx] = { breakfast: '', lunch: '', dinner: '' };
                 const dayCard = document.createElement('div');
                 dayCard.className = 'menu-day-card';
-                
                 const getSlotBtnContent = (val) => {
-                    // Val is global index. We need to find it in getAllMeals array
                     if(val !== '' && allMeals[val]) return `<span style="font-weight:700;">${allMeals[val].title}</span> <span class="slot-arrow">✎</span>`;
                     return `<span style="color:#aaa;">בחר מנה...</span> <span class="slot-arrow">▼</span>`;
                 };
-                
                 const valB = weeklyMenu[dayIdx].breakfast;
                 const valL = weeklyMenu[dayIdx].lunch;
                 const valD = weeklyMenu[dayIdx].dinner;
-
                 dayCard.innerHTML = `
                     <div class="menu-day-title">${dayName}</div>
                     <div class="menu-slot"><div class="slot-label">בוקר</div><div class="slot-btn ${valB!==''?'filled':''}" onclick="openMealSelector(${dayIdx}, 'breakfast')">${getSlotBtnContent(valB)}</div></div>
@@ -553,17 +450,13 @@
             const query = document.getElementById('selectorSearch').value.toLowerCase();
             const listEl = document.getElementById('selectorList');
             listEl.innerHTML = '';
-            
             const allMeals = getAllMeals();
-
             const filtered = allMeals.map((m, idx) => ({...m, globalIdx: idx})).filter(m => {
                 const matchesType = currentSelectorFilter === 'all' || m.type === currentSelectorFilter;
                 const matchesSearch = m.title.toLowerCase().includes(query);
                 return matchesType && matchesSearch;
             });
-
             if (filtered.length === 0) { listEl.innerHTML = '<div style="text-align:center; padding:20px; color:#ccc;">לא נמצאו תוצאות</div>'; return; }
-
             filtered.forEach(m => {
                 let typeColor = m.type === 'meat' ? 'var(--meat)' : m.type === 'dairy' ? 'var(--dairy)' : 'var(--parve)';
                 let typeName = m.type === 'meat' ? 'בשרי' : m.type === 'dairy' ? 'חלבי' : 'פרווה';
@@ -572,7 +465,6 @@
                 item.className = 'selector-item';
                 const currentVal = weeklyMenu[selectionContext.day][selectionContext.slot];
                 if(currentVal == m.globalIdx) item.classList.add('selected');
-
                 item.onclick = () => selectMealFromSelector(m.globalIdx);
                 item.innerHTML = `
                     <img src="${displayImg}" class="selector-img">
@@ -797,13 +689,11 @@
                 else { tagClass = 'tag-parve'; tagText = 'פרווה'; }
                 const displayImg = meal.img || 'https://via.placeholder.com/400x200?text=No+Image';
                 
-                // Permission Check
                 const isLocked = (meal.source === 'base') || (meal.source === 'admin' && !isAdminMode);
                 const showLock = isLocked ? '<div class="locked-icon">🔒</div>' : '';
                 
                 let swipeContent = '';
                 if(!isLocked) {
-                    // Allow edit/delete for user meals OR admin editing admin meals
                     swipeContent = `
                     <div class="task-action-bg">
                         <div class="action-btn edit" onclick="editMeal('${meal.source}', ${meal.originalIndex})">✎</div>
@@ -870,15 +760,12 @@
             const mealObj = { title, time, img, link, type: currentMealType };
             
             if (editingMealData) {
-                // Editing
                 if(editingMealData.source === 'user') userMeals[editingMealData.index] = mealObj;
                 else if(editingMealData.source === 'admin') adminRecipes[editingMealData.index] = mealObj;
             } else {
-                // New
                 if(isAdminMode) adminRecipes.push(mealObj);
                 else userMeals.push(mealObj);
             }
-            
             saveAll(); closeModal('mealModal'); if(currentView === 'meals') renderMeals();
         }
 
@@ -991,7 +878,8 @@
             saveAll(); closeDeleteModal();
         }
         
-        renderDay(0);
+        // Initial Fetch
+        loadRemoteRecipes();
     </script>
 </body>
 </html>
