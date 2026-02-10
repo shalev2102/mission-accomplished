@@ -125,5 +125,13 @@
     "link": "",
     "type": "meat",
     "desc": ""
+  },
+  {
+    "title": "פתיתים ",
+    "time": "20 דק'",
+    "img": "https://img.mako.co.il/2020/04/01/ptitim10_i.jpg",
+    "link": "",
+    "type": "parve",
+    "desc": ""
   }
 ]
