@@ -71,18 +71,16 @@
         .bubble-crown svg { width: 50px; height: 40px; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.15)); margin-bottom: 2px; }
         .bubble-label-text { font-size: 0.75rem; color: var(--gray); font-weight: 700; }
 
-        /* --- FIXED SWIPEABLE CARD STYLES --- */
+        /* --- CARD STYLES --- */
         .task-card-wrapper, .meal-swipe-wrapper {
             position: relative; width: 98%; margin: 0 auto 12px auto; height: 85px;
             border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
         }
         .meal-swipe-wrapper { height: 200px; }
 
-        /* Background Layer (The Fix) */
         .task-action-bg {
             position: absolute; top: 0; bottom: 0; right: 0; left: 0;
-            display: flex; 
-            justify-content: flex-start; /* FIX: Align to RIGHT in RTL mode */
+            display: flex; justify-content: flex-start; /* Right side in RTL */
             z-index: 1;
         }
         
@@ -94,7 +92,6 @@
         .action-btn.edit { background-color: var(--edit-btn); }
         .action-btn.delete { background-color: var(--danger); }
 
-        /* Foreground Layer */
         .task-card-content, .meal-card-content {
             position: absolute; top: 0; bottom: 0; right: 0; left: 0; background-color: var(--card);
             display: flex; justify-content: space-between; align-items: center; padding: 0 15px 0 20px;
@@ -124,8 +121,14 @@
         .meal-details { display: flex; justify-content: space-between; align-items: center; }
         .meal-tag { font-size: 0.75rem; padding: 3px 8px; border-radius: 6px; color: white; font-weight: 600; }
         .tag-meat { background: var(--meat); } .tag-dairy { background: var(--dairy); } .tag-parve { background: var(--parve); }
+        
+        .locked-icon { position: absolute; top: 10px; left: 10px; font-size: 1.2rem; color: rgba(0,0,0,0.3); z-index: 5; }
 
         /* Menu */
+        .menu-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .admin-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray); transition: 0.3s; }
+        .admin-btn.active { color: var(--primary); transform: scale(1.1); }
+        
         .menu-day-card { background: white; border-radius: 16px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
         .menu-day-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 10px; color: var(--primary); }
         .menu-slot { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
@@ -209,7 +212,10 @@
     </div>
 
     <div id="view-menu" class="view-section">
-        <h2 style="margin-top:0; padding-right: 10px; color: var(--text);">תפריט שבועי</h2>
+        <div class="menu-header">
+            <h2 style="margin:0; padding-right: 10px; color: var(--text);">תפריט שבועי</h2>
+            <button id="adminBtn" class="admin-btn" onclick="openAdminLogin()">💼</button>
+        </div>
         <div id="menuList"></div>
     </div>
 
@@ -324,6 +330,17 @@
         </div>
     </div>
 
+    <div id="adminModal" class="modal">
+        <div class="modal-content" style="max-width: 300px;">
+            <h3 style="margin-top:0; text-align:center;">כניסת מנהל</h3>
+            <input type="password" id="adminPassword" placeholder="סיסמה" inputmode="numeric">
+            <button class="btn-save" onclick="checkAdminPassword()">כניסה</button>
+            <div style="text-align:center; margin-top:20px;">
+                <span onclick="closeModal('adminModal')" style="color:var(--gray); cursor:pointer;">ביטול</span>
+            </div>
+        </div>
+    </div>
+
     <div id="weightModal" class="modal">
         <div class="modal-content" style="max-width: 300px;">
             <h3 style="margin-top:0; text-align:center;">עריכת חשיבות</h3>
@@ -371,10 +388,23 @@
             return `<svg class="crown-svg crown-animate" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg"><defs>${defs}</defs><path d="M 15,75 L 85,75 L 80,50 L 50,60 L 20,50 Z" fill="${bodyFill}" stroke="${strokeColor}" stroke-width="1"/><path d="M 20,50 L 10,15 L 35,55 L 50,5 L 65,55 L 90,15 L 80,50 L 50,60 Z" fill="${bodyFill}" stroke="${strokeColor}" stroke-width="1"/>${gemsHTML}</svg>`;
         }
 
+        // --- HARDCODED BASE SYSTEM RECIPES ---
+        const baseRecipes = [
+            { title: "שקשוקה קלאסית", time: "20 דקות", type: "dairy", img: "https://images.unsplash.com/photo-1590412200988-a436970781fa?w=500&auto=format&fit=crop&q=60", link: "https://www.mako.co.il/food-cooking_magazine/flavors-shakshuka/Recipe-76d06631623bd21006.htm" },
+            { title: "שניצל ופירה", time: "40 דקות", type: "meat", img: "https://images.unsplash.com/photo-1599921841143-819065a55cc6?w=500&auto=format&fit=crop&q=60", link: "https://www.nikib.co.il/lunch/4624/" },
+            { title: "פסטה עגבניות", time: "15 דקות", type: "parve", img: "https://images.unsplash.com/photo-1626844131082-256783844137?w=500&auto=format&fit=crop&q=60", link: "https://www.foodisgood.co.il/recipe/pasta-tomato-sauce/" },
+            { title: "חזה עוף בתנור", time: "25 דקות", type: "meat", img: "https://images.unsplash.com/photo-1632778149955-e80f8ceca2e8?w=500&auto=format&fit=crop&q=60", link: "https://www.10dakot.co.il/recipe/%D7%97%D7%96%D7%94-%D7%A2%D7%95%D7%A3-%D7%91%D7%AA%D7%A0%D7%95%D7%A8/" },
+            { title: "סלט יווני", time: "10 דקות", type: "dairy", img: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=500&auto=format&fit=crop&q=60", link: "https://www.foodsdictionary.co.il/Recipes/3673" }
+        ];
+
         let currentDate = new Date();
         let trackerData = JSON.parse(localStorage.getItem('myTrackerData')) || {};
         let templates = JSON.parse(localStorage.getItem('myTrackerTemplates')) || [];
-        let mealsData = JSON.parse(localStorage.getItem('myTrackerMeals')) || [];
+        
+        // Split recipes: Admin (Protected) vs User (Public)
+        let adminRecipes = JSON.parse(localStorage.getItem('myTrackerAdminMeals')) || [];
+        let userMeals = JSON.parse(localStorage.getItem('myTrackerMeals')) || [];
+        
         let weeklyMenu = JSON.parse(localStorage.getItem('myTrackerMenu')) || {};
         
         let currentTaskType = 'once';
@@ -384,17 +414,29 @@
         
         let selectionContext = { day: 0, slot: '' };
         let currentSelectorFilter = 'all';
-        let editingMealIndex = null;
+        let editingMealData = null; // { source: 'user'|'admin', index: 0 }
         let editingWeightSlot = null;
+        let isAdminMode = false;
         
         const dayNames = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
         const dayShortNames = ['א\'','ב\'','ג\'','ד\'','ה\'','ו\'','ש\''];
+
+        // Helper to combine all meals for display
+        function getAllMeals() {
+            // Returns array with objects containing { ...mealData, source: 'base'|'admin'|'user', originalIndex: i }
+            let all = [];
+            baseRecipes.forEach((m, i) => all.push({...m, source: 'base', originalIndex: i}));
+            adminRecipes.forEach((m, i) => all.push({...m, source: 'admin', originalIndex: i}));
+            userMeals.forEach((m, i) => all.push({...m, source: 'user', originalIndex: i}));
+            return all;
+        }
 
         function getStorageKey(date) { return date.toISOString().split('T')[0]; }
         function saveAll() {
             localStorage.setItem('myTrackerData', JSON.stringify(trackerData));
             localStorage.setItem('myTrackerTemplates', JSON.stringify(templates));
-            localStorage.setItem('myTrackerMeals', JSON.stringify(mealsData));
+            localStorage.setItem('myTrackerMeals', JSON.stringify(userMeals));
+            localStorage.setItem('myTrackerAdminMeals', JSON.stringify(adminRecipes)); // Save Admin meals separately
             localStorage.setItem('myTrackerMenu', JSON.stringify(weeklyMenu));
             renderCurrentView();
         }
@@ -429,22 +471,57 @@
             renderCurrentView();
         }
 
+        // --- ADMIN LOGIC ---
+        function openAdminLogin() {
+            if(isAdminMode) {
+                // Logout
+                isAdminMode = false;
+                document.getElementById('adminBtn').classList.remove('active');
+                alert('יצאת ממצב מנהל');
+                renderCurrentView();
+            } else {
+                openModal('adminModal');
+            }
+        }
+
+        function checkAdminPassword() {
+            const pass = document.getElementById('adminPassword').value;
+            if(pass === '1234') {
+                isAdminMode = true;
+                document.getElementById('adminBtn').classList.add('active');
+                closeModal('adminModal');
+                alert('נכנסת למצב מנהל בהצלחה');
+                renderCurrentView(); // Re-render to show edit buttons for protected meals
+            } else {
+                alert('סיסמה שגויה');
+            }
+            document.getElementById('adminPassword').value = '';
+        }
+
+        // --- MENU LOGIC ---
         function renderMenu() {
             document.getElementById('mainHeader').style.display = 'none';
             updateScoreBubble(0);
             const container = document.getElementById('menuList');
             container.innerHTML = '';
+            
+            const allMeals = getAllMeals();
+
             dayNames.forEach((dayName, dayIdx) => {
                 if(!weeklyMenu[dayIdx]) weeklyMenu[dayIdx] = { breakfast: '', lunch: '', dinner: '' };
                 const dayCard = document.createElement('div');
                 dayCard.className = 'menu-day-card';
+                
                 const getSlotBtnContent = (val) => {
-                    if(val !== '' && mealsData[val]) return `<span style="font-weight:700;">${mealsData[val].title}</span> <span class="slot-arrow">✎</span>`;
+                    // Val is global index. We need to find it in getAllMeals array
+                    if(val !== '' && allMeals[val]) return `<span style="font-weight:700;">${allMeals[val].title}</span> <span class="slot-arrow">✎</span>`;
                     return `<span style="color:#aaa;">בחר מנה...</span> <span class="slot-arrow">▼</span>`;
                 };
+                
                 const valB = weeklyMenu[dayIdx].breakfast;
                 const valL = weeklyMenu[dayIdx].lunch;
                 const valD = weeklyMenu[dayIdx].dinner;
+
                 dayCard.innerHTML = `
                     <div class="menu-day-title">${dayName}</div>
                     <div class="menu-slot"><div class="slot-label">בוקר</div><div class="slot-btn ${valB!==''?'filled':''}" onclick="openMealSelector(${dayIdx}, 'breakfast')">${getSlotBtnContent(valB)}</div></div>
@@ -476,12 +553,17 @@
             const query = document.getElementById('selectorSearch').value.toLowerCase();
             const listEl = document.getElementById('selectorList');
             listEl.innerHTML = '';
-            const filtered = mealsData.map((m, idx) => ({...m, idx})).filter(m => {
+            
+            const allMeals = getAllMeals();
+
+            const filtered = allMeals.map((m, idx) => ({...m, globalIdx: idx})).filter(m => {
                 const matchesType = currentSelectorFilter === 'all' || m.type === currentSelectorFilter;
                 const matchesSearch = m.title.toLowerCase().includes(query);
                 return matchesType && matchesSearch;
             });
+
             if (filtered.length === 0) { listEl.innerHTML = '<div style="text-align:center; padding:20px; color:#ccc;">לא נמצאו תוצאות</div>'; return; }
+
             filtered.forEach(m => {
                 let typeColor = m.type === 'meat' ? 'var(--meat)' : m.type === 'dairy' ? 'var(--dairy)' : 'var(--parve)';
                 let typeName = m.type === 'meat' ? 'בשרי' : m.type === 'dairy' ? 'חלבי' : 'פרווה';
@@ -489,8 +571,9 @@
                 const item = document.createElement('div');
                 item.className = 'selector-item';
                 const currentVal = weeklyMenu[selectionContext.day][selectionContext.slot];
-                if(currentVal == m.idx) item.classList.add('selected');
-                item.onclick = () => selectMealFromSelector(m.idx);
+                if(currentVal == m.globalIdx) item.classList.add('selected');
+
+                item.onclick = () => selectMealFromSelector(m.globalIdx);
                 item.innerHTML = `
                     <img src="${displayImg}" class="selector-img">
                     <div style="margin-left:10px; flex:1;"><div class="selector-text">${m.title}</div></div>
@@ -532,6 +615,7 @@
             if (!trackerData.mealWeights) trackerData.mealWeights = { breakfast: 20, lunch: 20, dinner: 20 };
 
             const dayOfWeek = currentDate.getDay();
+            const allMeals = getAllMeals();
             let displayTasks = [];
             
             const mealSlots = [
@@ -546,7 +630,7 @@
                 if(trackerData[dateKey].deletedMealSlots.includes(slot.key)) return;
                 const recipeId = menuForToday[slot.key];
                 let recipeData = { title: 'לא נבחר מתכון', img: '', link: '' };
-                if(recipeId !== '' && mealsData[recipeId]) recipeData = mealsData[recipeId];
+                if(recipeId !== '' && allMeals[recipeId]) recipeData = allMeals[recipeId];
                 const slotWeight = trackerData.mealWeights[slot.key];
                 displayTasks.push({
                     type: 'meal', slotKey: slot.key, name: slot.label, meta: recipeData.title, img: recipeData.img, link: recipeData.link, weight: slotWeight
@@ -695,10 +779,16 @@
             updateScoreBubble(0);
             const container = document.getElementById('mealsList');
             container.innerHTML = '';
-            const filteredMeals = filter === 'all' ? mealsData : mealsData.filter(m => m.type === filter);
+            
+            const allMeals = getAllMeals();
+            
+            const filteredMeals = allMeals.filter(m => {
+                return filter === 'all' || m.type === filter;
+            });
+
             if (filteredMeals.length === 0) { container.innerHTML = '<div style="text-align:center; color:#B2BEC3; margin-top:40px;">אין מתכונים בקטגוריה זו</div>'; return; }
-            filteredMeals.forEach((meal, index) => {
-                const realIndex = mealsData.indexOf(meal);
+            
+            filteredMeals.forEach((meal) => {
                 const wrapper = document.createElement('div');
                 wrapper.className = 'meal-swipe-wrapper';
                 let tagClass = '', tagText = '';
@@ -706,12 +796,25 @@
                 else if(meal.type === 'dairy') { tagClass = 'tag-dairy'; tagText = 'חלבי'; }
                 else { tagClass = 'tag-parve'; tagText = 'פרווה'; }
                 const displayImg = meal.img || 'https://via.placeholder.com/400x200?text=No+Image';
-                wrapper.innerHTML = `
+                
+                // Permission Check
+                const isLocked = (meal.source === 'base') || (meal.source === 'admin' && !isAdminMode);
+                const showLock = isLocked ? '<div class="locked-icon">🔒</div>' : '';
+                
+                let swipeContent = '';
+                if(!isLocked) {
+                    // Allow edit/delete for user meals OR admin editing admin meals
+                    swipeContent = `
                     <div class="task-action-bg">
-                        <div class="action-btn edit" onclick="editMeal(${realIndex})">✎</div>
-                        <div class="action-btn delete" onclick="deleteMeal(${realIndex})">🗑</div>
-                    </div>
+                        <div class="action-btn edit" onclick="editMeal('${meal.source}', ${meal.originalIndex})">✎</div>
+                        <div class="action-btn delete" onclick="deleteMeal('${meal.source}', ${meal.originalIndex})">🗑</div>
+                    </div>`;
+                }
+
+                wrapper.innerHTML = `
+                    ${swipeContent}
                     <div class="meal-card-content" onclick="window.open('${meal.link || '#'}', '_blank')">
+                        ${showLock}
                         <img src="${displayImg}" class="meal-img" alt="${meal.title}">
                         <div class="meal-info-box">
                             <div class="meal-title">${meal.title}</div>
@@ -720,13 +823,13 @@
                     </div>
                 `;
                 container.appendChild(wrapper);
-                setupSwipe(wrapper.querySelector('.meal-card-content'));
+                if(!isLocked) setupSwipe(wrapper.querySelector('.meal-card-content'));
             });
         }
 
         function handleFabPlus() { 
             if (currentView === 'meals') {
-                editingMealIndex = null;
+                editingMealData = null;
                 document.getElementById('mealModalTitle').innerText = 'מתכון חדש';
                 document.getElementById('mealSaveBtn').innerText = 'שמור מתכון';
                 document.getElementById('mealTitle').value = '';
@@ -740,11 +843,17 @@
             }
         }
 
-        function editMeal(index) {
+        function editMeal(source, index) {
             const contents = document.querySelectorAll('.meal-card-content');
             contents.forEach(c => c.style.transform = 'translateX(0)');
-            editingMealIndex = index;
-            const meal = mealsData[index];
+            
+            editingMealData = { source, index };
+            let meal;
+            if(source === 'user') meal = userMeals[index];
+            else if(source === 'admin') meal = adminRecipes[index];
+            
+            if(!meal) return;
+
             document.getElementById('mealModalTitle').innerText = 'עריכת מתכון';
             document.getElementById('mealSaveBtn').innerText = 'עדכן מתכון';
             document.getElementById('mealTitle').value = meal.title;
@@ -759,7 +868,17 @@
             const title = document.getElementById('mealTitle').value; const time = document.getElementById('mealTime').value; const img = document.getElementById('mealImgUrl').value; const link = document.getElementById('mealLinkUrl').value;
             if(!title) return alert('נא להזין שם מנה');
             const mealObj = { title, time, img, link, type: currentMealType };
-            if (editingMealIndex !== null) { mealsData[editingMealIndex] = mealObj; } else { mealsData.push(mealObj); }
+            
+            if (editingMealData) {
+                // Editing
+                if(editingMealData.source === 'user') userMeals[editingMealData.index] = mealObj;
+                else if(editingMealData.source === 'admin') adminRecipes[editingMealData.index] = mealObj;
+            } else {
+                // New
+                if(isAdminMode) adminRecipes.push(mealObj);
+                else userMeals.push(mealObj);
+            }
+            
             saveAll(); closeModal('mealModal'); if(currentView === 'meals') renderMeals();
         }
 
@@ -785,7 +904,14 @@
 
         function filterMeals(type, btn) { document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderMeals(type); }
         function setMealType(type) { currentMealType = type; document.getElementById('opt-meat').className = type === 'meat' ? 'toggle-opt selected' : 'toggle-opt'; document.getElementById('opt-dairy').className = type === 'dairy' ? 'toggle-opt selected' : 'toggle-opt'; document.getElementById('opt-parve').className = type === 'parve' ? 'toggle-opt selected' : 'toggle-opt'; }
-        function deleteMeal(index) { if(confirm('למחוק את המתכון?')) { mealsData.splice(index, 1); saveAll(); renderMeals(); } }
+        
+        function deleteMeal(source, index) { 
+            if(confirm('למחוק את המתכון?')) { 
+                if(source === 'user') userMeals.splice(index, 1);
+                else if(source === 'admin') adminRecipes.splice(index, 1);
+                saveAll(); renderMeals(); 
+            } 
+        }
 
         function renderStats() {
             document.getElementById('mainHeader').style.display = 'none';
