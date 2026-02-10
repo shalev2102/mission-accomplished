@@ -19,7 +19,6 @@
             --success: #1DD1A1;
             --danger: #FF4757;
             
-            /* Meal Tags */
             --meat: #e17055;
             --dairy: #74b9ff;
             --parve: #00b894;
@@ -66,36 +65,57 @@
             white-space: nowrap; backface-visibility: hidden;
         }
 
-        /* --- UPDATED BUBBLE POSITION --- */
+        /* Bubble */
         .score-bubble-container {
-            position: fixed; 
-            bottom: 90px; /* הועלה למעלה מעל הסרגל */
-            left: 50%; transform: translateX(-50%) scale(0.9);
-            background: white; width: 100px; height: 100px; border-radius: 50%;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 25; /* מעל המשימות */
+            position: fixed; bottom: var(--nav-height); left: 50%; 
+            width: 140px; height: 70px; border-radius: 100px 100px 0 0;
+            background: white; box-shadow: 0 -5px 15px rgba(0,0,0,0.08);
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+            padding-bottom: 8px; z-index: 15;
+            transform: translateX(-50%) translateY(100%); 
             transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); opacity: 0; pointer-events: none;
         }
-        .score-bubble-container.visible { opacity: 1; pointer-events: auto; transform: translateX(-50%) scale(1); }
-        .bubble-crown svg { width: 50px; height: 40px; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.15)); }
-        .bubble-label-text { font-size: 0.7rem; color: var(--gray); font-weight: 700; margin-top: 2px; }
+        .score-bubble-container.visible { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+        .bubble-crown svg { width: 50px; height: 40px; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.15)); margin-bottom: 2px; }
+        .bubble-label-text { font-size: 0.75rem; color: var(--gray); font-weight: 700; }
 
-        /* Task List Items */
-        .task-card {
-            background-color: var(--card); border-radius: 16px; padding: 18px; margin-bottom: 12px;
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.02);
-            position: relative; overflow: hidden; transition: 0.3s;
-            width: 98%; margin-right: auto; margin-left: auto; padding-left: 90px;
+        /* --- SWIPEABLE TASK CARD STYLES --- */
+        .task-card-wrapper {
+            position: relative;
+            width: 98%; 
+            margin: 0 auto 12px auto; /* Centered with bottom margin */
+            height: 85px; /* Fixed height is better for swipe UI consistency */
+            border-radius: 16px;
+            overflow: hidden; /* Clips the sliding content */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
         }
+
+        /* The Red Background Layer (Action) */
+        .task-action-bg {
+            position: absolute; top: 0; bottom: 0; right: 0; left: 0;
+            background-color: var(--danger);
+            display: flex; align-items: center; justify-content: flex-start; /* Icon on the right */
+            padding-right: 25px; /* Padding for the trash icon */
+            color: white; font-size: 1.8rem;
+            border-radius: 16px;
+            z-index: 1;
+        }
+
+        /* The White Content Layer (Slider) */
+        .task-card-content {
+            position: absolute; top: 0; bottom: 0; right: 0; left: 0;
+            background-color: var(--card);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 15px 0 20px; /* Padding inside the card */
+            border-radius: 16px;
+            z-index: 2;
+            transition: transform 0.2s ease-out; /* Smooth snapping */
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+        
         .task-info { flex: 1; }
         .task-name { font-weight: 600; font-size: 1.15rem; margin-bottom: 4px; color: var(--text); }
         .task-meta { font-size: 0.85rem; color: var(--gray); font-weight: 500; display: flex; align-items: center; gap: 5px; }
-
-        .delete-wrapper { width: 0; opacity: 0; overflow: hidden; transition: all 0.3s; display: flex; align-items: center; }
-        .delete-mode .delete-wrapper { width: 40px; opacity: 1; margin-left: 10px; }
-        .btn-trash-icon { color: #FF4757; font-size: 1.4rem; cursor: pointer; padding: 5px; }
 
         .status-btn {
             width: 48px; height: 48px; border-radius: 50%; border: 2px solid #F1F2F6;
@@ -104,62 +124,30 @@
         }
         .status-btn.success { background-color: var(--success); border-color: var(--success); color: white; }
         .status-btn.fail { background-color: var(--danger); border-color: var(--danger); color: white; }
-        .delete-mode .status-btn { opacity: 0.2; pointer-events: none; filter: grayscale(100%); }
 
-        /* --- MEALS STYLES --- */
-        .meal-filters {
-            display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px;
-        }
-        .filter-btn {
-            padding: 8px 16px; border-radius: 20px; border: 1px solid #eee; background: white;
-            font-size: 0.9rem; color: var(--gray); font-weight: 600; white-space: nowrap; transition: 0.2s;
-        }
-        .filter-btn.active {
-            background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(255, 107, 107, 0.2);
-        }
+        /* Meals Styles */
+        .meal-filters { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
+        .filter-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid #eee; background: white; font-size: 0.9rem; color: var(--gray); font-weight: 600; white-space: nowrap; transition: 0.2s; }
+        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(255, 107, 107, 0.2); }
 
-        .meal-card {
-            background: white; border-radius: 16px; margin-bottom: 15px; overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.04); position: relative;
-            display: flex; flex-direction: column;
-        }
-        .meal-img {
-            width: 100%; height: 160px; object-fit: cover; background: #f0f0f0;
-        }
+        .meal-card { background: white; border-radius: 16px; margin-bottom: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.04); position: relative; display: flex; flex-direction: column; }
+        .meal-img { width: 100%; height: 160px; object-fit: cover; background: #f0f0f0; }
         .meal-content { padding: 15px; }
         .meal-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; color: var(--text); }
         .meal-details { display: flex; justify-content: space-between; align-items: center; }
         .meal-time { font-size: 0.85rem; color: var(--gray); display: flex; align-items: center; gap: 4px; }
-        .meal-tag { 
-            font-size: 0.75rem; padding: 4px 10px; border-radius: 8px; color: white; font-weight: 600;
-        }
+        .meal-tag { font-size: 0.75rem; padding: 4px 10px; border-radius: 8px; color: white; font-weight: 600; }
         .tag-meat { background: var(--meat); }
         .tag-dairy { background: var(--dairy); }
         .tag-parve { background: var(--parve); }
-        
-        .meal-delete {
-            position: absolute; top: 10px; left: 10px; background: rgba(255,255,255,0.9);
-            width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            color: var(--danger); font-size: 1.2rem; cursor: pointer; display: none;
-        }
-        .delete-mode .meal-delete { display: flex; }
-
+        /* Swipe for meals can be added later, currently sticking to delete button for meals */
+        .meal-delete { position: absolute; top: 10px; left: 10px; background: rgba(255,255,255,0.9); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--danger); font-size: 1.2rem; cursor: pointer; }
 
         /* Floating Buttons */
-        .fabs-container {
-            position: fixed; bottom: 110px; left: 25px;
-            display: flex; flex-direction: column; gap: 15px; z-index: 30;
-            align-items: center;
-        }
-        .fab {
-            width: 56px; height: 56px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; 
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); cursor: pointer; transition: transform 0.2s;
-        }
+        .fabs-container { position: fixed; bottom: 110px; left: 25px; display: flex; flex-direction: column; gap: 15px; z-index: 30; align-items: center; }
+        .fab { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); cursor: pointer; transition: transform 0.2s; }
         .fab:active { transform: scale(0.9); }
-        .fab-minus { background: white; color: #FF4757; width: 45px; height: 45px; border: 1px solid rgba(0,0,0,0.05); }
-        .fab-minus svg { width: 24px; height: 24px; fill: currentColor; display: block; }
-        .fab-minus.active { background: #FF4757; color: white; box-shadow: 0 8px 20px rgba(255, 71, 87, 0.4); }
+        /* Removed Fab Minus */
         .fab-plus { background: var(--gold-gradient); color: white; }
         .fab-plus svg { width: 24px; height: 24px; fill: currentColor; }
 
@@ -170,11 +158,7 @@
             padding: 5px; padding-bottom: max(5px, env(safe-area-inset-bottom)); 
             z-index: 20; box-shadow: 0 -5px 20px rgba(255, 107, 107, 0.2); align-items: flex-end;
         }
-        .nav-item { 
-            text-align: center; color: rgba(255, 255, 255, 0.5); font-size: 0.75rem; flex: 1; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            transition: 0.3s; font-weight: 500; height: 100%; z-index: 22;
-        }
+        .nav-item { text-align: center; color: rgba(255, 255, 255, 0.5); font-size: 0.75rem; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.3s; font-weight: 500; height: 100%; z-index: 22; }
         .nav-item.active { color: white; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .nav-icon svg { width: 26px; height: 26px; fill: currentColor; transition: 0.3s; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.05)); }
         .nav-item.active .nav-icon svg { transform: scale(1.1); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
@@ -186,16 +170,8 @@
         .stat-label { font-size: 0.8rem; color: var(--gray); font-weight: 600; margin-top: 5px; }
 
         /* Modals */
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(45, 52, 54, 0.6); backdrop-filter: blur(4px);
-            align-items: flex-end; justify-content: center; z-index: 1000;
-        }
-        .modal-content {
-            background: #ffffff; padding: 30px;
-            border-top-left-radius: 25px; border-top-right-radius: 25px;
-            width: 100%; max-width: 600px; animation: slideUp 0.3s;
-        }
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(45, 52, 54, 0.6); backdrop-filter: blur(4px); align-items: flex-end; justify-content: center; z-index: 1000; }
+        .modal-content { background: #ffffff; padding: 30px; border-top-left-radius: 25px; border-top-right-radius: 25px; width: 100%; max-width: 600px; animation: slideUp 0.3s; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         .modal-content input, .modal-content select { width: 100%; padding: 16px; margin-bottom: 15px; border: 2px solid #F1F2F6; border-radius: 12px; font-size: 1.1rem; }
         .toggle-container { background: #F1F2F6; padding: 4px; border-radius: 12px; display: flex; margin-bottom: 25px; }
@@ -229,7 +205,7 @@
 
     <div id="view-daily" class="view-section active">
         <div id="taskList"></div>
-        </div>
+    </div>
 
     <div id="view-meals" class="view-section">
         <h2 style="margin-top:0; padding-right: 10px; color: var(--text);">מתכונים</h2>
@@ -262,9 +238,6 @@
     </div>
 
     <div class="fabs-container">
-        <div class="fab fab-minus" id="minusBtn" onclick="toggleDeleteMode()">
-            <svg viewBox="0 0 24 24"><rect x="6" y="11" width="12" height="2" rx="1"/></svg>
-        </div>
         <div class="fab fab-plus" onclick="handleFabPlus()">
             <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
         </div>
@@ -349,7 +322,6 @@
     </div>
 
     <script>
-        // Crown Logic
         function getCrownSVG(score) {
             if (score === 0) return ''; 
             let defs = '', bodyFill = '', strokeColor = '#000', gemsHTML = '';
@@ -373,7 +345,6 @@
             return `<svg class="crown-svg crown-animate" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg"><defs>${defs}</defs><path d="M 15,75 L 85,75 L 80,50 L 50,60 L 20,50 Z" fill="${bodyFill}" stroke="${strokeColor}" stroke-width="1"/><path d="M 20,50 L 10,15 L 35,55 L 50,5 L 65,55 L 90,15 L 80,50 L 50,60 Z" fill="${bodyFill}" stroke="${strokeColor}" stroke-width="1"/>${gemsHTML}</svg>`;
         }
 
-        // Data & State
         let currentDate = new Date();
         let trackerData = JSON.parse(localStorage.getItem('myTrackerData')) || {};
         let templates = JSON.parse(localStorage.getItem('myTrackerTemplates')) || [];
@@ -384,7 +355,6 @@
         let selectedDays = [];
         let currentView = 'daily';
         let taskToDeleteIndex = null;
-        let isDeleteMode = false;
         const dayNames = ['א\'','ב\'','ג\'','ד\'','ה\'','ו\'','ש\''];
 
         function getStorageKey(date) { return date.toISOString().split('T')[0]; }
@@ -401,10 +371,8 @@
             else renderStats();
         }
 
-        // --- BUBBLE ---
         function updateScoreBubble(score) {
             const bubble = document.getElementById('scoreBubble');
-            // Show only on daily view and score > 0
             if (score > 0 && currentView === 'daily') {
                 document.getElementById('bubbleCrown').innerHTML = getCrownSVG(score);
                 bubble.classList.add('visible');
@@ -413,31 +381,22 @@
             }
         }
 
-        // --- NAVIGATION & VIEWS ---
         function switchView(viewName, btn) {
             currentView = viewName;
             if (viewName === 'daily') currentDate = new Date();
-            isDeleteMode = false; document.getElementById('minusBtn').classList.remove('active');
             
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.getElementById('view-' + viewName).classList.add('active');
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             btn.classList.add('active');
             
-            // Handle Fabs visibility
             const fabContainer = document.querySelector('.fabs-container');
             if(viewName === 'stats') fabContainer.style.display = 'none';
             else fabContainer.style.display = 'flex';
-            
-            // Adjust minus button visibility (only for daily and meals)
-            const minusBtn = document.getElementById('minusBtn');
-            if(viewName === 'stats') minusBtn.style.display = 'none';
-            else minusBtn.style.display = 'flex';
 
             renderCurrentView();
         }
 
-        // --- DAILY VIEW LOGIC ---
         function changeDate(direction) { currentDate.setDate(currentDate.getDate() + direction); renderDay(direction); }
         
         function renderDay(animateDirection = 0) {
@@ -478,9 +437,7 @@
             });
 
             const taskListEl = document.getElementById('taskList');
-            if(isDeleteMode) taskListEl.classList.add('delete-mode'); else taskListEl.classList.remove('delete-mode');
             taskListEl.innerHTML = '';
-            
             const tasks = trackerData[dateKey].tasks;
             let totalWeight = 0; let currentScore = 0;
 
@@ -489,12 +446,6 @@
             tasks.forEach((task, index) => {
                 totalWeight += parseInt(task.weight);
                 if (task.status === 'done') currentScore += parseInt(task.weight);
-                
-                const taskCard = document.createElement('div');
-                taskCard.className = 'task-card';
-                let statusClass = '', statusIcon = '';
-                if (task.status === 'done') { statusIcon = '✓'; statusClass = 'success'; }
-                else if (task.status === 'fail') { statusIcon = '✕'; statusClass = 'fail'; }
                 
                 let typeStr = 'חד פעמי';
                 if (task.fromTemplate && task.templateId) {
@@ -506,14 +457,58 @@
                 }
                 const metaString = `${task.weight}% | ${typeStr}`;
 
-                taskCard.innerHTML = `
-                    <div class="task-info"><div class="task-name">${task.name}</div><div class="task-meta">${metaString}</div></div>
-                    <div style="display:flex; align-items:center;">
-                        <div class="status-btn ${statusClass}" onclick="toggleStatus(${index})">${statusIcon}</div>
-                        <div class="delete-wrapper"><div class="btn-trash-icon" onclick="openDeleteModal(${index})">🗑</div></div>
+                let statusClass = '', statusIcon = '';
+                if (task.status === 'done') { statusIcon = '✓'; statusClass = 'success'; }
+                else if (task.status === 'fail') { statusIcon = '✕'; statusClass = 'fail'; }
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'task-card-wrapper';
+                
+                // HTML Structure for Swipe
+                wrapper.innerHTML = `
+                    <div class="task-action-bg" onclick="handleDeleteClick(${index})">🗑</div>
+                    <div class="task-card-content" id="task-content-${index}">
+                        <div class="task-info">
+                            <div class="task-name">${task.name}</div>
+                            <div class="task-meta">${metaString}</div>
+                        </div>
+                        <div class="status-btn ${statusClass}" onclick="toggleStatus(${index}, event)">${statusIcon}</div>
                     </div>
                 `;
-                taskListEl.appendChild(taskCard);
+                
+                taskListEl.appendChild(wrapper);
+                
+                // Add Swipe Logic
+                const content = wrapper.querySelector('.task-card-content');
+                let startX, currentX;
+                
+                content.addEventListener('touchstart', (e) => {
+                    // Close other open swipes
+                    document.querySelectorAll('.task-card-content').forEach(el => {
+                        if(el !== content) el.style.transform = 'translateX(0)';
+                    });
+                    startX = e.touches[0].clientX;
+                    content.style.transition = 'none';
+                }, {passive: true});
+
+                content.addEventListener('touchmove', (e) => {
+                    currentX = e.touches[0].clientX;
+                    let diff = currentX - startX;
+                    // Limit swipe to left (negative) and max 80px
+                    if (diff < 0 && diff > -100) {
+                        content.style.transform = `translateX(${diff}px)`;
+                    }
+                }, {passive: true});
+
+                content.addEventListener('touchend', (e) => {
+                    content.style.transition = 'transform 0.2s ease-out';
+                    let diff = currentX - startX;
+                    if (diff < -40) { // Threshold to snap open
+                        content.style.transform = 'translateX(-80px)';
+                    } else {
+                        content.style.transform = 'translateX(0)';
+                    }
+                });
             });
 
             let finalScore = totalWeight > 0 ? Math.round((currentScore / totalWeight) * 100) : 0;
@@ -522,44 +517,52 @@
             localStorage.setItem('myTrackerData', JSON.stringify(trackerData));
         }
 
+        // --- COMMON ACTIONS ---
+        function handleFabPlus() {
+            if (currentView === 'meals') openModal('mealModal');
+            else openAddModal();
+        }
+
+        function toggleStatus(index, event) {
+            // Prevent status toggle if swiped open
+            const content = document.getElementById(`task-content-${index}`);
+            if (content.style.transform === 'translateX(-80px)') return;
+            
+            event.stopPropagation();
+            const dateKey = getStorageKey(currentDate);
+            const task = trackerData[dateKey].tasks[index];
+            if (!task.status) task.status = 'done'; else if (task.status === 'done') task.status = 'fail'; else task.status = null;
+            saveAll();
+        }
+
+        function handleDeleteClick(index) {
+            taskToDeleteIndex = index;
+            openModal('deleteModal');
+            // Reset swipe
+            document.getElementById(`task-content-${index}`).style.transform = 'translateX(0)';
+        }
+
         // --- MEALS LOGIC ---
         function renderMeals(filter = 'all') {
             document.getElementById('mainHeader').style.display = 'none';
             updateScoreBubble(0); 
-            
             const container = document.getElementById('mealsList');
-            const listClass = isDeleteMode ? 'delete-mode' : '';
-            container.className = listClass;
             container.innerHTML = '';
-
             const filteredMeals = filter === 'all' ? mealsData : mealsData.filter(m => m.type === filter);
-
-            if (filteredMeals.length === 0) {
-                container.innerHTML = '<div style="text-align:center; color:#B2BEC3; margin-top:40px;">אין מתכונים בקטגוריה זו</div>';
-                return;
-            }
-
+            if (filteredMeals.length === 0) { container.innerHTML = '<div style="text-align:center; color:#B2BEC3; margin-top:40px;">אין מתכונים בקטגוריה זו</div>'; return; }
             filteredMeals.forEach((meal, index) => {
-                // Find actual index in original array for deletion
                 const realIndex = mealsData.indexOf(meal);
-                
                 const card = document.createElement('div');
                 card.className = 'meal-card';
-                card.onclick = (e) => {
-                    if(isDeleteMode || e.target.classList.contains('meal-delete')) return;
-                    if(meal.link) window.open(meal.link, '_blank');
-                };
-
+                card.onclick = (e) => { if(e.target.classList.contains('meal-delete')) return; if(meal.link) window.open(meal.link, '_blank'); };
                 let tagClass = '', tagText = '';
                 if(meal.type === 'meat') { tagClass = 'tag-meat'; tagText = 'בשרי'; }
                 else if(meal.type === 'dairy') { tagClass = 'tag-dairy'; tagText = 'חלבי'; }
                 else { tagClass = 'tag-parve'; tagText = 'פרווה'; }
-
                 const displayImg = meal.img || 'https://via.placeholder.com/400x200?text=No+Image';
-
                 card.innerHTML = `
                     <img src="${displayImg}" class="meal-img" alt="${meal.title}">
-                    <div class="meal-delete" onclick="deleteMeal(${realIndex}); event.stopPropagation();">🗑</div>
+                    <div class="meal-delete" onclick="deleteMeal(${realIndex}); event.stopPropagation();" style="display:flex;">🗑</div>
                     <div class="meal-content">
                         <div class="meal-title">${meal.title}</div>
                         <div class="meal-details">
@@ -572,40 +575,23 @@
             });
         }
 
-        function filterMeals(type, btn) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderMeals(type);
-        }
-
+        function filterMeals(type, btn) { document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderMeals(type); }
         function saveMeal() {
             const title = document.getElementById('mealTitle').value;
             const time = document.getElementById('mealTime').value;
             const img = document.getElementById('mealImgUrl').value;
             const link = document.getElementById('mealLinkUrl').value;
-            
             if(!title) return alert('נא להזין שם מנה');
-
             mealsData.push({ title, time, img, link, type: currentMealType });
-            saveAll();
-            closeModal('mealModal');
-            if(currentView === 'meals') renderMeals();
+            saveAll(); closeModal('mealModal'); if(currentView === 'meals') renderMeals();
         }
-
         function setMealType(type) {
             currentMealType = type;
             document.getElementById('opt-meat').className = type === 'meat' ? 'toggle-opt selected' : 'toggle-opt';
             document.getElementById('opt-dairy').className = type === 'dairy' ? 'toggle-opt selected' : 'toggle-opt';
             document.getElementById('opt-parve').className = type === 'parve' ? 'toggle-opt selected' : 'toggle-opt';
         }
-
-        function deleteMeal(index) {
-            if(confirm('למחוק את המתכון?')) {
-                mealsData.splice(index, 1);
-                saveAll();
-                renderMeals();
-            }
-        }
+        function deleteMeal(index) { if(confirm('למחוק את המתכון?')) { mealsData.splice(index, 1); saveAll(); renderMeals(); } }
 
         // --- STATS LOGIC ---
         function renderStats() {
@@ -629,34 +615,6 @@
             document.getElementById('yearlyCrown').innerHTML = getCrownSVG(yAvg || 1);
         }
 
-        // --- COMMON ACTIONS ---
-        function handleFabPlus() {
-            if (currentView === 'meals') openModal('mealModal');
-            else openAddModal();
-        }
-
-        function toggleStatus(index) {
-            if(isDeleteMode) return; 
-            const dateKey = getStorageKey(currentDate);
-            const task = trackerData[dateKey].tasks[index];
-            if (!task.status) task.status = 'done'; else if (task.status === 'done') task.status = 'fail'; else task.status = null;
-            saveAll();
-        }
-
-        function toggleDeleteMode() {
-            isDeleteMode = !isDeleteMode;
-            const btn = document.getElementById('minusBtn');
-            if(isDeleteMode) btn.classList.add('active'); else btn.classList.remove('active');
-            
-            if(currentView === 'daily') {
-                const list = document.getElementById('taskList');
-                if(isDeleteMode) list.classList.add('delete-mode'); else list.classList.remove('delete-mode');
-            } else if (currentView === 'meals') {
-                const list = document.getElementById('mealsList');
-                if(isDeleteMode) list.classList.add('delete-mode'); else list.classList.remove('delete-mode');
-            }
-        }
-
         // Modals
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
@@ -671,9 +629,7 @@
             if(type === 'recurring') { selectedDays = []; updateDaysUI(); }
         }
         
-        function toggleDay(d) {
-            const idx = selectedDays.indexOf(d); if (idx > -1) selectedDays.splice(idx, 1); else selectedDays.push(d); updateDaysUI();
-        }
+        function toggleDay(d) { const idx = selectedDays.indexOf(d); if (idx > -1) selectedDays.splice(idx, 1); else selectedDays.push(d); updateDaysUI(); }
         function toggleAllDays() { selectedDays = selectedDays.length === 7 ? [] : [0,1,2,3,4,5,6]; updateDaysUI(); }
         function updateDaysUI() {
             document.querySelectorAll('.day-circle').forEach(el => {
@@ -704,7 +660,6 @@
             saveAll(); closeModal('taskModal'); renderDay(0);
         }
 
-        function openDeleteModal(index) { taskToDeleteIndex = index; openModal('deleteModal'); }
         function closeDeleteModal() { closeModal('deleteModal'); taskToDeleteIndex = null; }
         
         function confirmDeleteToday() {
@@ -730,7 +685,6 @@
             saveAll(); closeDeleteModal();
         }
         
-        // Initial render
         renderDay(0);
     </script>
 </body>
