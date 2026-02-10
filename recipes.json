@@ -1,0 +1,23 @@
+[
+  {
+    "title": "שקשוקה קלאסית",
+    "time": "20 דקות",
+    "type": "dairy",
+    "img": "https://images.unsplash.com/photo-1590412200988-a436970781fa?w=500&auto=format&fit=crop&q=60",
+    "link": "https://www.mako.co.il/food-cooking_magazine/flavors-shakshuka/Recipe-76d06631623bd21006.htm"
+  },
+  {
+    "title": "שניצל ופירה",
+    "time": "40 דקות",
+    "type": "meat",
+    "img": "https://images.unsplash.com/photo-1599921841143-819065a55cc6?w=500&auto=format&fit=crop&q=60",
+    "link": "https://www.nikib.co.il/lunch/4624/"
+  },
+  {
+    "title": "פסטה ברוטב עגבניות",
+    "time": "15 דקות",
+    "type": "parve",
+    "img": "https://images.unsplash.com/photo-1626844131082-256783844137?w=500&auto=format&fit=crop&q=60",
+    "link": "https://www.foodisgood.co.il/recipe/pasta-tomato-sauce/"
+  }
+]
