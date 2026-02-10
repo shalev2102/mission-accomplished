@@ -12,7 +12,7 @@
             --primary: #FF6B6B;
             --gradient: linear-gradient(135deg, #FF6B6B 0%, #FF9F43 100%);
             --gold-gradient: linear-gradient(135deg, #F1C40F 0%, #F39C12 100%);
-            --edit-btn: #F39C12;
+            --red-gradient: linear-gradient(135deg, #ff7675 0%, #d63031 100%); /* New Delete Color */
             --bg: #FAFAFC;
             --card: #FFFFFF;
             --text: #2D3436;
@@ -20,7 +20,7 @@
             --success: #1DD1A1;
             --danger: #FF4757;
             --meat: #e17055; --dairy: #74b9ff; --parve: #00b894;
-            --nav-height: 75px;
+            --nav-height: 85px; /* Increased slightly for text */
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
@@ -31,13 +31,14 @@
             overscroll-behavior-y: none; user-select: none;
         }
 
-        .view-section { display: none; flex: 1; overflow-y: auto; padding: 15px 0; padding-bottom: 160px; }
+        .view-section { display: none; flex: 1; overflow-y: auto; padding: 15px 0; padding-bottom: 170px; }
         .view-section.active { display: block; }
-        #view-stats, #view-meals, #view-menu { padding: 15px; padding-bottom: 160px; }
+        #view-stats, #view-meals, #view-menu { padding: 15px; padding-bottom: 170px; }
 
         /* Header */
         header {
-            background: var(--gradient); padding: 15px; padding-top: max(15px, env(safe-area-inset-top));
+            background: var(--gradient);
+            padding: 15px; padding-top: max(15px, env(safe-area-inset-top));
             display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
             z-index: 10; color: white; height: 80px;
@@ -62,10 +63,12 @@
         .meal-swipe-wrapper { height: 200px; }
         
         .task-action-bg { position: absolute; top: 0; bottom: 0; right: 0; left: 0; display: flex; justify-content: flex-start; z-index: 1; }
-        .action-btn { width: 70px; height: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        .action-btn svg { width: 28px; height: 28px; fill: white; }
-        .action-btn.edit { background-color: var(--edit-btn); }
-        .action-btn.delete { background-color: var(--danger); }
+        .action-btn { width: 70px; height: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+        .action-btn svg { width: 24px; height: 24px; fill: white; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+        
+        /* THEME MATCHING COLORS */
+        .action-btn.edit { background: var(--gold-gradient); } /* Matches Gold */
+        .action-btn.delete { background: var(--red-gradient); } /* Matches Theme Red */
         
         .task-card-content, .meal-card-content { position: absolute; top: 0; bottom: 0; right: 0; left: 0; background-color: var(--card); display: flex; justify-content: space-between; align-items: center; padding: 0 15px 0 20px; border-radius: 16px; z-index: 2; transition: transform 0.2s ease-out; border: 1px solid rgba(0,0,0,0.02); }
         .meal-card-content { display: flex; flex-direction: column; align-items: stretch; padding: 0; }
@@ -104,21 +107,36 @@
         .slot-btn.filled { background: white; border-color: var(--primary); color: var(--primary); font-weight: 600; }
         .slot-arrow { font-size: 0.8rem; color: var(--gray); }
 
-        /* Nav & Fabs */
-        .fabs-container { position: fixed; bottom: 110px; left: 25px; display: flex; flex-direction: column; gap: 15px; z-index: 30; align-items: center; }
+        /* Fabs */
+        .fabs-container { position: fixed; bottom: 120px; left: 25px; display: flex; flex-direction: column; gap: 15px; z-index: 30; align-items: center; }
         .fab { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); cursor: pointer; transition: transform 0.2s; }
         .fab:active { transform: scale(0.9); }
         .fab-plus { background: var(--gold-gradient); color: white; }
         .fab-plus svg { width: 24px; height: 24px; fill: currentColor; }
+
+        /* UPDATED NAV BAR */
+        .nav-bar { 
+            position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-height); 
+            background: var(--gradient); border-top: none; display: flex; flex-direction: column;
+            padding-bottom: max(5px, env(safe-area-inset-bottom)); z-index: 20; 
+            box-shadow: 0 -5px 20px rgba(255, 107, 107, 0.2); 
+        }
         
-        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-height); background: var(--gradient); border-top: none; display: flex; padding: 5px; padding-bottom: max(5px, env(safe-area-inset-bottom)); z-index: 20; box-shadow: 0 -5px 20px rgba(255, 107, 107, 0.2); align-items: flex-end; }
-        .nav-item { text-align: center; color: rgba(255, 255, 255, 0.5); font-size: 0.65rem; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.3s; font-weight: 500; height: 100%; z-index: 22; }
+        /* Icons Row */
+        .nav-icons-row { display: flex; width: 100%; flex: 1; align-items: center; }
+        
+        .nav-item { text-align: center; color: rgba(255, 255, 255, 0.5); font-size: 0.65rem; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.3s; font-weight: 500; height: 100%; }
         .nav-item.active { color: white; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .nav-icon svg { width: 24px; height: 24px; fill: currentColor; transition: 0.3s; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.05)); }
         .nav-item.active .nav-icon svg { transform: scale(1.1); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
         
-        /* Bottom Status Text */
-        .nav-status { position: absolute; top: -18px; left: 0; right: 0; text-align: center; font-size: 0.65rem; color: #aaa; font-weight: 600; text-shadow: 0 1px 2px white; pointer-events: none; }
+        /* STATUS FOOTER (Inside Nav) */
+        .nav-footer-status {
+            width: 100%; text-align: center; 
+            font-size: 0.7rem; color: rgba(255,255,255,0.7); 
+            padding-bottom: 4px; font-weight: 600;
+            background: rgba(0,0,0,0.05); /* Slight separation */
+        }
 
         /* Modals & Utils */
         .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(45, 52, 54, 0.6); backdrop-filter: blur(4px); align-items: flex-end; justify-content: center; z-index: 1000; }
@@ -205,11 +223,13 @@
     </div>
 
     <div class="nav-bar">
-        <div id="navStatus" class="nav-status"></div>
-        <div class="nav-item active" onclick="switchView('daily', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19,4H18V2H16V4H8V2H6V4H5A2,2 0 0,0 3,6V20A2,2 0 0,0 5,22H19A2,2 0 0,0 21,20V6A2,2 0 0,0 19,4M19,20H5V10H19V20M19,8H5V6H19V8M9,14L7,12L5.5,13.5L9,17L15,11L13.5,9.5L9,14Z" /></svg></span>היום</div>
-        <div class="nav-item" onclick="switchView('menu', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/></svg></span>תפריט</div>
-        <div class="nav-item" onclick="switchView('meals', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg></span>ארוחות</div>
-        <div class="nav-item" onclick="switchView('stats', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z" /></svg></span>דוח</div>
+        <div class="nav-icons-row">
+            <div class="nav-item active" onclick="switchView('daily', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19,4H18V2H16V4H8V2H6V4H5A2,2 0 0,0 3,6V20A2,2 0 0,0 5,22H19A2,2 0 0,0 21,20V6A2,2 0 0,0 19,4M19,20H5V10H19V20M19,8H5V6H19V8M9,14L7,12L5.5,13.5L9,17L15,11L13.5,9.5L9,14Z" /></svg></span>היום</div>
+            <div class="nav-item" onclick="switchView('menu', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/></svg></span>תפריט</div>
+            <div class="nav-item" onclick="switchView('meals', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg></span>ארוחות</div>
+            <div class="nav-item" onclick="switchView('stats', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z" /></svg></span>דוח</div>
+        </div>
+        <div id="navStatus" class="nav-footer-status">V.52 | טוען...</div>
     </div>
 
     <div id="taskModal" class="modal">
@@ -311,7 +331,7 @@
         const GITHUB_USERNAME = "shalev2102"; 
         const REPO_NAME = "mission-accomplished"; 
 
-        // --- 2. FALLBACK RECIPES (SAFETY NET) ---
+        // --- 2. FALLBACK RECIPES ---
         const fallbackRecipes = [
             { title: "שקשוקה קלאסית", time: "20 דקות", type: "dairy", img: "https://images.unsplash.com/photo-1590412200988-a436970781fa?w=500&auto=format&fit=crop&q=60", link: "https://www.mako.co.il/food-cooking_magazine/flavors-shakshuka/Recipe-76d06631623bd21006.htm" },
             { title: "שניצל ופירה", time: "40 דקות", type: "meat", img: "https://images.unsplash.com/photo-1599921841143-819065a55cc6?w=500&auto=format&fit=crop&q=60", link: "https://www.nikib.co.il/lunch/4624/" },
@@ -338,7 +358,7 @@
         let weeklyMenu = safeLoad('myTrackerMenu', {});
         let userMeals = safeLoad('myTrackerMeals', []);
         let adminRecipes = safeLoad('myTrackerAdminMeals', []);
-        let baseRecipes = fallbackRecipes; // Default to fallback initially
+        let baseRecipes = fallbackRecipes; 
 
         let currentTaskType = 'once';
         let currentMealType = 'meat';
@@ -358,7 +378,7 @@
         // --- GITHUB API ---
         async function loadRemoteRecipes() {
             const statusEl = document.getElementById('navStatus');
-            statusEl.innerText = "טוען...";
+            statusEl.innerText = "V.52 | טוען...";
             try {
                 const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/recipes.json?ts=${new Date().getTime()}`);
                 if(response.ok) {
@@ -367,8 +387,7 @@
                     const parsed = JSON.parse(decoded);
                     if (Array.isArray(parsed) && parsed.length > 0) {
                         baseRecipes = parsed;
-                        statusEl.innerText = "מחובר לענן";
-                        statusEl.style.color = "#4cd137";
+                        statusEl.innerText = "V.52 | מחובר לענן ✅";
                     } else {
                         throw new Error("Empty remote array");
                     }
@@ -378,8 +397,7 @@
             } catch(e) { 
                 console.log('Using fallback:', e); 
                 baseRecipes = fallbackRecipes;
-                statusEl.innerText = "גיבוי";
-                statusEl.style.color = "#e1b12c";
+                statusEl.innerText = "V.52 | מצב גיבוי ⚠️";
             }
             renderCurrentView();
         }
@@ -420,7 +438,6 @@
         // --- DATA HELPERS ---
         function getAllMeals() {
             let all = [];
-            // Fail-safe check
             const safeBase = Array.isArray(baseRecipes) ? baseRecipes : fallbackRecipes;
             const safeAdmin = Array.isArray(adminRecipes) ? adminRecipes : [];
             const safeUser = Array.isArray(userMeals) ? userMeals : [];
@@ -631,7 +648,7 @@
             } 
         }
 
-        // --- COMMON ---
+        // --- MENU LOGIC ---
         function renderMenu() {
             document.getElementById('mainHeader').style.display = 'none'; updateScoreBubble(0);
             const container = document.getElementById('menuList'); container.innerHTML = '';
