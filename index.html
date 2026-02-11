@@ -13,7 +13,6 @@
             --gradient: linear-gradient(135deg, #FF6B6B 0%, #FF9F43 100%);
             --gold-gradient: linear-gradient(135deg, #F1C40F 0%, #F39C12 100%);
             --red-gradient: linear-gradient(135deg, #ff7675 0%, #d63031 100%);
-            /* שיניתי כאן לגרדיאנט אפור כסוף חזק */
             --silver-gradient: linear-gradient(to bottom, #95a5a6 0%, #636e72 100%);
             --bg: #FAFAFC;
             --card: #FFFFFF;
@@ -23,9 +22,8 @@
             --danger: #FF4757;
             --meat: #e17055; --dairy: #74b9ff; --parve: #00b894;
             --nav-height: 85px;
-            --task-bar-height: 50px; /* גובה סרגל משימה חדשה */
+            --task-bar-height: 50px;
             --header-height: 60px;
-            /* אייפון Safe Area */
             --safe-top: env(safe-area-inset-top, 20px);
             --safe-bottom: env(safe-area-inset-bottom, 20px);
         }
@@ -109,7 +107,7 @@
         .date-wrapper { position: relative; height: 28px; width: 110px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
         .date-text { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,0.1); white-space: nowrap; }
 
-        /* --- NAVIGATION BAR FIXED --- */
+        /* --- NAVIGATION BAR --- */
         .nav-bar { 
             position: fixed; 
             bottom: 0; left: 0; right: 0; 
@@ -123,12 +121,7 @@
         }
         
         .nav-bar::after {
-            content: '';
-            position: absolute;
-            top: 100%; left: 0; right: 0;
-            height: 100px; 
-            background: var(--gradient);
-            z-index: 1;
+            content: ''; position: absolute; top: 100%; left: 0; right: 0; height: 100px; background: var(--gradient); z-index: 1;
         }
 
         .nav-icons-row { display: flex; width: 100%; flex: 1; align-items: center; min-height: 60px; position: relative; z-index: 2; }
@@ -140,28 +133,25 @@
         
         .nav-footer-status { width: 100%; text-align: center; font-size: 0.7rem; color: rgba(255,255,255,0.7); padding-bottom: 2px; font-weight: 600; background: rgba(0,0,0,0.05); position: relative; z-index: 2; }
 
-        /* --- NEW TASK BAR (FULL WIDTH) --- */
+        /* --- NEW TASK BAR --- */
         .new-task-bar {
             position: fixed;
-            bottom: calc(var(--nav-height) + var(--safe-bottom)); /* יושב בדיוק מעל הסרגל */
-            left: 0; right: 0; /* רוחב מלא */
+            bottom: calc(var(--nav-height) + var(--safe-bottom)); 
+            left: 0; right: 0; 
             height: var(--task-bar-height);
             background: var(--silver-gradient);
             display: flex; align-items: center; justify-content: center;
-            /* שיניתי ללבן */
             color: white; 
             font-weight: 800;
             font-size: 1rem;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.15); /* צל עדין לטקסט */
-            z-index: 90; /* מתחת לסרגל (100) ומעל לתוכן */
+            text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+            z-index: 90; 
             box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
             cursor: pointer;
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            transform: translateY(100%); /* מוסתר כברירת מחדל */
+            transform: translateY(100%); 
         }
-        .new-task-bar.visible {
-            transform: translateY(0); /* מופיע */
-        }
+        .new-task-bar.visible { transform: translateY(0); }
         .new-task-bar:active { filter: brightness(0.9); }
 
         /* --- VIEWS --- */
@@ -169,19 +159,13 @@
             display: none; flex: 1; overflow-y: auto; 
             padding: 15px; 
             padding-top: calc(var(--header-height) + var(--safe-top) + 15px);
-            padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 20px); /* מרווח ברירת מחדל */
+            padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 20px); 
             -webkit-overflow-scrolling: touch; 
         }
         .view-section.active { display: block; }
 
-        /* כשאנחנו במסך משימות, צריך מרווח תחתון גדול יותר בגלל הסרגל הכסוף */
-        #view-daily.active {
-            padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + var(--task-bar-height) + 20px);
-        }
-
-        #view-stats, #view-menu, #view-meals { 
-            padding-top: calc(var(--safe-top) + 20px) !important; 
-        }
+        #view-daily.active { padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + var(--task-bar-height) + 20px); }
+        #view-stats, #view-menu, #view-meals { padding-top: calc(var(--safe-top) + 20px) !important; }
 
         .view-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; margin-top: 0; }
         .view-title { margin: 0; color: var(--text); font-size: 1.5rem; line-height: 1.2; }
@@ -193,18 +177,10 @@
         .header-icon-btn.white-btn { color: rgba(255,255,255,0.8); }
 
         /* --- CARDS & SWIPE --- */
-        .task-card-wrapper { 
-            position: relative; width: 100%; margin-bottom: 10px; height: 72px; 
-            border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
-        }
+        .task-card-wrapper { position: relative; width: 100%; margin-bottom: 10px; height: 72px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
         .meal-swipe-wrapper { position: relative; width: 100%; margin-bottom: 12px; height: 200px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
         
-        .task-action-bg { 
-            position: absolute; top: 0; bottom: 0; right: 0; left: 0; 
-            display: flex; justify-content: flex-start; 
-            z-index: 1; 
-            background: var(--red-gradient); 
-        }
+        .task-action-bg { position: absolute; top: 0; bottom: 0; right: 0; left: 0; display: flex; justify-content: flex-start; z-index: 1; background: var(--red-gradient); }
         
         .action-btn { width: 70px; height: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
         .action-btn svg { width: 24px; height: 24px; fill: white; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
@@ -246,20 +222,17 @@
         .recipe-link-btn { background: white; border: 1px solid #F1F2F6; border-radius: 20px; padding: 8px 12px; display: flex; align-items: center; gap: 8px; color: var(--primary); font-weight: 700; font-size: 0.85rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; transition: 0.2s; white-space: nowrap; flex-shrink: 0; }
         .recipe-link-btn svg { width: 18px; height: 18px; fill: currentColor; }
         
-        /* CROWN BUBBLE (LAYER 80 - Below Bar which is 90) */
         .score-bubble-container { 
             position: fixed; 
             bottom: calc(var(--nav-height) + var(--safe-bottom)); 
             left: 50%; width: 140px; height: 70px; border-radius: 100px 100px 0 0; background: white; box-shadow: 0 -5px 15px rgba(0,0,0,0.08); display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 8px; 
-            z-index: 80; /* מתחת לסרגל הכסוף */
+            z-index: 80; 
             transform: translateX(-50%) translateY(100%); 
-            /* אנימציה גם למיקום התחתון */
             transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), bottom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             opacity: 0; pointer-events: none; 
         }
         .score-bubble-container.visible { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
         
-        /* כשיש סרגל כסוף, הכתר עולה למעלה */
         body.has-task-bar .score-bubble-container.visible {
             bottom: calc(var(--nav-height) + var(--safe-bottom) + var(--task-bar-height));
         }
@@ -290,7 +263,6 @@
         .slot-badge { background: rgba(255, 107, 107, 0.1); color: var(--primary); font-weight: 700; font-size: 0.8rem; padding: 2px 8px; border-radius: 6px; border: 1px solid rgba(255, 107, 107, 0.2); }
         .slot-placeholder { color: #aaa; font-style: italic; }
 
-        /* REMOVED ORIGINAL FABS CONTAINER */
         .fabs-container { display: none !important; }
 
         .stats-year-selector { display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 20px; font-size: 1.2rem; font-weight: 700; color: var(--primary); }
@@ -354,6 +326,17 @@
         .crown-animate { animation: popCrown 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
         .backup-area { background: #FAFAFC; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px dashed #A4B0BE; word-break: break-all; font-family: monospace; font-size: 0.8rem; max-height: 100px; overflow-y: auto; user-select: all; text-align: left; direction: ltr; }
+
+        /* TOGGLE SWITCH CSS */
+        .switch-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+        .switch-row:last-child { border-bottom: none; }
+        .switch-label { font-size: 1rem; font-weight: 600; color: var(--text); }
+        .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--success); }
+        input:checked + .slider:before { transform: translateX(22px); }
     </style>
 </head>
 <body>
@@ -368,8 +351,8 @@
     <div id="loadingOverlay"><div class="spinner"></div><div style="margin-top:10px; font-weight:bold; color:var(--primary);">מעדכן נתונים...</div></div>
 
     <header id="mainHeader">
-        <button class="header-icon-btn white-btn" onclick="openModal('settingsModal')" style="position: absolute; right: 15px; z-index: 10;">
-            <svg viewBox="0 0 24 24" style="fill:white;"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 c-0.12,0.21-0.08,0.47,0.12,0.61l2.03,1.58c-0.05,0.3-0.09,0.63-0.09,0.94s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+        <button class="header-icon-btn white-btn" onclick="openSettings()" style="position: absolute; right: 15px; z-index: 10;">
+            <svg viewBox="0 0 24 24" style="fill:white;"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 c-0.12,0.21-0.08,0.47,0.12,0.61l2.03,1.58c-0.05,0.3-0.09,0.63-0.09,0.94s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6S13.98,15.6,12,15.6z"/></svg>
         </button>
 
         <div class="date-control-group" style="margin-right: 50px;">
@@ -431,7 +414,7 @@
             <div class="nav-item" onclick="switchView('menu', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/></svg></span>תפריט</div>
             <div class="nav-item" onclick="switchView('stats', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z" /></svg></span>דוח</div>
         </div>
-        <div id="navStatus" class="nav-footer-status">V.87 | טוען...</div>
+        <div id="navStatus" class="nav-footer-status">V.88 | טוען...</div>
     </div>
 
     <div id="taskModal" class="modal">
@@ -543,6 +526,33 @@
             <h3 style="margin-top:0; text-align:center; margin-bottom:15px;">הגדרות וגיבוי</h3>
             
             <div style="margin-bottom:20px;">
+                <h4 style="margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">תצוגת ארוחות</h4>
+                <div class="switch-row">
+                    <span class="switch-label">ארוחת בוקר</span>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-breakfast" onchange="toggleMealSetting('breakfast')">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="switch-row">
+                    <span class="switch-label">ארוחת צהריים</span>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-lunch" onchange="toggleMealSetting('lunch')">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="switch-row">
+                    <span class="switch-label">ארוחת ערב</span>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-dinner" onchange="toggleMealSetting('dinner')">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <hr style="border:none; border-top:1px solid #eee; margin:20px 0;">
+
+            <div style="margin-bottom:20px;">
                 <label style="font-weight:700; display:block; margin-bottom:5px;">העברת נתונים לטלפון אחר:</label>
                 <p style="font-size:0.85rem; color:var(--gray); margin-top:0;">כדי להעביר את כל המידע שלך, העתק את הקוד מפה והדבק אותו בטלפון החדש.</p>
                 
@@ -611,6 +621,8 @@
         let currentSelectorFilter = 'all';
         let editingMealData = null;
         let tempSelectedMeals = [];
+        // Meal Visibility Settings (Default: all true)
+        let mealSettings = safeLoad('myTrackerMealSettings', { breakfast: true, lunch: true, dinner: true });
 
         const dayNames = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
         const dayShortNames = ['א\'','ב\'','ג\'','ד\'','ה\'','ו\'','ש\''];
@@ -632,7 +644,7 @@
         // --- UPDATED LOAD FUNCTION ---
         async function loadRemoteRecipes() {
             const statusEl = document.getElementById('navStatus');
-            statusEl.innerText = "V.87.0 | טוען...";
+            statusEl.innerText = "V.88.0 | טוען...";
             
             const headers = {};
             if (adminToken) {
@@ -648,14 +660,14 @@
                     const data = await response.json();
                     const decoded = decodeURIComponent(escape(window.atob(data.content)));
                     baseRecipes = JSON.parse(decoded);
-                    statusEl.innerText = "V.87.0 | מחובר לענן ✅";
+                    statusEl.innerText = "V.88.0 | מחובר לענן ✅";
                 } else { 
                     throw new Error("Repo not found"); 
                 }
             } catch(e) { 
                 console.log('Using fallback:', e); 
                 baseRecipes = fallbackRecipes; 
-                statusEl.innerText = "V.87.0 | מצב גיבוי ⚠️"; 
+                statusEl.innerText = "V.88.0 | מצב גיבוי ⚠️"; 
             }
             renderCurrentView();
         }
@@ -702,6 +714,7 @@
             localStorage.setItem('myTrackerMeals', JSON.stringify(userMeals));
             localStorage.setItem('myTrackerAdminMeals', JSON.stringify(adminRecipes)); 
             localStorage.setItem('myTrackerMenu', JSON.stringify(weeklyMenu));
+            localStorage.setItem('myTrackerMealSettings', JSON.stringify(mealSettings));
             renderCurrentView();
         }
 
@@ -1164,7 +1177,10 @@
             const menuForToday = weeklyMenu[dayOfWeek] || { breakfast: '', lunch: '', dinner: '' };
             
             mealSlots.forEach(slot => {
-                if(trackerData[dateKey].deletedMealSlots.includes(slot.key)) return;
+                // בדיקה כפולה: גם אם הוסתר בהגדרות וגם אם נמחק ידנית
+                if (!mealSettings[slot.key]) return; // אם כבוי בהגדרות - דלג
+                if(trackerData[dateKey].deletedMealSlots.includes(slot.key)) return; // אם נמחק בסוויפ - דלג
+
                 const rawVal = menuForToday[slot.key];
                 let indices = [];
                 if (Array.isArray(rawVal)) indices = rawVal;
@@ -1266,7 +1282,11 @@
             });
         }
 
-        function toggleStatus(visualIndex, type, event) { if(type === 'meal') return; const content = document.getElementById(`content-${visualIndex}`); if (content.style.transform.includes('-')) return; event.stopPropagation(); const dateKey = getStorageKey(currentDate); const dayOfWeek = currentDate.getDay(); let mealCount = 0; ['breakfast', 'lunch', 'dinner'].forEach(k => { if(!trackerData[dateKey].deletedMealSlots.includes(k)) mealCount++; }); const taskIndex = visualIndex - mealCount; const task = trackerData[dateKey].tasks[taskIndex]; if (!task.status) task.status = 'done'; else if (task.status === 'done') task.status = 'fail'; else task.status = null; saveAll(); }
+        function toggleStatus(visualIndex, type, event) { if(type === 'meal') return; const content = document.getElementById(`content-${visualIndex}`); if (content.style.transform.includes('-')) return; event.stopPropagation(); const dateKey = getStorageKey(currentDate); const dayOfWeek = currentDate.getDay(); let mealCount = 0; ['breakfast', 'lunch', 'dinner'].forEach(k => { 
+            // FIX for correct indexing: check BOTH settings and deleted
+            if (mealSettings[k] && !trackerData[dateKey].deletedMealSlots.includes(k)) mealCount++; 
+        }); const taskIndex = visualIndex - mealCount; const task = trackerData[dateKey].tasks[taskIndex]; if (!task.status) task.status = 'done'; else if (task.status === 'done') task.status = 'fail'; else task.status = null; saveAll(); }
+        
         function toggleMealStatus(slotKey, event) { event.stopPropagation(); const dateKey = getStorageKey(currentDate); if(!trackerData[dateKey].mealStatuses) trackerData[dateKey].mealStatuses = {}; const current = trackerData[dateKey].mealStatuses[slotKey]; if (!current) trackerData[dateKey].mealStatuses[slotKey] = 'done'; else if (current === 'done') trackerData[dateKey].mealStatuses[slotKey] = 'fail'; else trackerData[dateKey].mealStatuses[slotKey] = null; saveAll(); }
         function handleDeleteSwipe(isMeal, idOrIndex, visualIndex) { const el = document.getElementById(`content-${visualIndex}`); if(el) el.style.transform = 'translateX(0)'; const dateKey = getStorageKey(currentDate); if(isMeal) { if(!trackerData[dateKey].deletedMealSlots) trackerData[dateKey].deletedMealSlots = []; trackerData[dateKey].deletedMealSlots.push(idOrIndex); saveAll(); } else { taskToDeleteIndex = idOrIndex; openModal('deleteModal'); } }
         function filterMeals(type, btn) { document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderMeals(type); }
@@ -1292,7 +1312,8 @@
                 menu: weeklyMenu,
                 meals: userMeals,
                 admin: adminRecipes,
-                token: adminToken
+                token: adminToken,
+                mealSettings: mealSettings // Add meal settings to backup
             };
             const json = JSON.stringify(allData);
             const encoded = btoa(unescape(encodeURIComponent(json)));
@@ -1319,6 +1340,7 @@
                     if(data.menu) weeklyMenu = data.menu;
                     if(data.meals) userMeals = data.meals;
                     if(data.admin) adminRecipes = data.admin;
+                    if(data.mealSettings) mealSettings = data.mealSettings;
                     if(data.token) { adminToken = data.token; localStorage.setItem('adminToken', data.token); isAdminMode = true; }
                     
                     saveAll();
@@ -1329,6 +1351,29 @@
                 alert('קוד לא תקין או פגום.');
                 console.error(e);
             }
+        }
+
+        // --- NEW FUNCTIONS FOR SETTINGS TOGGLES ---
+        function openSettings() {
+            // Update switches state based on current settings
+            document.getElementById('toggle-breakfast').checked = mealSettings.breakfast;
+            document.getElementById('toggle-lunch').checked = mealSettings.lunch;
+            document.getElementById('toggle-dinner').checked = mealSettings.dinner;
+            openModal('settingsModal');
+        }
+
+        function toggleMealSetting(key) {
+            mealSettings[key] = !mealSettings[key];
+            
+            // Critical: If turning ON, we must remove it from the "deleted today" list
+            // to ensure it reappears immediately if it was swiped away.
+            if(mealSettings[key]) {
+                 const dateKey = getStorageKey(currentDate);
+                 if(trackerData[dateKey] && trackerData[dateKey].deletedMealSlots) {
+                     trackerData[dateKey].deletedMealSlots = trackerData[dateKey].deletedMealSlots.filter(k => k !== key);
+                 }
+            }
+            saveAll();
         }
 
         // Start
