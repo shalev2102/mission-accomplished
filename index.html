@@ -13,7 +13,8 @@
             --gradient: linear-gradient(135deg, #FF6B6B 0%, #FF9F43 100%);
             --gold-gradient: linear-gradient(135deg, #F1C40F 0%, #F39C12 100%);
             --red-gradient: linear-gradient(135deg, #ff7675 0%, #d63031 100%);
-            --silver-gradient: linear-gradient(to bottom, #95a5a6 0%, #636e72 100%);
+            /* גרדיאנט כסוף-פלדה חזק */
+            --steel-gradient: linear-gradient(135deg, #bdc3c7 0%, #2c3e50 100%);
             --bg: #FAFAFC;
             --card: #FFFFFF;
             --text: #2D3436;
@@ -94,7 +95,7 @@
             line-height: 0.8; margin-bottom: -4px;
         }
         .brand-subtitle {
-            font-family: sans-serif; font-size: 0.5rem; color: rgba(255, 255, 255, 0.9);
+            font-family: sans-serif; font-size: 0.8rem; color: rgba(255, 255, 255, 0.9);
             font-weight: 600; letter-spacing: 0.4px; 
             margin-right: 2px; margin-top: 0;
         }
@@ -107,7 +108,7 @@
         .date-wrapper { position: relative; height: 28px; width: 110px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
         .date-text { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,0.1); white-space: nowrap; }
 
-        /* --- NAVIGATION BAR --- */
+        /* --- NAVIGATION BAR FIXED --- */
         .nav-bar { 
             position: fixed; 
             bottom: 0; left: 0; right: 0; 
@@ -133,18 +134,18 @@
         
         .nav-footer-status { width: 100%; text-align: center; font-size: 0.7rem; color: rgba(255,255,255,0.7); padding-bottom: 2px; font-weight: 600; background: rgba(0,0,0,0.05); position: relative; z-index: 2; }
 
-        /* --- NEW TASK BAR --- */
+        /* --- NEW TASK BAR (FULL WIDTH) --- */
         .new-task-bar {
             position: fixed;
             bottom: calc(var(--nav-height) + var(--safe-bottom)); 
             left: 0; right: 0; 
             height: var(--task-bar-height);
-            background: var(--silver-gradient);
+            background: var(--steel-gradient); /* צבע כסף חזק חדש */
             display: flex; align-items: center; justify-content: center;
             color: white; 
             font-weight: 800;
             font-size: 1rem;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
             z-index: 90; 
             box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
             cursor: pointer;
@@ -337,6 +338,16 @@
         .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--success); }
         input:checked + .slider:before { transform: translateX(22px); }
+        
+        /* BACKUP CONTAINER STYLE */
+        #backup-container {
+            background-color: #f7f9fa;
+            border: 1px solid #dfe6e9;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 15px;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.03);
+        }
     </style>
 </head>
 <body>
@@ -352,7 +363,7 @@
 
     <header id="mainHeader">
         <button class="header-icon-btn white-btn" onclick="openSettings()" style="position: absolute; right: 15px; z-index: 10;">
-            <svg viewBox="0 0 24 24" style="fill:white;"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 c-0.12,0.21-0.08,0.47,0.12,0.61l2.03,1.58c-0.05,0.3-0.09,0.63-0.09,0.94s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6S13.98,15.6,12,15.6z"/></svg>
+            <svg viewBox="0 0 24 24" style="fill:white;"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 c-0.12,0.21-0.08,0.47,0.12,0.61l2.03,1.58c-0.05,0.3-0.09,0.63-0.09,0.94s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6S13.98,15.6,12,15.6z"/></svg>
         </button>
 
         <div class="date-control-group" style="margin-right: 50px;">
@@ -414,7 +425,7 @@
             <div class="nav-item" onclick="switchView('menu', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/></svg></span>תפריט</div>
             <div class="nav-item" onclick="switchView('stats', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z" /></svg></span>דוח</div>
         </div>
-        <div id="navStatus" class="nav-footer-status">V.88 | טוען...</div>
+        <div id="navStatus" class="nav-footer-status">V.89 | טוען...</div>
     </div>
 
     <div id="taskModal" class="modal">
@@ -550,26 +561,34 @@
                 </div>
             </div>
 
-            <hr style="border:none; border-top:1px solid #eee; margin:20px 0;">
+            <div class="switch-row" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
+                <span class="switch-label">ניהול גיבוי ושחזור</span>
+                <label class="switch">
+                    <input type="checkbox" id="toggle-backup-ui" onchange="toggleBackupUI()">
+                    <span class="slider"></span>
+                </label>
+            </div>
 
-            <div style="margin-bottom:20px;">
-                <label style="font-weight:700; display:block; margin-bottom:5px;">העברת נתונים לטלפון אחר:</label>
-                <p style="font-size:0.85rem; color:var(--gray); margin-top:0;">כדי להעביר את כל המידע שלך, העתק את הקוד מפה והדבק אותו בטלפון החדש.</p>
+            <div id="backup-container" style="display:none;">
+                <div style="margin-bottom:20px;">
+                    <label style="font-weight:700; display:block; margin-bottom:5px;">העברת נתונים לטלפון אחר:</label>
+                    <p style="font-size:0.85rem; color:var(--gray); margin-top:0;">כדי להעביר את כל המידע שלך, העתק את הקוד מפה והדבק אותו בטלפון החדש.</p>
+                    
+                    <button class="btn-save" onclick="exportData()">📤 צור קוד גיבוי (העתק)</button>
+                    <textarea id="backupOutput" class="backup-area" style="display:none; margin-top:10px;" readonly onclick="this.select()"></textarea>
+                </div>
                 
-                <button class="btn-save" onclick="exportData()">📤 צור קוד גיבוי (העתק)</button>
-                <textarea id="backupOutput" class="backup-area" style="display:none; margin-top:10px;" readonly onclick="this.select()"></textarea>
-            </div>
-            
-            <hr style="border:none; border-top:1px solid #eee; margin:20px 0;">
+                <hr style="border:none; border-top:1px solid #dcdde1; margin:20px 0;">
 
-            <div style="margin-bottom:20px;">
-                <label style="font-weight:700; display:block; margin-bottom:5px;">שחזור מטלפון ישן:</label>
-                <p style="font-size:0.85rem; color:var(--gray); margin-top:0;">הדבק כאן את הקוד שקיבלת מהטלפון הישן.</p>
-                <textarea id="restoreInput" placeholder="הדבק כאן את קוד הגיבוי..."></textarea>
-                <button class="btn-save btn-secondary" onclick="importData()">📥 שחזר נתונים</button>
+                <div style="margin-bottom:20px;">
+                    <label style="font-weight:700; display:block; margin-bottom:5px;">שחזור מטלפון ישן:</label>
+                    <p style="font-size:0.85rem; color:var(--gray); margin-top:0;">הדבק כאן את הקוד שקיבלת מהטלפון הישן.</p>
+                    <textarea id="restoreInput" placeholder="הדבק כאן את קוד הגיבוי..."></textarea>
+                    <button class="btn-save btn-secondary" onclick="importData()">📥 שחזר נתונים</button>
+                </div>
             </div>
 
-            <div style="text-align:center;"><span onclick="closeModal('settingsModal')" style="color:var(--gray); cursor:pointer;">סגור</span></div>
+            <div style="text-align:center; margin-top: 20px;"><span onclick="closeModal('settingsModal')" style="color:var(--gray); cursor:pointer;">סגור</span></div>
         </div>
     </div>
 
@@ -644,7 +663,7 @@
         // --- UPDATED LOAD FUNCTION ---
         async function loadRemoteRecipes() {
             const statusEl = document.getElementById('navStatus');
-            statusEl.innerText = "V.88.0 | טוען...";
+            statusEl.innerText = "V.89.0 | טוען...";
             
             const headers = {};
             if (adminToken) {
@@ -660,14 +679,14 @@
                     const data = await response.json();
                     const decoded = decodeURIComponent(escape(window.atob(data.content)));
                     baseRecipes = JSON.parse(decoded);
-                    statusEl.innerText = "V.88.0 | מחובר לענן ✅";
+                    statusEl.innerText = "V.89.0 | מחובר לענן ✅";
                 } else { 
                     throw new Error("Repo not found"); 
                 }
             } catch(e) { 
                 console.log('Using fallback:', e); 
                 baseRecipes = fallbackRecipes; 
-                statusEl.innerText = "V.88.0 | מצב גיבוי ⚠️"; 
+                statusEl.innerText = "V.89.0 | מצב גיבוי ⚠️"; 
             }
             renderCurrentView();
         }
@@ -1304,6 +1323,13 @@
         function confirmDeleteForever() { if (taskToDeleteIndex === null) return; const dateKey = getStorageKey(currentDate); const task = trackerData[dateKey].tasks[taskToDeleteIndex]; if (task.fromTemplate) { const tplIndex = templates.findIndex(t => t.id === task.templateId); if (tplIndex > -1) templates.splice(tplIndex, 1); Object.keys(trackerData).forEach(dayKey => { if (trackerData[dayKey].tasks) { trackerData[dayKey].tasks = trackerData[dayKey].tasks.filter(t => t.templateId !== task.templateId); } }); } else { trackerData[dateKey].tasks.splice(taskToDeleteIndex, 1); } saveAll(); closeDeleteModal(); }
         
         // --- BACKUP & RESTORE LOGIC ---
+        // NEW FUNCTION: Toggle visibility of backup container
+        function toggleBackupUI() {
+            const isChecked = document.getElementById('toggle-backup-ui').checked;
+            const container = document.getElementById('backup-container');
+            container.style.display = isChecked ? 'block' : 'none';
+        }
+
         function exportData() {
             // Collect all local storage keys related to app
             const allData = {
@@ -1359,6 +1385,11 @@
             document.getElementById('toggle-breakfast').checked = mealSettings.breakfast;
             document.getElementById('toggle-lunch').checked = mealSettings.lunch;
             document.getElementById('toggle-dinner').checked = mealSettings.dinner;
+            
+            // Reset backup toggle to off when opening settings
+            document.getElementById('toggle-backup-ui').checked = false;
+            document.getElementById('backup-container').style.display = 'none';
+            
             openModal('settingsModal');
         }
 
