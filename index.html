@@ -22,26 +22,31 @@
             --meat: #e17055; --dairy: #74b9ff; --parve: #00b894;
             --nav-height: 85px;
             --header-height: 60px;
-            /* אייפון Safe Area משתנים */
+            /* אייפון Safe Area */
             --safe-top: env(safe-area-inset-top, 20px);
             --safe-bottom: env(safe-area-inset-bottom, 20px);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
         
-        /* תיקון קריטי לאייפון למניעת רווחים לבנים וגלילת יתר של כל העמוד */
-        html, body {
-            margin: 0; padding: 0;
-            height: 100%; width: 100%;
-            background-color: var(--bg);
-            position: fixed; /* נועל את הגוף למקום */
+        /* נעילה מוחלטת למניעת "קפיצות" ומרווחים לבנים */
+        html {
+            height: 100%;
             overflow: hidden;
+            background-color: var(--bg);
         }
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            color: var(--text);
+            background-color: var(--bg); 
+            color: var(--text); 
+            margin: 0; padding: 0;
             display: flex; flex-direction: column; 
+            height: 100%; 
+            width: 100%;
+            position: fixed; /* מונע גלילה אלסטית של כל העמוד */
+            overflow: hidden;
+            overscroll-behavior-y: none;
         }
 
         /* --- SPLASH SCREEN --- */
@@ -73,7 +78,7 @@
 
         /* --- HEADER --- */
         header {
-            position: fixed; top: 0; left: 0; right: 0;
+            position: absolute; top: 0; left: 0; right: 0;
             background: var(--gradient); 
             padding: 0 15px;
             padding-top: max(5px, var(--safe-top)); 
@@ -107,21 +112,22 @@
         .date-wrapper { position: relative; height: 28px; width: 110px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
         .date-text { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,0.1); white-space: nowrap; }
 
-        /* --- NAVIGATION BAR --- */
+        /* --- NAVIGATION BAR (FIXED BOTTOM GAP) --- */
         .nav-bar { 
-            position: fixed; bottom: 0; left: 0; right: 0; 
-            /* שימוש ב-height במקום min-height כדי לכפות את הגודל המדויק ולמנוע רווחים */
-            height: calc(var(--nav-height) + var(--safe-bottom)); 
-            background: var(--gradient); border-top: none; 
+            position: absolute; bottom: 0; left: 0; right: 0; 
+            background: var(--gradient); 
+            border-top: none; 
             display: flex; flex-direction: column; 
-            padding-bottom: var(--safe-bottom);
-            z-index: 100; box-shadow: 0 -5px 20px rgba(255, 107, 107, 0.2); 
+            z-index: 100; 
+            box-shadow: 0 -5px 20px rgba(255, 107, 107, 0.2);
+            /* טריק לכיסוי המרווח הלבן */
+            padding-bottom: env(safe-area-inset-bottom);
+            height: calc(var(--nav-height) + env(safe-area-inset-bottom));
         }
         .nav-icons-row { display: flex; width: 100%; flex: 1; align-items: center; }
         .nav-item { text-align: center; color: rgba(255, 255, 255, 0.5); font-size: 0.65rem; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.3s; font-weight: 500; height: 100%; }
         .nav-item.active { color: white; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         
-        /* אייקונים מוגדלים ל-30px */
         .nav-icon svg { width: 30px; height: 30px; fill: currentColor; transition: 0.3s; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.05)); }
         .nav-item.active .nav-icon svg { transform: scale(1.1); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
         .nav-footer-status { width: 100%; text-align: center; font-size: 0.7rem; color: rgba(255,255,255,0.7); padding-bottom: 4px; font-weight: 600; background: rgba(0,0,0,0.05); }
@@ -130,34 +136,38 @@
         .view-section { 
             display: none; flex: 1; overflow-y: auto; 
             padding: 15px; 
-            /* מרווח עליון מותאם ל-Daily */
+            /* מרווחים מותאמים לכל לשונית */
             padding-top: calc(var(--header-height) + var(--safe-top) + 15px);
             padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 20px);
-            -webkit-overflow-scrolling: touch; /* גלילה חלקה באייפון */
+            -webkit-overflow-scrolling: touch; 
         }
         .view-section.active { display: block; }
 
-        /* תיקון מרווחים ללשוניות אחרות - ביטול הרווח המיותר */
+        /* תיקון מרווחים למעלה ללשוניות תפריט ודוח - צמצום משמעותי */
         #view-stats, #view-menu { 
-            padding-top: calc(var(--header-height) + var(--safe-top) + 5px); /* מרווח צפוף יותר */
+            padding-top: calc(var(--header-height) + var(--safe-top) + 5px); 
         }
 
-        .view-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; margin-top: 5px; }
+        .view-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; margin-top: 0; }
         .view-title { margin: 0; color: var(--text); font-size: 1.5rem; line-height: 1.2; }
+        .view-subtitle { font-size: 0.85rem; color: var(--gray); margin-top: 5px; line-height: 1.3; }
         
         .header-icon-btn { background: none; border: none; cursor: pointer; color: var(--gray); transition: 0.3s; display: flex; align-items: center; justify-content: center; padding: 5px; }
         .header-icon-btn svg { width: 26px; height: 26px; fill: currentColor; }
         .header-icon-btn.active { color: var(--primary); transform: scale(1.1); }
 
         /* --- CARDS & SWIPE --- */
-        .task-card-wrapper { position: relative; width: 100%; margin-bottom: 10px; height: 72px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .task-card-wrapper { 
+            position: relative; width: 100%; margin-bottom: 10px; height: 72px; 
+            border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
+        }
         .meal-swipe-wrapper { position: relative; width: 100%; margin-bottom: 12px; height: 200px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
         
         .task-action-bg { 
             position: absolute; top: 0; bottom: 0; right: 0; left: 0; 
             display: flex; justify-content: flex-start; 
             z-index: 1; 
-            background: var(--red-gradient); /* רקע מלא למניעת חורים לבנים */
+            background: var(--red-gradient); /* רקע אדום מלא */
         }
         
         .action-btn { width: 70px; height: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
@@ -172,15 +182,16 @@
             align-items: center; padding: 0 20px; border-radius: 16px; z-index: 2; 
             transition: transform 0.2s ease-out; border: 1px solid rgba(0,0,0,0.02); 
         }
+        .meal-card-content { display: flex; flex-direction: column; align-items: stretch; padding: 0; }
         
         .task-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
         .task-name { font-weight: 600; font-size: 1.1rem; margin-bottom: 2px; color: var(--text); }
         .task-meta { font-size: 0.8rem; color: var(--gray); font-weight: 500; display: flex; align-items: center; gap: 5px; }
+        
         .meal-action-group { display: flex; align-items: center; gap: 12px; }
         .meal-stack-container { width: 50px; height: 50px; position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .task-meal-img { width: 45px; height: 45px; border-radius: 10px; object-fit: cover; border: 2px solid #fff; flex-shrink: 0; background: #eee; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         
-        .meal-card-content { display: flex; flex-direction: column; align-items: stretch; padding: 0; }
         .meal-img { width: 100%; height: 130px; object-fit: cover; background: #f0f0f0; }
         .meal-info-box { padding: 12px 15px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
         .meal-title { font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 5px; }
@@ -254,7 +265,7 @@
         
         .btn-clear-top { position: absolute; top: 25px; right: 25px; background: none; border: none; color: var(--danger); font-weight: 700; font-size: 0.9rem; cursor: pointer; z-index: 5; }
         .btn-close-modal { background: var(--gold-gradient); color: white; border: none; padding: 12px 30px; border-radius: 30px; font-weight: 700; font-size: 1rem; box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3); cursor: pointer; margin-top: 10px; display: inline-block; transition: transform 0.2s; }
-
+        
         .selector-header { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
         .selector-search { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #F1F2F6; font-size: 1rem; }
         .selector-list { max-height: 50vh; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
@@ -266,15 +277,19 @@
         .selector-type { margin-right: auto; font-size: 0.75rem; padding: 3px 8px; border-radius: 6px; color: white; margin-right: 10px; }
         .check-icon { font-size: 1.2rem; color: var(--primary); margin-left: 10px; opacity: 0; transition: 0.2s; }
         .selector-item.selected .check-icon { opacity: 1; }
+        
+        .delete-btn-group { display: flex; flex-direction: column; gap: 10px; }
+        .btn-delete-today { width: 100%; padding: 15px; background: #F1F2F6; color: var(--text); border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; }
+        .btn-delete-forever { width: 100%; padding: 15px; background: #FF4757; color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; }
+        .btn-cancel { width: 100%; padding: 15px; background: transparent; color: var(--gray); border: none; font-size: 1rem; font-weight: 500; }
 
+        .recipe-view-body { text-align: right; white-space: pre-wrap; font-size: 1.1rem; line-height: 1.6; color: var(--text); margin-bottom: 20px; }
+        .recipe-view-img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; margin-bottom: 20px; }
         .stack-list-item { display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
         .stack-list-item:last-child { border-bottom: none; }
         .stack-list-img { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; margin-left: 15px; }
         .stack-list-title { font-weight: 600; color: var(--text); font-size: 1.1rem; }
 
-        .recipe-view-body { text-align: right; white-space: pre-wrap; font-size: 1.1rem; line-height: 1.6; color: var(--text); margin-bottom: 20px; }
-        .recipe-view-img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; margin-bottom: 20px; }
-        
         .stack-img.layer-1 { z-index: 3; right: 0; }
         .stack-img.layer-2 { z-index: 2; right: 5px; top: -3px; }
         .stack-img.layer-3 { z-index: 1; right: 10px; top: -6px; }
@@ -326,12 +341,16 @@
     </div>
 
     <div id="view-menu" class="view-section">
-        <div class="view-header"><h2 class="view-title">תפריט שבועי</h2></div>
-        <div class="view-subtitle" style="margin-bottom:15px;">ניתן להוסיף מתכונים אישיים או למצוא מוכנים בלשונית מתכונים הנמצאת משמאל</div>
-        <button class="recipe-link-btn" style="width:100%; justify-content:center; margin-bottom:15px;" onclick="switchView('meals', null)">
-            <span>מתכונים מוכנים</span>
-            <svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>
-        </button>
+        <div class="view-header">
+            <div class="view-title-group">
+                <h2 class="view-title">תפריט שבועי</h2>
+                <div class="view-subtitle">ניתן להוסיף מתכונים אישיים או למצוא מוכנים בלשונית מתכונים הנמצאת משמאל</div>
+            </div>
+            <button class="recipe-link-btn" onclick="switchView('meals', null)">
+                <span>מתכונים מוכנים</span>
+                <svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>
+            </button>
+        </div>
         <div id="menuList"></div>
     </div>
 
@@ -359,7 +378,7 @@
             <div class="nav-item" onclick="switchView('menu', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/></svg></span>תפריט</div>
             <div class="nav-item" onclick="switchView('stats', this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z" /></svg></span>דוח</div>
         </div>
-        <div id="navStatus" class="nav-footer-status">V.80 | טוען...</div>
+        <div id="navStatus" class="nav-footer-status">V.81 | טוען...</div>
     </div>
 
     <div id="taskModal" class="modal">
@@ -535,7 +554,7 @@
         // --- UPDATED LOAD FUNCTION ---
         async function loadRemoteRecipes() {
             const statusEl = document.getElementById('navStatus');
-            statusEl.innerText = "V.80.0 | טוען...";
+            statusEl.innerText = "V.81.0 | טוען...";
             
             const headers = {};
             if (adminToken) {
@@ -551,14 +570,14 @@
                     const data = await response.json();
                     const decoded = decodeURIComponent(escape(window.atob(data.content)));
                     baseRecipes = JSON.parse(decoded);
-                    statusEl.innerText = "V.80.0 | מחובר לענן ✅";
+                    statusEl.innerText = "V.81.0 | מחובר לענן ✅";
                 } else { 
                     throw new Error("Repo not found"); 
                 }
             } catch(e) { 
                 console.log('Using fallback:', e); 
                 baseRecipes = fallbackRecipes; 
-                statusEl.innerText = "V.80.0 | מצב גיבוי ⚠️"; 
+                statusEl.innerText = "V.81.0 | מצב גיבוי ⚠️"; 
             }
             renderCurrentView();
         }
@@ -720,6 +739,7 @@
             });
         }
 
+        // Universal Click Handler
         function handleSmartClick(index, source) {
             let realIndex = index;
             if(source === 'admin') realIndex -= 1000;
@@ -764,6 +784,7 @@
 
         function saveTask() {
             const name = document.getElementById('newTaskName').value;
+            // Removed weight logic
             if(!name) return alert('חובה להזין שם משימה');
             
             if (currentTaskType === 'once') {
@@ -853,6 +874,7 @@
             } 
         }
 
+        // --- MENU LOGIC (MULTI-SELECT) ---
         function renderMenu() {
             document.getElementById('mainHeader').style.display = 'none'; updateScoreBubble(0);
             const container = document.getElementById('menuList'); container.innerHTML = '';
@@ -985,6 +1007,7 @@
             renderSelectorList();
         }
 
+        // --- STATS LOGIC ---
         function changeStatsYear(dir) {
             const nowYear = new Date().getFullYear();
             const newYear = currentStatsYear + dir;
@@ -1043,6 +1066,7 @@
             }
         }
 
+        // --- DAILY VIEW LOGIC (UPDATED SWIPE) ---
         function changeDate(direction) { currentDate.setDate(currentDate.getDate() + direction); renderDay(direction); }
         function renderDay(animateDirection = 0) {
             const dateKey = getStorageKey(currentDate); const dateStr = currentDate.toLocaleDateString('he-IL', { weekday: 'long', day: 'numeric', month: 'numeric' });
